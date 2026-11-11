@@ -17,7 +17,7 @@ import { CANVAS, POSES, type PoseId } from "./poses";
  *   5. compass glow      — --compass/--compass-a, pulsing at the compass position
  *   6. water reflection  — faded, flipped copy; strength follows --glint-a
  */
-export function SpriteMigo({ pose, size, facing = 1, reflection = true }: { pose: PoseId; size: number; facing?: 1 | -1; reflection?: boolean }) {
+export function SpriteMigo({ pose, size, facing = 1, reflection = true, contact = 1 }: { pose: PoseId; size: number; facing?: 1 | -1; reflection?: boolean; contact?: number }) {
   const p = POSES[pose];
   const url = `url(${p.src})`;
   const [cx, cy] = p.compass;
@@ -38,12 +38,12 @@ export function SpriteMigo({ pose, size, facing = 1, reflection = true }: { pose
         className="absolute left-1/2 rounded-[50%]"
         style={{
           bottom: size * 0.0,
-          width: size * 0.62,
-          height: size * 0.09,
+          width: size * (pose === "jump" ? 0.38 : 0.52),
+          height: size * 0.045,
           transform: `translateX(-50%) skewX(calc(var(--shadow-skew) * 1deg)) scaleX(calc(1 + var(--shadow-skew) / 60))`,
           background: "radial-gradient(closest-side, var(--migo-shadow), transparent)",
-          opacity: "var(--migo-shadow-a)",
-          filter: "blur(3px)",
+          opacity: `calc(var(--migo-shadow-a) * ${contact * (pose === "jump" ? 0.35 : 0.65)})`,
+          filter: "blur(2px)",
         }}
       />
       {/* 6. reflection (below the feet, behind the body) */}

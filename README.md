@@ -235,3 +235,8 @@ The welcome and homepage now use locally hosted, licensed illustrative photograp
 Scene lighting and sunset photography interpolate over **750 ms**. Sections claim a scene when entering a central viewport band so tall mobile sections still activate it. Booking, payment, concierge, inventory, operator and Trip Rescue logic are unchanged.
 
 Run `npm test`, `npm run lint`, `npm run typecheck`, and `npm run build`. For browser regression tests, install Chromium with `npx playwright install chromium`, run the production server, then `npm run test:ui`. Set `PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium` to use an existing system Chromium. Set `CAPTURE_PREVIEWS=1` to save responsive review screenshots in `docs/previews/`. See [Phase 1 review](docs/CINEMATIC_PHASE_1.md) and [asset provenance](ASSETS.md).
+
+
+### Cinematic Luxury · Phase 1.5
+
+The shared fictional Aurora Tide environment, contact-driven Migo motion/audio, responsive captures, actual browser recording and remaining rig limitations are documented in [the Phase 1.5 review](docs/CINEMATIC_PHASE_15.md). Assets and business logic from Phase 1 are preserved; this update does not deploy or merge the redesign.

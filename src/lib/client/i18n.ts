@@ -14,12 +14,12 @@ export const LANGS: { id: Lang; label: string }[] = [
 
 const en = {
   "welcome.escape": "Your Caribbean escape",
-  "welcome.headline": "A little closer to paradise.",
+  "welcome.headline": "Welcome to your next adventure.",
   "welcome.meet": "Meet Migo.",
-  "welcome.companion": "Your island companion. A little local knowledge for a remarkable day ashore.",
+  "welcome.companion": "Every port has a story. Let’s find yours.",
   "welcome.begin": "Before we set sail",
   "welcome.signature": "Extraordinary days ashore",
-  "welcome.imagery": "Illustrative photography · not a listed destination",
+  "welcome.imagery": "Fictional vessel & island · concept rendering",
 
   "nav.explore": "Explore",
   "nav.ships": "Ships & Rooms",
@@ -44,7 +44,7 @@ const en = {
   "welcome.rememberHint": "Stored only in your browser. Leave unticked and they're forgotten when you close the tab.",
   "welcome.continue": "Continue",
   "welcome.skip": "Skip",
-  "migo.greeting": "Hey, explorer! I'm Migo. Ready to see what the islands have waiting for you?",
+  "migo.greeting": "Hey, explorer! I'm Migo. I'll help you make the most of every moment ashore.",
   "migo.greetingFrom": "Hey, explorer! I'm Migo. Joining us from {country}? Ready to see what the islands have waiting for you?",
   "migo.cta": "Show me",
   "hero.eyebrow": "Your adventure doesn't stop when plans change",
@@ -72,12 +72,12 @@ type Dict = Record<Key, string>;
 
 const es: Dict = {
   "welcome.escape": "Tu escapada al Caribe",
-  "welcome.headline": "Un poco más cerca del paraíso.",
+  "welcome.headline": "Bienvenido a tu próxima aventura.",
   "welcome.meet": "Conoce a Migo.",
-  "welcome.companion": "Tu compañero de isla. Un poco de conocimiento local para un día extraordinario en tierra.",
+  "welcome.companion": "Cada puerto tiene una historia. Busquemos la tuya.",
   "welcome.begin": "Antes de zarpar",
   "welcome.signature": "Días extraordinarios en tierra",
-  "welcome.imagery": "Fotografía ilustrativa · no es un destino del catálogo",
+  "welcome.imagery": "Barco e isla ficticios · imagen conceptual",
 
   "nav.explore": "Explorar",
   "nav.ships": "Barcos y cabinas",
@@ -127,12 +127,12 @@ const es: Dict = {
 
 const fr: Dict = {
   "welcome.escape": "Votre escapade caribéenne",
-  "welcome.headline": "Un peu plus près du paradis.",
+  "welcome.headline": "Bienvenue dans votre prochaine aventure.",
   "welcome.meet": "Voici Migo.",
-  "welcome.companion": "Votre compagnon des îles. Des conseils locaux pour une journée remarquable à terre.",
+  "welcome.companion": "Chaque port a son histoire. Trouvons la vôtre.",
   "welcome.begin": "Avant de prendre le large",
   "welcome.signature": "Des escales extraordinaires",
-  "welcome.imagery": "Photographie illustrative · pas une destination proposée",
+  "welcome.imagery": "Navire et île fictifs · illustration conceptuelle",
 
   "nav.explore": "Explorer",
   "nav.ships": "Navires et cabines",
@@ -182,12 +182,12 @@ const fr: Dict = {
 
 const pt: Dict = {
   "welcome.escape": "Sua escapada caribenha",
-  "welcome.headline": "Um pouco mais perto do paraíso.",
+  "welcome.headline": "Bem-vindo à sua próxima aventura.",
   "welcome.meet": "Conheça o Migo.",
-  "welcome.companion": "Seu companheiro de ilha. Dicas locais para um dia extraordinário em terra.",
+  "welcome.companion": "Cada porto tem uma história. Vamos encontrar a sua.",
   "welcome.begin": "Antes de zarpar",
   "welcome.signature": "Dias extraordinários em terra",
-  "welcome.imagery": "Fotografia ilustrativa · não é um destino do catálogo",
+  "welcome.imagery": "Navio e ilha fictícios · imagem conceitual",
 
   "nav.explore": "Explorar",
   "nav.ships": "Navios e cabines",

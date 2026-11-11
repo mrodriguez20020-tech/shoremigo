@@ -1,5 +1,7 @@
 # Cinematic Luxury · Phase 1 review
 
+Phase 1 baseline. The current refinement and recording are in [Phase 1.5](CINEMATIC_PHASE_15.md).
+
 Phase 1 replaces the welcome and homepage presentation with an atmospheric tropical travel experience. It keeps the original Migo character, event bus/state machine, booking and inventory logic, PayPal integration, Gemini concierge, Trip Rescue and operator workflows.
 
 ## Implemented

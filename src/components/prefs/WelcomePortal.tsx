@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
+import { OceanScene } from "@/components/scene/OceanScene";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { COUNTRIES, LANGS, type Lang, translate } from "@/lib/client/i18n";
 import { INTRO_DONE_EVENT } from "@/components/intro/Intro";
-import { SpriteMigo } from "@/components/migo/SpriteMigo";
+import { GreetingMigo } from "@/components/migo/GreetingMigo";
 import { CompassMark, Wordmark } from "@/components/brand/Wordmark";
 import { useCompanion } from "@/components/migo/CompanionProvider";
 import { migo } from "@/components/migo/bus";
@@ -93,6 +93,10 @@ export function WelcomePortal() {
       lang: l,
       country_set: Boolean(c),
     });
+    if (!reducedMotion) {
+      document.documentElement.dataset.approach = "true";
+      window.setTimeout(() => { delete document.documentElement.dataset.approach; }, 900);
+    }
     closePortal();
     if (greetingTimer.current) clearTimeout(greetingTimer.current);
     greetingTimer.current = setTimeout(
@@ -126,8 +130,8 @@ export function WelcomePortal() {
           className="welcome-world fixed inset-0 z-[80] overflow-y-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: reducedMotion ? 0 : 0.4 }}
+          exit={reducedMotion ? { opacity: 0 } : { opacity: 0, scale: 1.015 }}
+          transition={{ duration: reducedMotion ? 0 : 0.45 }}
           onKeyDown={(e) => {
             if (e.key === "Escape") {
               e.preventDefault();
@@ -151,14 +155,7 @@ export function WelcomePortal() {
             }
           }}
         >
-          <Image
-            src="/images/caribbean-shore.webp"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="welcome-photo object-cover"
-          />
+          <OceanScene variant="welcome" />
           <div className="welcome-shade absolute inset-0" />
           <div className="welcome-shell relative mx-auto flex min-h-dvh max-w-[1600px] flex-col px-6 py-6 sm:px-12 sm:py-8 lg:px-20">
             <div className="flex items-center justify-between gap-4">
@@ -184,24 +181,7 @@ export function WelcomePortal() {
                   {T("welcome.headline")}
                 </h1>
                 <div className="welcome-companion mt-10 flex items-center gap-4">
-                  <motion.div
-                    aria-hidden
-                    initial={
-                      reducedMotion
-                        ? false
-                        : { opacity: 0, x: -70, y: 24, rotate: -9 }
-                    }
-                    animate={{ opacity: 1, x: 0, y: 0, rotate: 0 }}
-                    transition={{
-                      duration: 0.75,
-                      delay: 0.15,
-                      type: "spring",
-                      bounce: 0.28,
-                    }}
-                    className="welcome-migo shrink-0"
-                  >
-                    <SpriteMigo pose="wave" size={180} reflection={false} />
-                  </motion.div>
+                  <div aria-hidden className="welcome-migo shrink-0"><GreetingMigo /></div>
                   <div className="max-w-[250px] border-l border-white/30 pl-5">
                     <p className="font-display text-2xl">{T("welcome.meet")}</p>
                     <p className="mt-2 text-sm leading-relaxed text-white/80">

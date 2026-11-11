@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { OceanScene } from "@/components/scene/OceanScene";
 import { SAILING, getExcursion } from "@/lib/domain/catalog";
 import { HeroCopy } from "@/components/home/HeroCopy";
 import { Discovery } from "@/components/home/Discovery";
@@ -24,11 +24,11 @@ export default function Home() {
 
       {/* ── Hero ───────────────────────────────────────── */}
       <section className="luxury-hero relative flex min-h-dvh items-center px-6 pb-32 pt-36 sm:px-12 lg:px-20">
-        <Image src="/images/caribbean-shore.webp" alt="" fill priority sizes="100vw" className="object-cover" />
+        <OceanScene />
         <div className="hero-shade absolute inset-0" />
-        <div className="relative mx-auto grid w-full max-w-[1400px] grid-cols-[minmax(0,1fr)] items-end gap-12 xl:grid-cols-[1.5fr_0.5fr]">
+        <div className="relative mx-auto grid w-full max-w-[1400px] grid-cols-[minmax(0,1fr)] items-end gap-12 xl:grid-cols-[1.05fr_0.95fr]">
           <div className="min-w-0">
-            <HeroCopy />
+            <div data-migo-tip-avoid><HeroCopy /></div>
             <Reveal delay={0.3}>
               <HeroActions />
             </Reveal>
@@ -40,11 +40,7 @@ export default function Home() {
               </ul>
             </Reveal>
           </div>
-          <Reveal delay={0.5} className="hero-note hidden border-l border-white/35 pl-6 pb-2 xl:block">
-            <p className="luxury-kicker">The art of the shore day</p>
-            <p className="font-display mt-4 text-3xl leading-snug">Less watching the clock.<br /><em>More living the moment.</em></p>
-            <p className="mt-5 text-xs leading-relaxed text-white/75">Illustrative photography.<br />Explore our sample Caribbean sailing below.</p>
-          </Reveal>
+          <div className="hero-vessel-caption" aria-hidden><span className="luxury-kicker">Aurora Tide</span><p>Our fictional exploration cruiser.<br />An original concept rendering.</p></div>
         </div>
         <a
           href="#ports"
@@ -57,7 +53,7 @@ export default function Home() {
         </a>
       </section>
 
-      <p className="photo-caption">Caribbean-inspired atmosphere · illustrative photography, not a listed destination · demo sailing</p>
+      <p className="photo-caption">Aurora Tide · fictional vessel and island · AI-generated concept rendering · demo sailing</p>
       <Discovery />
 
       {/* ── Ports ──────────────────────────────────────── */}
@@ -102,9 +98,9 @@ export default function Home() {
         className="golden-scene relative flex min-h-dvh items-center overflow-hidden px-6 py-28 sm:px-12 lg:px-20"
         threshold={0.4}
       >
-        <Image src="/images/golden-ocean.webp" alt="" fill sizes="100vw" className="scene-photo object-cover" />
+        <OceanScene variant="sunset" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#151522]/90 via-[#151522]/45 to-[#151522]/25" />
-        <p className="absolute bottom-6 left-6 text-[10px] tracking-wider text-white/70 sm:left-12">Illustrative sunset photography · not a view of Ocho Rios or the listed excursion</p>
+        <p className="absolute bottom-6 left-6 text-[10px] tracking-wider text-white/70 sm:left-12">Fictional Aurora Tide and island · concept rendering, not Ocho Rios or the listed excursion</p>
         <div className="relative mx-auto grid w-full max-w-[1400px] items-end gap-12 lg:grid-cols-[1.2fr_0.8fr]">
           <Reveal>
             <p className="eyebrow">Ocho Rios · golden hour</p>
@@ -123,6 +119,7 @@ export default function Home() {
           <Reveal delay={0.15}>
             <TideLink
               href={`/excursions/${sunset.id}`}
+              data-migo-avoid
               className="surface group block rounded-[28px] p-7 transition hover:-translate-y-1"
             >
               <p className="eyebrow">Featured excursion</p>

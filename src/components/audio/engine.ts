@@ -6,6 +6,8 @@
  *  motif     : a 5-note pentatonic "tide" phrase in a soft marimba-like voice
  *  character : Migo's short voice-like blips (greeting, curious, excited, listening, success, concern, resolve)
  */
+import type { FootSurface } from "@/components/migo/gait";
+
 export type Sfx = "greet" | "curious" | "excited" | "listen" | "success" | "concern" | "resolve" | "tap";
 
 export class AudioEngine {
@@ -38,9 +40,11 @@ export class AudioEngine {
     if (c.state === "suspended") await c.resume();
   }
 
-  setVolume(v: number) {
+  setVolume(v: number, immediate = false) {
     if (!this.ctx) return;
-    this.master.gain.setTargetAtTime(Math.max(0, Math.min(1, v)), this.ctx.currentTime, 0.1);
+    this.master.gain.cancelScheduledValues(this.ctx.currentTime);
+    if (immediate) this.master.gain.setValueAtTime(Math.max(0, Math.min(1, v)), this.ctx.currentTime);
+    else this.master.gain.setTargetAtTime(Math.max(0, Math.min(1, v)), this.ctx.currentTime, 0.04);
   }
 
   private noiseBuffer(c: AudioContext, seconds = 4) {
@@ -217,6 +221,24 @@ export class AudioEngine {
         this.note(1200, t, 0.08, 0.04);
         break;
     }
+  }
+
+  /** Original, one-shot contact sound. Called only by an actual rendered contact. */
+  contact(surface: FootSurface, landing = false) {
+    if (!this.ctx || this.ctx.state !== "running" || surface === "underwater") return false;
+    const c = this.ctx;
+    const duration = landing ? 0.09 : surface === "sand" ? 0.07 : 0.045;
+    const buffer = c.createBuffer(1, Math.ceil(c.sampleRate * duration), c.sampleRate);
+    const samples = buffer.getChannelData(0);
+    for (let i = 0; i < samples.length; i++) samples[i] = (Math.random() * 2 - 1) * Math.exp(-i / (samples.length * 0.17));
+    const source = c.createBufferSource(); source.buffer = buffer;
+    const filter = c.createBiquadFilter(); filter.type = "lowpass";
+    filter.frequency.value = surface === "deck" ? 1300 : surface === "cabin" ? 400 : 650;
+    const gain = c.createGain(); gain.gain.value = (surface === "cabin" ? 0.022 : 0.04) * (landing ? 1.3 : 1);
+    source.connect(filter).connect(gain).connect(this.sfxBus);
+    source.start(); source.stop(c.currentTime + duration);
+    source.onended = () => { source.disconnect(); filter.disconnect(); gain.disconnect(); };
+    return true;
   }
 
   /** Soft scene-change motif (pentatonic), routed through ambience bus so it obeys the ambience toggle. */

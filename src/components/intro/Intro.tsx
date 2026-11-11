@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { OceanScene } from "@/components/scene/OceanScene";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { Wordmark } from "@/components/brand/Wordmark";
@@ -35,7 +35,7 @@ export function Intro() {
   useEffect(() => {
     if (!show) return;
     const end = () => setShow(false);
-    const timer = setTimeout(end, reducedMotion ? 0 : 1200);
+    const timer = setTimeout(end, reducedMotion ? 0 : 800);
     window.addEventListener("keydown", end);
     return () => {
       clearTimeout(timer);
@@ -51,15 +51,8 @@ export function Intro() {
           exit={{ opacity: 0 }}
           transition={{ duration: reducedMotion ? 0 : 0.35 }}
         >
-          <Image
-            src="/images/caribbean-shore.webp"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-40"
-          />
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/20 px-6 text-center">
+          <OceanScene variant="intro" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center intro-brand-shade px-6 text-center">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

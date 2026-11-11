@@ -138,6 +138,10 @@ export function ShipExplorer() {
   const [walk, setWalk] = useState(false);
   const [view, setView] = useState(0);
   const [venue, setVenue] = useState(SHIP_VENUES[0].id);
+  useEffect(() => {
+    document.documentElement.dataset.migoSurface = tab === "rooms" && walk ? "cabin" : "deck";
+    return () => { delete document.documentElement.dataset.migoSurface; };
+  }, [tab, walk]);
   const d = DECKS.find((x) => x.number === deck)!;
   const v = DEMO_CABIN.views[view];
 

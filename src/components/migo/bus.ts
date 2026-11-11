@@ -1,3 +1,4 @@
+import type { FootSurface } from "./gait";
 import type { SceneId } from "@/lib/domain/types";
 
 /**
@@ -7,6 +8,8 @@ import type { SceneId } from "@/lib/domain/types";
  */
 export type MigoEvent =
   | { type: "app:arrived" }
+  | { type: "motion:contact"; surface: FootSurface; foot: "left" | "right"; source: "roam"; step: number }
+  | { type: "motion:landed"; surface: FootSurface }
   | { type: "excursion:selected"; excursionId: string }
   | { type: "match:completed"; count: number }
   | { type: "concierge:opened" }

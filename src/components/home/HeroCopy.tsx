@@ -21,6 +21,7 @@ export function HeroCopy() {
           {t("hero.title1")} <em className="text-[#e8c895]">{t("hero.title2")}</em>
         </h1>
       </Reveal>
+      <div className="hero-ocean-space" aria-hidden />
       <Reveal delay={0.2}>
         <p className="mt-7 max-w-xl text-lg leading-relaxed text-ink-soft sm:text-xl [text-shadow:0_1px_20px_rgba(4,30,50,0.4)]">{t("hero.sub")}</p>
         <p className="mt-3 text-sm font-semibold tracking-wide text-accent">{t("hero.eyebrow")}.</p>

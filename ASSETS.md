@@ -16,6 +16,18 @@ The **source code** is MIT-licensed (see `LICENSE`). Non-code assets are listed 
 
 Photos are stored locally as optimized WebP files. They are atmospheric editorial images, not destination, inventory, vessel, or venue evidence. Adjacent captions disclose this in the welcome, hero, discovery tiles, and sunset section. They are not included under the source-code MIT license. No third-party photo is used to redraw or alter Migo.
 
+## Phase 1.5 fictional environment assets
+
+| Asset | Location | Source / rights basis | Disclosure |
+|---|---|---|---|
+| Fictional island/ocean plate | `public/cinematic/island-ocean.webp` | Created for this task using OpenAI image generation, 2026-11-11. User-generated output under OpenAI terms, including commercial use; not part of the source-code MIT license. | Fictional, Caribbean-inspired setting; no actual destination identity claimed |
+| Aurora Tide concept render | `public/cinematic/aurora-tide.webp` | Original fictional vessel generated for this task using OpenAI image generation with the ocean plate as lighting/camera reference. Same rights basis as above. | Fictional vessel; 2D concept rendering, not a real cruise ship photo, live 3D model or accurate deck plan |
+| Wake, contact shadows, scene grading | `OceanScene.tsx`, `globals.css`, `SpriteMigo.tsx` | Original code, MIT | Composited presentation, not water physics |
+| Deck/cabin/sand contacts and landing | `src/components/audio/engine.ts` | Original short Web Audio noise synthesis; no recording, loop, sample or external effect | Opt-in only; synchronized to rendered contacts/landing |
+| Browser evidence | `docs/phase15/` | Captured locally from this application with Playwright; contains the authorized assets listed here | Actual browser recording; audio begins only after recorded explicit sound opt-in |
+
+[Asset direction and limitations](public/cinematic/README.md). The real cruise-harbor stock photograph remains archived in the repository but is no longer used for the Ships & Rooms discovery card. No real ship is presented as Aurora Tide. Migo's eight approved originals are unchanged; no generated replacement mascot or facial/limb layers were introduced. Full articulated locomotion remains asset-limited; see [Migo asset handoff](docs/MIGO_ASSET_PLAN.md).
+
 ## Third-party software (production dependency tree, audited 2026-11-10)
 
 Installed production packages are under permissive licenses: MIT (majority), Apache-2.0 (`sharp`, `@swc/helpers`, `detect-libc`), ISC (`picocolors`, `semver`), BSD-3-Clause (`source-map-js`), 0BSD (`tslib`), Unlicense/public domain (`postgres`, the Postgres driver), and CC-BY-4.0 for data (`caniuse-lite`, attribution via its package). `@img/sharp-*` platform binaries bundle libvips under LGPL-3.0-or-later. They are installed by npm at build time and **not** redistributed in this repository.

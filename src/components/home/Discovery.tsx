@@ -9,7 +9,7 @@ import type { Key } from "@/lib/client/i18n";
 const TILES: { kind: "adventure" | "taste" | "ships" | "relax"; image: string; href: string; title: Key; sub: Key }[] = [
   { kind: "adventure", image: "caribbean-shore", href: "/excursions", title: "disc.adventure", sub: "disc.adventureSub" },
   { kind: "taste", image: "dining", href: "/taste", title: "disc.taste", sub: "disc.tasteSub" },
-  { kind: "ships", image: "ship", href: "/ships", title: "disc.ships", sub: "disc.shipsSub" },
+  { kind: "ships", image: "aurora", href: "/ships", title: "disc.ships", sub: "disc.shipsSub" },
   { kind: "relax", image: "golden-ocean", href: "/excursions?mood=relax", title: "disc.relax", sub: "disc.relaxSub" },
 ];
 
@@ -29,9 +29,9 @@ export function Discovery() {
               <TideLink href={tile.href} className="group surface block h-full overflow-hidden transition hover:-translate-y-1">
                 <div className="relative aspect-[5/3] overflow-hidden">
                   <div className="absolute inset-0 transition duration-700 group-hover:scale-105">
-                    <Image src={`/images/${tile.image}.webp`} alt="" fill sizes="(max-width: 639px) 100vw, (max-width: 1279px) 50vw, 25vw" className="object-cover" />
+                    <Image src={tile.image === "aurora" ? "/cinematic/aurora-tide.webp" : `/images/${tile.image}.webp`} alt="" fill sizes="(max-width: 639px) 100vw, (max-width: 1279px) 50vw, 25vw" className={tile.image === "aurora" ? "object-contain bg-[#143d47] p-4" : "object-cover"} />
                   </div>
-                  <span className="absolute bottom-2 left-3 rounded bg-black/65 px-2 py-1 text-[9px] tracking-wide text-white">Illustrative photo</span>
+                  <span className="absolute bottom-2 left-3 rounded bg-black/65 px-2 py-1 text-[9px] tracking-wide text-white">{tile.image === "aurora" ? "Fictional vessel · concept render" : "Illustrative photo"}</span>
                 </div>
                 <div className="p-6">
                   <p className="font-display text-2xl">{t(tile.title)}</p>
