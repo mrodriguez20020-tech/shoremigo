@@ -1,0 +1,308 @@
+@import "tailwindcss";
+
+/* ──────────────────────────────────────────────────────────────
+   ShoreMigo design tokens
+   Scene lighting is expressed as registered custom properties so the
+   browser can interpolate them: switching `data-scene` on <html>
+   smoothly relights the sky, sea, UI surfaces AND Migo together.
+   ────────────────────────────────────────────────────────────── */
+
+@property --sky-1 { syntax: "<color>"; inherits: true; initial-value: #1e8fd0; }
+@property --sky-2 { syntax: "<color>"; inherits: true; initial-value: #6cc7ea; }
+@property --sky-3 { syntax: "<color>"; inherits: true; initial-value: #f3e7c9; }
+@property --sun { syntax: "<color>"; inherits: true; initial-value: #fff8e0; }
+@property --sun-glow { syntax: "<color>"; inherits: true; initial-value: rgba(255, 240, 200, 0.6); }
+@property --sea-1 { syntax: "<color>"; inherits: true; initial-value: #39c2d0; }
+@property --sea-2 { syntax: "<color>"; inherits: true; initial-value: #0a4f78; }
+@property --glint { syntax: "<color>"; inherits: true; initial-value: #fffbe8; }
+@property --land { syntax: "<color>"; inherits: true; initial-value: #0f5a4a; }
+@property --land-rim { syntax: "<color>"; inherits: true; initial-value: #8fe3c0; }
+@property --mist { syntax: "<color>"; inherits: true; initial-value: rgba(255, 255, 255, 0.3); }
+@property --ink { syntax: "<color>"; inherits: true; initial-value: #fbf7ee; }
+@property --ink-soft { syntax: "<color>"; inherits: true; initial-value: rgba(251, 247, 238, 0.78); }
+@property --surface { syntax: "<color>"; inherits: true; initial-value: rgba(8, 30, 48, 0.5); }
+@property --surface-line { syntax: "<color>"; inherits: true; initial-value: rgba(255, 255, 255, 0.16); }
+@property --accent { syntax: "<color>"; inherits: true; initial-value: #2fd1c5; }
+@property --accent-ink { syntax: "<color>"; inherits: true; initial-value: #04212c; }
+@property --warm { syntax: "<color>"; inherits: true; initial-value: #ff7a59; }
+@property --migo-tint { syntax: "<color>"; inherits: true; initial-value: #fff4d6; }
+@property --migo-rim { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
+@property --migo-shadow { syntax: "<color>"; inherits: true; initial-value: #06324a; }
+@property --compass { syntax: "<color>"; inherits: true; initial-value: #ffd27a; }
+@property --sun-y { syntax: "<number>"; inherits: true; initial-value: 18; }
+@property --sun-x { syntax: "<number>"; inherits: true; initial-value: 72; }
+@property --sun-size { syntax: "<number>"; inherits: true; initial-value: 9; }
+@property --stars { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --glint-a { syntax: "<number>"; inherits: true; initial-value: 0.55; }
+@property --migo-tint-a { syntax: "<number>"; inherits: true; initial-value: 0.08; }
+@property --migo-rim-a { syntax: "<number>"; inherits: true; initial-value: 0.35; }
+@property --migo-bright { syntax: "<number>"; inherits: true; initial-value: 1.04; }
+@property --migo-sat { syntax: "<number>"; inherits: true; initial-value: 1.05; }
+@property --migo-shadow-a { syntax: "<number>"; inherits: true; initial-value: 0.35; }
+@property --compass-a { syntax: "<number>"; inherits: true; initial-value: 0.35; }
+@property --rim-angle { syntax: "<angle>"; inherits: true; initial-value: 135deg; }
+@property --shadow-skew { syntax: "<number>"; inherits: true; initial-value: 0; }
+
+:root {
+  --scene-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --scene-dur: 1800ms;
+  transition:
+    --sky-1 var(--scene-dur) var(--scene-ease), --sky-2 var(--scene-dur) var(--scene-ease), --sky-3 var(--scene-dur) var(--scene-ease),
+    --sun var(--scene-dur) var(--scene-ease), --sun-glow var(--scene-dur) var(--scene-ease), --sea-1 var(--scene-dur) var(--scene-ease),
+    --sea-2 var(--scene-dur) var(--scene-ease), --glint var(--scene-dur) var(--scene-ease), --land var(--scene-dur) var(--scene-ease),
+    --land-rim var(--scene-dur) var(--scene-ease), --mist var(--scene-dur) var(--scene-ease), --ink 900ms var(--scene-ease),
+    --ink-soft 900ms var(--scene-ease), --surface 900ms var(--scene-ease), --surface-line 900ms var(--scene-ease),
+    --accent var(--scene-dur) var(--scene-ease), --accent-ink var(--scene-dur) var(--scene-ease), --warm var(--scene-dur) var(--scene-ease),
+    --migo-tint var(--scene-dur) var(--scene-ease), --migo-rim var(--scene-dur) var(--scene-ease), --migo-shadow var(--scene-dur) var(--scene-ease),
+    --compass var(--scene-dur) var(--scene-ease), --sun-y var(--scene-dur) var(--scene-ease), --sun-x var(--scene-dur) var(--scene-ease),
+    --sun-size var(--scene-dur) var(--scene-ease), --stars var(--scene-dur) var(--scene-ease), --glint-a var(--scene-dur) var(--scene-ease),
+    --migo-tint-a var(--scene-dur) var(--scene-ease), --migo-rim-a var(--scene-dur) var(--scene-ease), --migo-bright var(--scene-dur) var(--scene-ease),
+    --migo-sat var(--scene-dur) var(--scene-ease), --migo-shadow-a var(--scene-dur) var(--scene-ease), --compass-a var(--scene-dur) var(--scene-ease),
+    --rim-angle var(--scene-dur) var(--scene-ease), --shadow-skew var(--scene-dur) var(--scene-ease);
+}
+
+/* Bright tropical daylight: sun high to the right, crisp turquoise sea. */
+:root, [data-scene="day"] {
+  --sky-1: #1b86c9; --sky-2: #63c3ea; --sky-3: #f4e9cf;
+  --sun: #fffaf0; --sun-glow: rgba(255, 244, 214, 0.65);
+  --sea-1: #45cdd6; --sea-2: #07496f; --glint: #fffdf2; --glint-a: 0.5;
+  --land: #0e5446; --land-rim: #9ff0cf; --mist: rgba(255, 255, 255, 0.32);
+  --ink: #fffaf1; --ink-soft: rgba(255, 250, 241, 0.82);
+  --surface: rgba(6, 34, 54, 0.46); --surface-line: rgba(255, 255, 255, 0.18);
+  --accent: #34d6c9; --accent-ink: #032029; --warm: #ff7a59;
+  --migo-tint: #fff4d6; --migo-tint-a: 0.06; --migo-rim: #ffffff; --migo-rim-a: 0.38; --rim-angle: 135deg;
+  --migo-bright: 1.04; --migo-sat: 1.06; --migo-shadow: #053049; --migo-shadow-a: 0.34; --shadow-skew: -8;
+  --compass: #ffd27a; --compass-a: 0.3;
+  --sun-y: 16; --sun-x: 74; --sun-size: 8; --stars: 0;
+}
+
+/* Tropical shade: under palms / jungle canopy. Cool green bounce light. */
+[data-scene="shade"] {
+  --sky-1: #1f6f7d; --sky-2: #6fbfb3; --sky-3: #dbecd9;
+  --sun: #f6ffe9; --sun-glow: rgba(220, 255, 220, 0.4);
+  --sea-1: #3fb7a6; --sea-2: #0a3f4f; --glint: #e9fff4; --glint-a: 0.3;
+  --land: #0b3b2f; --land-rim: #8fe6b8; --mist: rgba(220, 255, 236, 0.3);
+  --surface: rgba(6, 40, 38, 0.5);
+  --migo-tint: #7fe0c0; --migo-tint-a: 0.14; --migo-rim: #d4fff0; --migo-rim-a: 0.2; --rim-angle: 160deg;
+  --migo-bright: 0.94; --migo-sat: 1; --migo-shadow: #04241f; --migo-shadow-a: 0.42; --shadow-skew: -3;
+  --compass-a: 0.4; --sun-y: 10; --sun-x: 60; --sun-size: 6;
+}
+
+/* Signature golden hour: low sun near the horizon, coral sky, amber glitter path,
+   warm back-rim on Migo and long cool shadows. */
+[data-scene="sunset"] {
+  --sky-1: #1a1546; --sky-2: #c4476c; --sky-3: #ffb55e;
+  --sun: #fff0c2; --sun-glow: rgba(255, 148, 72, 0.78);
+  --sea-1: #74406c; --sea-2: #0a1636; --glint: #ffc46b; --glint-a: 0.95;
+  --land: #1b0f27; --land-rim: #ff9a57; --mist: rgba(255, 170, 130, 0.22);
+  --ink: #fff6e8; --ink-soft: rgba(255, 240, 222, 0.82);
+  --surface: rgba(34, 14, 42, 0.44); --surface-line: rgba(255, 210, 170, 0.2);
+  --accent: #ffbe6b; --accent-ink: #2b1205; --warm: #ff7f6b;
+  --migo-tint: #ff9a5a; --migo-tint-a: 0.24; --migo-rim: #ffb066; --migo-rim-a: 0.75; --rim-angle: 255deg;
+  --migo-bright: 0.95; --migo-sat: 1.12; --migo-shadow: #2a0d2e; --migo-shadow-a: 0.5; --shadow-skew: 22;
+  --compass: #ffcf6e; --compass-a: 0.8;
+  --sun-y: 57; --sun-x: 50; --sun-size: 13; --stars: 0.15;
+}
+
+/* Evening / disruption: moonlit navy; Migo's compass becomes his lantern. */
+[data-scene="night"] {
+  --sky-1: #040a1d; --sky-2: #0c1f40; --sky-3: #22436a;
+  --sun: #eaf1ff; --sun-glow: rgba(150, 185, 255, 0.32);
+  --sea-1: #123251; --sea-2: #020815; --glint: #a8c6ff; --glint-a: 0.45;
+  --land: #020611; --land-rim: #5d8bd4; --mist: rgba(140, 170, 230, 0.16);
+  --ink: #f2f6ff; --ink-soft: rgba(225, 234, 255, 0.8);
+  --surface: rgba(6, 14, 34, 0.6); --surface-line: rgba(170, 200, 255, 0.18);
+  --accent: #7fd8ff; --accent-ink: #021626; --warm: #ff8a7a;
+  --migo-tint: #3b5c9c; --migo-tint-a: 0.32; --migo-rim: #9cc0ff; --migo-rim-a: 0.5; --rim-angle: 120deg;
+  --migo-bright: 0.8; --migo-sat: 0.86; --migo-shadow: #000000; --migo-shadow-a: 0.55; --shadow-skew: -4;
+  --compass: #ffd27a; --compass-a: 1;
+  --sun-y: 14; --sun-x: 22; --sun-size: 5; --stars: 1;
+}
+
+/* Neutral checkout: calm ivory, dark ink, no drama around financial controls. */
+[data-scene="neutral"] {
+  --sky-1: #f6f0e4; --sky-2: #f1e8d6; --sky-3: #ebdfc8;
+  --sun: #fffaf0; --sun-glow: rgba(255, 236, 200, 0.35);
+  --sea-1: #cfe6e2; --sea-2: #a9cfd0; --glint: #ffffff; --glint-a: 0.15;
+  --land: #c9d9cf; --land-rim: #e8f3ec; --mist: rgba(255, 255, 255, 0.5);
+  --ink: #0b2236; --ink-soft: rgba(11, 34, 54, 0.72);
+  --surface: rgba(255, 255, 255, 0.78); --surface-line: rgba(11, 34, 54, 0.12);
+  --accent: #0d7f86; --accent-ink: #ffffff; --warm: #d9573c;
+  --migo-tint: #fff7e8; --migo-tint-a: 0.04; --migo-rim: #ffffff; --migo-rim-a: 0.12; --rim-angle: 135deg;
+  --migo-bright: 1; --migo-sat: 1; --migo-shadow: #1b3a4a; --migo-shadow-a: 0.2; --shadow-skew: 0;
+  --compass-a: 0.15; --sun-y: 12; --sun-x: 80; --sun-size: 5; --stars: 0;
+}
+
+@theme inline {
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --color-navy: #071a2c;
+  --color-ivory: #fbf6ec;
+  --color-turquoise: #2fd1c5;
+  --color-seaglass: #8fd9c0;
+  --color-coral: #ff7a59;
+  --color-champagne: #f3d9a4;
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-surface: var(--surface);
+  --color-line: var(--surface-line);
+  --color-warm: var(--warm);
+}
+
+html {
+  background: #071a2c;
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+html[data-scene="neutral"] { color-scheme: light; }
+
+body {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--sea-2);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection { background: color-mix(in oklab, var(--accent) 45%, transparent); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+.font-display { font-family: var(--font-display); font-optical-sizing: auto; }
+
+@layer components {
+.eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+/* A ShoreMigo surface: tinted by the scene, never a flat white card. */
+.surface {
+  background:
+    linear-gradient(160deg, color-mix(in oklab, var(--surface) 92%, white 8%), var(--surface));
+  border: 1px solid var(--surface-line);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(18px) saturate(1.2);
+  box-shadow:
+    0 1px 0 0 color-mix(in oklab, var(--surface-line) 80%, white 20%) inset,
+    0 30px 60px -30px color-mix(in oklab, var(--migo-shadow) 70%, transparent);
+}
+
+/* Denser variant for overlays that hold reading content (concierge, settings). */
+.surface-strong {
+  background: linear-gradient(160deg, color-mix(in oklab, var(--sea-2) 70%, var(--surface)), color-mix(in oklab, var(--sea-2) 86%, black 6%));
+  border: 1px solid var(--surface-line);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.55);
+}
+html[data-scene="neutral"] .surface-strong { background: rgba(255, 255, 255, 0.94); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border-radius: 999px;
+  padding: 0.85rem 1.4rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s, background-color 0.4s, color 0.4s;
+  will-change: transform;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 10px 30px -10px color-mix(in oklab, var(--accent) 80%, transparent), 0 0 0 1px color-mix(in oklab, var(--accent) 60%, white 40%) inset;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px -12px color-mix(in oklab, var(--accent) 90%, transparent); }
+.btn-ghost {
+  color: var(--ink);
+  border: 1px solid var(--surface-line);
+  background: color-mix(in oklab, var(--surface) 60%, transparent);
+  backdrop-filter: blur(10px);
+}
+.btn-ghost:hover { background: color-mix(in oklab, var(--surface) 90%, transparent); transform: translateY(-2px); }
+.btn:disabled { opacity: 0.5; pointer-events: none; }
+
+.field {
+  width: 100%;
+  border-radius: 14px;
+  padding: 0.8rem 1rem;
+  background: color-mix(in oklab, var(--surface) 70%, white 6%);
+  border: 1px solid var(--surface-line);
+  color: var(--ink);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.field::placeholder { color: var(--ink-soft); opacity: 0.7; }
+.field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 22%, transparent); }
+
+.demo-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  color: #3a2300;
+  background: #ffd27a;
+}
+
+}
+
+/* ── Environment motion ─────────────────────────────── */
+@keyframes drift { from { transform: translateX(-10%); } to { transform: translateX(110vw); } }
+@keyframes swell { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(-2%, 0.4%, 0); } }
+@keyframes waveSlide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes glint { 0%, 100% { opacity: 0.15; transform: scaleX(0.7); } 50% { opacity: 1; transform: scaleX(1.15); } }
+@keyframes twinkle { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+@keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.85; } 50% { transform: scale(1.06); opacity: 1; } }
+@keyframes sway { 0%, 100% { transform: rotate(-1.2deg); } 50% { transform: rotate(1.4deg); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes compassPulse { 0%, 100% { opacity: calc(var(--compass-a) * 0.7); transform: scale(0.92); } 50% { opacity: var(--compass-a); transform: scale(1.08); } }
+@keyframes shimmerText { from { background-position: 200% 50%; } to { background-position: -200% 50%; } }
+@keyframes migoBreathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.012, 1.022); } }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+.shimmer-text {
+  background: linear-gradient(100deg, var(--ink) 30%, color-mix(in oklab, var(--glint) 80%, white) 50%, var(--ink) 70%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmerText 7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --scene-dur: 1ms; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+html[data-motion="reduced"] *, html[data-motion="reduced"] *::before, html[data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+}
+
+@media (max-width: 767px) {
+  .scene-fg .palm-left { display: none; }
+  .scene-fg .palm-right { height: 42vh; opacity: 0.85; }
+}
