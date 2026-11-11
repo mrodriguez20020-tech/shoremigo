@@ -60,7 +60,69 @@ Production build (`next start`) with `OPERATOR_PASSCODE` set, PayPal **unset**, 
 
 **Still not verified live:** buyer approval → capture COMPLETED, refund, top-up (needs a sandbox buyer login by a human).
 
-## To do once sandbox keys exist (fill in actual values)
+## 2026-11-11: PayPal sandbox end-to-end attempt (browser automation + direct API checks)
+
+All calls went to `https://api-m.sandbox.paypal.com` (hard-coded in `src/lib/server/paypal.ts`; no live switch exists). Sandbox credentials are only in git-ignored `.env.local` and were never printed. Every PayPal status below was read back **independently from PayPal** with a separate script (`GET /v2/checkout/orders/{id}`), not just from the app. No mocks were used in this section.
+
+### Sandbox-only configuration
+| Check | Result |
+|---|---|
+| Server API base | `api-m.sandbox.paypal.com` only (constant) |
+| Credentials | Accepted by the sandbox OAuth endpoint (a live client id would be refused there) |
+| Seller (payee) on orders | default sandbox business account, merchant `G37Y8N47AAGLN`, `@business.example.com` |
+
+### Results
+| # | Test | Result | Evidence (real sandbox) |
+|---|---|---|---|
+| 1 | Booking via UI, server-side price | PASS | `SM-ZJ8EF`, 2 × $89.00 = $178.00 |
+| 2 | Order creation | PASS | `6M425404UY501762B`, `5VM67506GB5088749`, `21K500574L414502M` (status `PAYER_ACTION_REQUIRED`) |
+| 3 | Duplicate order request (idempotency) | PASS | two requests → same `21K500574L414502M` |
+| 4 | Buyer approval (PayPal card guest checkout, PayPal-documented test Visa 4012 8888 8888 1881, fake test identity) | PASS | PayPal reports order `APPROVED`, payer country US, 178.00 USD, custom_id = booking id |
+| 5 | **Capture** | **BLOCKED by the sandbox seller account** | 422 `COMPLIANCE_VIOLATION` (debug ids `f683554b4276e`, `f10110146c2ad`) with both a generic and a PayPal-documented test card. Order stays `APPROVED`; no capture exists, so no sandbox money moved |
+| 6 | Failed capture handling | PASS | booking stays `pending_payment`, paid $0, no payment record, buyer sees PayPal's message |
+| 7 | Capture before buyer approval | PASS | PayPal 422 `ORDER_NOT_APPROVED`; booking unpaid |
+| 8 | Capture with another booking's order / a fabricated order id | PASS | 409 `order_mismatch` (PayPal never called) |
+| 9 | Client-supplied price (`totalCents: 1`) | PASS | ignored; server total $65.00 |
+| 10 | Holds reduce live inventory | PASS | Palancar 16 − 3 active 2-guest holds = 10 open; Cacao 20 − 2 = 18; older expired holds not counted |
+| 11 | Hold expiry releases seats (live) | PASS | Palancar 10 → 12 open at 05:46:08Z, after hold `SM-ZJ8EF` (created 05:30:25Z) passed 15 min; nothing else changed |
+| 12 | Refund / Trip Rescue refund | NOT RUN | needs a completed capture (blocked by #5) |
+| 13 | Buyer closes the PayPal window | NOT RUN in the app pane (popups don't open there); the resulting server state is covered by #7 and #10/#11 |
+
+### Bugs found by this live run, fixed with regression tests
+1. **Retry after a refused capture was impossible.** Order creation reused `PayPal-Request-Id: create-<booking>`, so after a failed capture PayPal replayed the dead order (`ORDER_ALREADY_CAPTURED` on the second click) and the buyer was stuck until the hold expired. A non-retryable capture failure now clears the dead order, and the next checkout uses a fresh key (`create-<booking>-r<n>`). `INSTRUMENT_DECLINED` keeps the same order, as PayPal intends. Test: `tests/inventory.test.ts` → "refused capture recovery". Live re-check pending the seller fix.
+2. **Failed captures left no audit trail.** Now recorded as `paypal.capture.failed` with PayPal's issue code and debug id (verified live: `COMPLIANCE_VIOLATION`, `f10110146c2ad`).
+3. Operator console kept polling `/api/operator/overview` every 5 s while signed out (401 flood). It now stops until sign-in.
+
+### Needs the owner (automation can't do this)
+- **Fix the sandbox seller account.** developer.paypal.com → Testing Tools → Sandbox Accounts → create a **Business** account with country **United States** → Apps & Credentials → Sandbox → create an app linked to that business account → put its client id/secret in `.env.local`. Then rerun #4–#5 and the refund steps.
+- Optional: approve once by logging in with the sandbox **Personal** account in PayPal's own window (automation does not enter passwords).
+
+## 2026-11-11 (later): full sandbox payment + refund cycle PASSED on the new US seller account
+
+The owner created a new US sandbox Business account and REST app (credentials only in `.env.local`). The new credentials can't see the old orders (404), which confirms a different merchant. Seller on every order below: merchant `QLPRBDFBW79U4`. **The COMPLIANCE_VIOLATION above was the old seller account; it did not recur.** Buyer approval used PayPal's card guest checkout with PayPal's documented sandbox Visa and a fake identity. Every status was re-read from PayPal by an independent script.
+
+| # | Test | Result | PayPal evidence (read back from PayPal) |
+|---|---|---|---|
+| 1 | New order → buyer approval → server capture (`SM-MS225`, 2 × $89) | PASS | order `1SE241003H9223117` `COMPLETED`; capture `7AA24246WA9507806` `COMPLETED` 178.00 USD; custom_id = booking id |
+| 2 | Booking paid, inventory committed | PASS | booking `confirmed`, paid $178.00, 1 payment record; the hold became committed seats (Palancar 14/16 open, unchanged) |
+| 3 | Duplicate capture: 2 sequential + 3 parallel replays | PASS | all 200 with the same booking; still **1** local payment and **1** capture at PayPal |
+| 4 | New order on a paid booking / foreign order id | PASS | 409 `bad_state` / 409 `order_mismatch` |
+| 5 | Declined payment (`CCREJECT-REFUSED`, `SM-VC93A`) | PASS | PayPal 422 `INSTRUMENT_DECLINED`, debug id `f8252418b8c7c`; booking unpaid; audited as `paypal.capture.failed` |
+| 6 | Retry after the decline (same booking, page reload) | **FAILED first, fixed, then PASS** | first retry hit PayPal `ORDER_ALREADY_CAPTURED` (spent order + reused idempotency key). After the fix: audit `capture.failed > order.replaced > order.created > capture.verified`; new order `0T454951WM4020632` `COMPLETED`, capture `04Y63015WU051620V` 178.00 USD |
+| 7 | Simulated 90-min delay (operator) | PASS | both bookings `disrupted`; LastBoard offered Afternoon Reef (−$20), Punta Sur (+$60), Cacao (−$48), full refund (−$178) |
+| 8 | Customer approval without confirmation / before operator review | PASS | 400 "Explicit confirmation is required" / 409 `awaiting_operator`; no money moved |
+| 9 | Trip Rescue switch: operator approves → customer picks Afternoon Reef | PASS | refund `6X5600853W843645J` `COMPLETED` 20.00 USD; capture now `PARTIALLY_REFUNDED`; booking `rebooked`, net paid $158.00 |
+| 10 | Trip Rescue cancel: customer picks full refund | PASS | refund `1PC89064GD524790R` `COMPLETED` 178.00 USD; capture now `REFUNDED`; booking `cancelled_refunded`, paid $0 |
+| 11 | Replay of either approval | PASS | 404 `no_proposal`; no second refund |
+| 12 | Inventory after rescue | PASS | Palancar back to 16/16 open (both parties left); Afternoon Reef 14/16 (2 moved in) |
+
+**Code fix from #6:** `startCheckout` now asks PayPal for the pending order's state and reuses it only while it's `CREATED`/`PAYER_ACTION_REQUIRED`. Otherwise it records `paypal.order.replaced` and creates a fresh order with a new idempotency key. The test double now mirrors PayPal's live behavior (a declined order is `APPROVED`). Tests: "a declined card…", "an order still awaiting the buyer is reused".
+
+**Not covered:** approval through a logged-in sandbox **Personal** wallet (automation doesn't enter passwords; the card path exercises the same create → approve → capture → refund API flow); buyer closing the PayPal popup (popups don't open in the automation pane); the top-up (customer pays more) rescue path.
+
+**Regression after these runs:** `tsc` OK · Vitest **67/67** · lint 0 errors · production build OK (20/20 pages) · secret scan 0 hits across 98 files. The simulated delay was cleared afterwards.
+
+## Earlier checklist (superseded by the table above)
 
 | Step | Expected | Actual |
 |---|---|---|

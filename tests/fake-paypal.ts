@@ -17,7 +17,7 @@ export function createFakePayPal() {
   const captures = new Map<string, { id: string; status: string; amount: string; refunded: number }>();
   const byRequestId = new Map<string, unknown>();
   const calls: { method: string; path: string; requestId?: string; body?: unknown }[] = [];
-  const opts = { declineNextCapture: false, captureAmountOverride: null as string | null, refundStatus: "COMPLETED", captureStatus: "COMPLETED" };
+  const opts = { declineNextCapture: false, complianceNextCapture: false, captureAmountOverride: null as string | null, refundStatus: "COMPLETED", captureStatus: "COMPLETED" };
   let n = 0;
 
   const json = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
@@ -60,8 +60,14 @@ export function createFakePayPal() {
       if (!o) return json(404, { name: "RESOURCE_NOT_FOUND" });
       if (!m[2]) return json(200, orderView(o));
       if (o.capture) return json(422, { name: "UNPROCESSABLE_ENTITY", details: [{ issue: "ORDER_ALREADY_CAPTURED", description: "Order already captured." }] });
+      if (opts.complianceNextCapture) {
+        opts.complianceNextCapture = false;
+        o.status = "APPROVED"; // as observed live: buyer approved, capture refused
+        return json(422, { name: "UNPROCESSABLE_ENTITY", details: [{ issue: "COMPLIANCE_VIOLATION", description: "Transaction cannot be processed due to a possible compliance violation." }], debug_id: "fake-debug" });
+      }
       if (opts.declineNextCapture) {
         opts.declineNextCapture = false;
+        o.status = "APPROVED"; // as observed live (order 3NT0815750628493N)
         return json(422, { name: "UNPROCESSABLE_ENTITY", details: [{ issue: "INSTRUMENT_DECLINED", description: "The instrument presented was declined." }] });
       }
       const cap = { id: `CAP${++n}`, status: opts.captureStatus, amount: opts.captureAmountOverride ?? o.amount };

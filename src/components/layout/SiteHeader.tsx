@@ -42,14 +42,14 @@ export function SiteHeader() {
           <CompassMark />
           <Wordmark />
         </TideLink>
-        <nav className="ml-6 hidden items-center gap-1 md:flex" aria-label="Main">
+        <nav className="ml-6 hidden items-center gap-1 lg:flex" aria-label="Main">
           {NAV.map((n) => {
             const active = n.href === pathname || (n.href !== "/" && !n.href.startsWith("/#") && pathname.startsWith(n.href));
             return (
               <TideLink
                 key={n.href}
                 href={n.href}
-                className={`rounded-full px-3.5 py-2 text-sm font-semibold transition ${active ? "bg-white/10 text-ink" : "text-ink-soft hover:text-ink"}`}
+                className={`whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-semibold transition ${active ? "bg-white/10 text-ink" : "text-ink-soft hover:text-ink"}`}
                 aria-current={active ? "page" : undefined}
               >
                 {n.label}
@@ -60,10 +60,10 @@ export function SiteHeader() {
         <div className="ml-auto flex items-center gap-2">
           <ProofDrawer />
           <ExperienceSettings />
-          <button className="btn btn-primary hidden !py-2 text-sm sm:inline-flex" onClick={() => openConcierge()}>
+          <button className="btn btn-primary hidden whitespace-nowrap !py-2 text-sm sm:inline-flex" onClick={() => openConcierge()}>
             Ask Migo
           </button>
-          <button className="btn btn-ghost !h-10 !w-10 !p-0 md:hidden" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu((m) => !m)}>
+          <button className="btn btn-ghost !h-10 !w-10 !p-0 lg:hidden" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu((m) => !m)}>
             ☰
           </button>
         </div>
@@ -74,7 +74,7 @@ export function SiteHeader() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="surface mx-3 mt-2 grid gap-1 rounded-3xl p-3 md:hidden"
+            className="surface mx-3 mt-2 grid gap-1 rounded-3xl p-3 lg:hidden"
             aria-label="Mobile"
           >
             {NAV.map((n) => (

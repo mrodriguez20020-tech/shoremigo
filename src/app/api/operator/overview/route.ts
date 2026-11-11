@@ -1,5 +1,4 @@
-import { EXCURSIONS } from "@/lib/domain/catalog";
-import { seatsLeft } from "@/lib/server/bookings";
+import { inventoryRows } from "@/lib/server/bookings";
 import { fail, ok } from "@/lib/server/http";
 import { isOperator } from "@/lib/server/session";
 import { read } from "@/lib/server/store";
@@ -18,7 +17,7 @@ export async function GET(req: Request) {
         disruptions: db.disruptions,
         audit: [...db.audit].reverse().slice(0, 300),
         engagement: counts,
-        inventory: EXCURSIONS.map((e) => ({ excursionId: e.id, capacity: e.capacity, seatsLeft: seatsLeft(db, e.id) })),
+        inventory: inventoryRows(db),
       };
     });
     return ok({ ...data, protected: Boolean(process.env.OPERATOR_PASSCODE) });

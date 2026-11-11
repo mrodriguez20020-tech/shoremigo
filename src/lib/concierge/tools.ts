@@ -175,6 +175,7 @@ export async function runTool(name: string, rawArgs: Record<string, unknown>, ct
       duration: fmtDuration(e.durationMin),
       intensity: e.intensity,
       seats_left: s.seatsLeft,
+      on_sale: s.onSale,
       schedule_fit: s.feasibility.status,
     };
   };

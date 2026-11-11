@@ -1,6 +1,6 @@
 import "server-only";
 import { randomBytes, randomUUID } from "node:crypto";
-import { EXCURSIONS, POLICY, excursionsForPort, getExcursion, getPort } from "@/lib/domain/catalog";
+import { EXCURSIONS, POLICY, VEHICLES, excursionsForPort, getExcursion, getPort } from "@/lib/domain/catalog";
 import { checkFeasibility } from "@/lib/domain/feasibility";
 import { planRescue } from "@/lib/domain/rescue";
 import type { AuditEvent, Booking, Disruption, PaymentRecord, RescueProposal } from "@/lib/domain/types";
@@ -35,10 +35,77 @@ export function seatsTaken(db: DbShape, excursionId: string, excludeBookingId?: 
     .reduce((n, b) => n + b.guests, 0);
 }
 
+/** Effective capacity: operator override if set, else the catalog default. */
+export function capacityOf(db: DbShape, excursionId: string) {
+  return db.inventory?.[excursionId]?.capacity ?? getExcursion(excursionId)?.capacity ?? 0;
+}
+
+export function isOnSale(db: DbShape, excursionId: string) {
+  return db.inventory?.[excursionId]?.open !== false;
+}
+
 export function seatsLeft(db: DbShape, excursionId: string, excludeBookingId?: string) {
   const ex = getExcursion(excursionId);
-  if (!ex) return 0;
-  return Math.max(0, ex.capacity - seatsTaken(db, excursionId, excludeBookingId));
+  if (!ex || !isOnSale(db, excursionId)) return 0;
+  return Math.max(0, capacityOf(db, excursionId) - seatsTaken(db, excursionId, excludeBookingId));
+}
+
+/** Operator inventory read model: confirmed vs held seats, sale state, next hold expiry. */
+export function inventoryRows(db: DbShape) {
+  return EXCURSIONS.map((ex) => {
+    const live = db.bookings.filter((b) => b.excursionId === ex.id);
+    const confirmed = live.filter((b) => b.status === "confirmed" || b.status === "rebooked" || b.status === "disrupted").reduce((n, b) => n + b.guests, 0);
+    const holds = live.filter(holdActive);
+    const held = holds.reduce((n, b) => n + b.guests, 0);
+    const expiries = holds.map((b) => Date.parse(b.createdAt) + POLICY.holdMinutes * 60_000).sort((a, z) => a - z);
+    return {
+      excursionId: ex.id,
+      catalogCapacity: ex.capacity,
+      capacity: capacityOf(db, ex.id),
+      open: isOnSale(db, ex.id),
+      confirmed,
+      held,
+      holds: holds.length,
+      nextHoldExpiresAt: expiries[0] ? new Date(expiries[0]).toISOString() : null,
+      seatsLeft: seatsLeft(db, ex.id),
+      vehicleSeats: VEHICLES[ex.vehicleId]?.seats ?? null,
+    };
+  });
+}
+
+export const MAX_CAPACITY = 60;
+
+/**
+ * Operator changes capacity and/or sale state. Capacity can never drop below
+ * seats already confirmed or held (that would oversell), nor exceed the
+ * assigned vehicle. Runs inside the serialized transaction and is audited.
+ */
+export async function updateInventory(input: { excursionId?: string; capacity?: unknown; open?: unknown }) {
+  const ex = input.excursionId ? getExcursion(String(input.excursionId)) : undefined;
+  if (!ex) throw new DomainError("Unknown excursion", "unknown_excursion", 404);
+  const hasCap = input.capacity !== undefined && input.capacity !== null && input.capacity !== "";
+  const hasOpen = typeof input.open === "boolean";
+  if (!hasCap && !hasOpen) throw new DomainError("Nothing to update", "bad_input");
+  const cap = hasCap ? Number(input.capacity) : undefined;
+  const limit = Math.min(MAX_CAPACITY, VEHICLES[ex.vehicleId]?.seats ?? MAX_CAPACITY);
+  if (cap !== undefined && (!Number.isInteger(cap) || cap < 0 || cap > limit))
+    throw new DomainError(`Capacity must be a whole number from 0 to ${limit} (vehicle limit).`, "bad_capacity");
+  return tx((db) => {
+    db.inventory ??= {};
+    const before = { capacity: capacityOf(db, ex.id), open: isOnSale(db, ex.id) };
+    if (cap !== undefined) {
+      const committed = seatsTaken(db, ex.id);
+      if (cap < committed)
+        throw new DomainError(`${committed} seats are already confirmed or held. Capacity can’t go below that.`, "would_oversell", 409);
+    }
+    const next = { ...db.inventory[ex.id], updatedAt: now() };
+    if (cap !== undefined) next.capacity = cap;
+    if (hasOpen) next.open = input.open as boolean;
+    db.inventory[ex.id] = next;
+    const after = { capacity: capacityOf(db, ex.id), open: isOnSale(db, ex.id) };
+    audit(db, { actor: "operator", type: "inventory.updated", detail: { excursionId: ex.id, before: JSON.stringify(before), after: JSON.stringify(after) } });
+    return inventoryRows(db).find((r) => r.excursionId === ex.id)!;
+  });
 }
 
 export function activeDisruption(db: DbShape, portId: string): Disruption | undefined {
@@ -61,6 +128,8 @@ export function availabilitySnapshot() {
       return {
         excursionId: ex.id,
         seatsLeft: seatsLeft(db, ex.id),
+        capacity: capacityOf(db, ex.id),
+        onSale: isOnSale(db, ex.id),
         feasibility: checkFeasibility(port, ex, POLICY, { delayMin: d?.delayMin ?? 0, allAboardExtensionMin: d?.allAboardExtensionMin }),
         disruption: d ?? null,
       };
@@ -122,6 +191,7 @@ export async function createBooking(raw: Partial<CreateBookingInput>) {
     const d = activeDisruption(db, port.id);
     const f = checkFeasibility(port, ex, POLICY, { delayMin: d?.delayMin ?? 0, allAboardExtensionMin: d?.allAboardExtensionMin });
     if (f.status === "infeasible") throw new DomainError("This excursion doesn't fit the ship's schedule.", "infeasible", 409);
+    if (!isOnSale(db, ex.id)) throw new DomainError("This excursion is not on sale right now.", "closed", 409);
     if (seatsLeft(db, ex.id) < input.guests) throw new DomainError("Not enough seats left on this excursion.", "sold_out", 409);
     const total = ex.priceCents * input.guests;
     const b: Booking = {
@@ -162,12 +232,35 @@ export async function startCheckout(bookingId: string) {
     });
     throw new DomainError("Your seat hold expired. Please start again.", "expired", 409);
   }
+  // Reuse the pending order only if PayPal says it is still waiting for the buyer.
+  // After a declined or refused capture the old order (and its idempotency key) is
+  // spent: PayPal answers ORDER_ALREADY_CAPTURED, so start a fresh order instead.
+  let attempt = b.checkoutAttempt ?? 0;
+  if (b.pendingOrderId) {
+    let reusable: paypal.PayPalOrder | null = null;
+    try {
+      const existing = await paypal.getOrder(b.pendingOrderId);
+      if (existing.status === "CREATED" || existing.status === "PAYER_ACTION_REQUIRED") reusable = existing;
+    } catch {
+      reusable = null;
+    }
+    if (reusable) return reusable;
+    const stale = b.pendingOrderId;
+    attempt = await tx((db) => {
+      const x = db.bookings.find((y) => y.id === bookingId)!;
+      x.checkoutAttempt = (x.checkoutAttempt ?? 0) + 1;
+      x.pendingOrderId = undefined;
+      x.updatedAt = now();
+      audit(db, { actor: "system", type: "paypal.order.replaced", bookingId, detail: { staleOrderId: stale, attempt: x.checkoutAttempt } });
+      return x.checkoutAttempt;
+    });
+  }
   const ex = getExcursion(b.excursionId)!;
   const order = await paypal.createOrder({
     amountCents: b.totalCents,
     customId: b.id,
     description: `ShoreMigo ${b.ref}: ${ex.title} x${b.guests}`,
-    requestId: `create-${b.id}`,
+    requestId: attempt ? `create-${b.id}-r${attempt}` : `create-${b.id}`,
   });
   await tx((db) => {
     const x = db.bookings.find((y) => y.id === bookingId)!;
@@ -197,7 +290,29 @@ export async function completeCheckout(bookingId: string, orderId: string) {
   if (b.status === "confirmed" && b.payments.some((p) => p.orderId === orderId)) return b; // idempotent replay
   if (b.status !== "pending_payment" || b.pendingOrderId !== orderId) throw new DomainError("Order does not match this booking.", "order_mismatch", 409);
 
-  const { order, check } = await captureVerified(orderId, `capture-${orderId}`, { customId: b.id, amountCents: b.totalCents });
+  let captured: Awaited<ReturnType<typeof captureVerified>>;
+  try {
+    captured = await captureVerified(orderId, `capture-${orderId}`, { customId: b.id, amountCents: b.totalCents });
+  } catch (e) {
+    // PayPal refused the capture (declined card, compliance hold, not approved...). Record it; the booking stays unpaid.
+    const err = e as { code?: string; message?: string; body?: { details?: { issue?: string }[]; debug_id?: string } };
+    const code = err.body?.details?.[0]?.issue ?? err.code ?? "error";
+    await tx((db) => {
+      audit(db, { actor: "paypal", type: "paypal.capture.failed", bookingId, detail: { orderId, code, debugId: err.body?.debug_id ?? null, message: String(err.message ?? "").slice(0, 160) } });
+      // INSTRUMENT_DECLINED: PayPal lets the buyer pick another funding source on the same order.
+      // Anything else (compliance hold, not approved...) leaves this order unusable: start a fresh one next time.
+      if (code !== "INSTRUMENT_DECLINED" && code !== "ORDER_NOT_APPROVED") {
+        const x = db.bookings.find((y) => y.id === bookingId);
+        if (x && x.pendingOrderId === orderId) {
+          x.pendingOrderId = undefined;
+          x.checkoutAttempt = (x.checkoutAttempt ?? 0) + 1;
+          x.updatedAt = now();
+        }
+      }
+    });
+    throw e;
+  }
+  const { order, check } = captured;
   return tx((db) => {
     const x = db.bookings.find((y) => y.id === bookingId)!;
     if (!check.ok || !check.capture) {

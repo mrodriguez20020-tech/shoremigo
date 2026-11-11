@@ -16,11 +16,24 @@ interface Overview {
   disruptions: Disruption[];
   audit: AuditEvent[];
   engagement: Record<string, number>;
-  inventory: { excursionId: string; capacity: number; seatsLeft: number }[];
+  inventory: InventoryRow[];
   protected: boolean;
 }
 
-type Tab = "schedule" | "rescue" | "bookings" | "audit" | "insights";
+interface InventoryRow {
+  excursionId: string;
+  catalogCapacity: number;
+  capacity: number;
+  open: boolean;
+  confirmed: number;
+  held: number;
+  holds: number;
+  nextHoldExpiresAt: string | null;
+  seatsLeft: number;
+  vehicleSeats: number | null;
+}
+
+type Tab = "schedule" | "inventory" | "rescue" | "bookings" | "audit" | "insights";
 
 export default function OperatorPage() {
   const [data, setData] = useState<Overview | null>(null);
@@ -45,10 +58,11 @@ export default function OperatorPage() {
   }, []);
 
   useEffect(() => {
+    if (needAuth) return; // don't keep polling a protected endpoint while signed out
     load();
     const t = setInterval(load, 5000);
     return () => clearInterval(t);
-  }, [load]);
+  }, [load, needAuth]);
 
   const pendingReviews = data?.rescues.filter((r) => r.status === "open" && r.operatorReview === "pending").length ?? 0;
   useEffect(() => {
@@ -78,6 +92,7 @@ export default function OperatorPage() {
             {(
               [
                 ["schedule", "Schedule"],
+                ["inventory", "Inventory"],
                 ["rescue", `Trip Rescue reviews${pendingReviews ? ` (${pendingReviews})` : ""}`],
                 ["bookings", "Bookings & payments"],
                 ["audit", "Audit trail"],
@@ -95,6 +110,7 @@ export default function OperatorPage() {
           ) : (
             <div className="mt-6">
               {tab === "schedule" && <ScheduleView data={data} port={port} setPort={setPort} />}
+              {tab === "inventory" && <InventoryView data={data} reload={load} />}
               {tab === "rescue" && <RescueReviews data={data} reload={load} />}
               {tab === "bookings" && <BookingsView data={data} />}
               {tab === "audit" && <AuditView data={data} />}
@@ -381,6 +397,116 @@ function RescueReviews({ data, reload }: { data: Overview; reload: () => void })
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function InventoryView({ data, reload }: { data: Overview; reload: () => void }) {
+  const [draft, setDraft] = useState<Record<string, string>>({});
+  const [msg, setMsg] = useState<Record<string, { ok: boolean; text: string }>>({});
+  const [busy, setBusy] = useState<string | null>(null);
+
+  const save = async (id: string, change: { capacity?: number; open?: boolean }) => {
+    setBusy(id);
+    try {
+      await api("/api/operator/inventory", { json: { excursionId: id, ...change } });
+      setMsg((m) => ({ ...m, [id]: { ok: true, text: "Saved" } }));
+      setDraft((d) => ({ ...d, [id]: "" }));
+      reload();
+    } catch (e) {
+      setMsg((m) => ({ ...m, [id]: { ok: false, text: (e as Error).message } }));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {PORTS.map((p) => (
+        <div key={p.id} className="surface overflow-x-auto rounded-[28px] p-4 sm:p-6">
+          <p className="eyebrow mb-3">
+            {p.name} · in port {p.arrive}–{p.allAboard}
+          </p>
+          <table className="w-full min-w-[860px] text-left text-sm">
+            <thead className="text-xs text-ink-soft">
+              <tr>
+                <th className="py-2">Excursion</th>
+                <th>Seat map</th>
+                <th>Confirmed</th>
+                <th>Held</th>
+                <th>Open</th>
+                <th>Capacity</th>
+                <th>Sales</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.inventory
+                .filter((i) => getExcursion(i.excursionId)?.portId === p.id)
+                .map((i) => {
+                  const ex = getExcursion(i.excursionId)!;
+                  const cap = Math.max(1, i.capacity);
+                  const m = msg[i.excursionId];
+                  return (
+                    <tr key={i.excursionId} className="border-t border-line align-middle">
+                      <td className="py-3 pr-3">
+                        <span className="font-semibold">{ex.title}</span>
+                        <span className="block text-xs text-ink-soft">
+                          {fmtUsd(ex.priceCents)} · {VEHICLES[ex.vehicleId]?.name ?? "No vehicle"}
+                          {i.vehicleSeats ? ` (${i.vehicleSeats} seats)` : ""}
+                        </span>
+                      </td>
+                      <td className="w-48 pr-3">
+                        <div className="flex h-2.5 overflow-hidden rounded-full bg-white/10" role="img" aria-label={`${i.confirmed} confirmed, ${i.held} held, ${i.seatsLeft} open of ${i.capacity}`}>
+                          <span className="bg-accent" style={{ width: `${(i.confirmed / cap) * 100}%` }} />
+                          <span className="bg-champagne" style={{ width: `${(i.held / cap) * 100}%` }} />
+                        </div>
+                      </td>
+                      <td>{i.confirmed}</td>
+                      <td>
+                        {i.held}
+                        {i.nextHoldExpiresAt && <span className="block text-[11px] text-ink-soft">next expires {new Date(i.nextHoldExpiresAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}</span>}
+                      </td>
+                      <td className={i.seatsLeft === 0 ? "font-bold text-warm" : ""}>{i.open ? (i.seatsLeft === 0 ? "Sold out" : i.seatsLeft) : "Closed"}</td>
+                      <td>
+                        <form
+                          className="flex items-center gap-2"
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            const v = draft[i.excursionId];
+                            if (v !== undefined && v !== "") save(i.excursionId, { capacity: Number(v) });
+                          }}
+                        >
+                          <input
+                            type="number"
+                            min={0}
+                            max={i.vehicleSeats ?? 60}
+                            value={draft[i.excursionId] ?? ""}
+                            placeholder={String(i.capacity)}
+                            onChange={(e) => setDraft((d) => ({ ...d, [i.excursionId]: e.target.value }))}
+                            className="w-20 rounded-lg border border-line bg-white/5 px-2 py-1.5 text-sm"
+                            aria-label={`Capacity for ${ex.title}`}
+                          />
+                          <button className="btn btn-ghost !px-3 !py-1.5 text-xs" disabled={busy === i.excursionId || !draft[i.excursionId]}>
+                            Set
+                          </button>
+                        </form>
+                        {m && <span className={`mt-1 block text-[11px] ${m.ok ? "text-accent" : "text-warm"}`} role="status">{m.text}</span>}
+                      </td>
+                      <td>
+                        <button className={`btn !px-3 !py-1.5 text-xs ${i.open ? "btn-ghost" : "btn-primary"}`} disabled={busy === i.excursionId} onClick={() => save(i.excursionId, { open: !i.open })}>
+                          {i.open ? "Close sales" : "Reopen"}
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
+      ))}
+      <p className="text-xs text-ink-soft">
+        Capacity can&apos;t go below seats already confirmed or held, or above the assigned vehicle. Every change is written to the audit trail. Holds expire after 15 minutes without payment.
+      </p>
     </div>
   );
 }

@@ -108,6 +108,8 @@ export interface Booking {
   createdAt: string;
   updatedAt: string;
   pendingOrderId?: string;
+  /** Incremented when PayPal refuses a capture, so the next checkout gets a fresh order. */
+  checkoutAttempt?: number;
   payments: PaymentRecord[];
 }
 

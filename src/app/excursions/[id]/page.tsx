@@ -113,7 +113,7 @@ export default async function ExcursionPage({ params, searchParams }: { params: 
                     {fmtUsd(e.priceCents)} <span className="font-sans text-base text-ink-soft">/ guest</span>
                   </p>
                   <p className="mt-1 text-sm text-ink-soft">
-                    {s.seatsLeft} of {e.capacity} seats open · demo inventory
+                    {s.onSale ? `${s.seatsLeft} of ${s.capacity} seats open` : "Not on sale"} · demo inventory
                   </p>
                   <ReserveForm excursionId={e.id} unitCents={e.priceCents} seatsLeft={s.seatsLeft} feasible={s.feasibility.status !== "infeasible"} initialGuests={initialGuests} maxGuests={POLICY.maxGuests} />
                 </div>

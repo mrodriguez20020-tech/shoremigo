@@ -14,9 +14,17 @@ export interface DbShape {
   rescues: RescueProposal[];
   audit: AuditEvent[];
   engagement: { at: string; type: string; props: Record<string, string | number | boolean> }[];
+  /** Operator-owned overrides on top of the catalog (capacity, sale open/closed). */
+  inventory: Record<string, InventoryOverride>;
 }
 
-const empty = (): DbShape => ({ bookings: [], disruptions: [], rescues: [], audit: [], engagement: [] });
+export interface InventoryOverride {
+  capacity?: number;
+  open?: boolean;
+  updatedAt: string;
+}
+
+const empty = (): DbShape => ({ bookings: [], disruptions: [], rescues: [], audit: [], engagement: [], inventory: {} });
 
 function dataFile() {
   const dir = process.env.SHOREMIGO_DATA_DIR || (process.env.VERCEL ? "/tmp/shoremigo" : path.join(process.cwd(), ".data"));
@@ -63,6 +71,6 @@ export async function read<T>(fn: (db: DbShape) => T): Promise<T> {
 
 /** Test helper. */
 export function __resetStoreForTests(db?: DbShape) {
-  cache = db ?? empty();
+  cache = db ? { ...empty(), ...db } : empty();
   queue = Promise.resolve();
 }

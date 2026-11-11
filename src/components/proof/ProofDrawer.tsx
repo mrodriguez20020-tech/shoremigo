@@ -78,7 +78,7 @@ export function ProofDrawer() {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
         </span>
-        <span className="hidden sm:inline">Live proof</span>
+        <span className="hidden whitespace-nowrap sm:inline">Live proof</span>
         {unseen > 0 && !open && (
           <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] text-accent-ink">{unseen > 9 ? "9+" : unseen}</span>
         )}

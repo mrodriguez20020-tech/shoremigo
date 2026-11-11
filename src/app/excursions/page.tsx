@@ -98,7 +98,7 @@ export default async function ExcursionsPage({ searchParams }: { searchParams: P
                     <p className="mt-1.5 text-sm text-ink-soft">{e.tagline}</p>
                     <p className="mt-4 text-xs font-semibold text-ink-soft">
                       {e.startMode === "fixed" ? `Departs ${fmtMin(toMin(e.start))}` : `Flexible start ${fmtMin(toMin(e.start))}–${fmtMin(toMin(e.latestStart!))}`} ·{" "}
-                      {fmtDuration(e.durationMin)} · {s.seatsLeft} of {e.capacity} seats open
+                      {fmtDuration(e.durationMin)} · {s.onSale ? `${s.seatsLeft} of ${s.capacity} seats open` : "Not on sale"}
                     </p>
                     <div className="mt-4">
                       <LastBoardTimeline f={s.feasibility} compact />
