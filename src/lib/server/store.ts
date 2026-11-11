@@ -4,9 +4,14 @@ import path from "node:path";
 import type { AuditEvent, Booking, Disruption, RescueProposal } from "@/lib/domain/types";
 
 /**
- * Persistence boundary. The default adapter is a JSON file (local dev / single
- * instance demo). `supabase/schema.sql` mirrors this shape for the Postgres
- * adapter; swap by implementing `Store` against Supabase.
+ * Persistence boundary, two adapters behind the same tx/read API:
+ *  - JSON file (default): local dev and single-instance demos. Serialized in-process.
+ *  - Postgres (when DATABASE_URL is set, e.g. Supabase or Neon): required on
+ *    Vercel, where routes can run on separate instances with separate disks.
+ *    The whole state is one JSONB document; every tx locks that row
+ *    (SELECT ... FOR UPDATE), so read-modify-write is serialized across all
+ *    instances and rolls back if the callback throws. Fine for a demo-scale
+ *    dataset; `supabase/schema.sql` is the normalized schema for production.
  */
 export interface DbShape {
   bookings: Booking[];
@@ -27,7 +32,11 @@ export interface InventoryOverride {
 const empty = (): DbShape => ({ bookings: [], disruptions: [], rescues: [], audit: [], engagement: [], inventory: {} });
 
 function dataFile() {
-  const dir = process.env.SHOREMIGO_DATA_DIR || (process.env.VERCEL ? "/tmp/shoremigo" : path.join(process.cwd(), ".data"));
+  if (process.env.VERCEL && !process.env.SHOREMIGO_DATA_DIR) {
+    // Refuse to silently lose bookings: Vercel instances don't share a disk.
+    throw new Error("DATABASE_URL is required on Vercel (the JSON store is per-instance and non-durable there).");
+  }
+  const dir = process.env.SHOREMIGO_DATA_DIR || path.join(process.cwd(), ".data");
   return path.join(dir, "db.json");
 }
 
@@ -52,8 +61,50 @@ async function persist(db: DbShape) {
   await fs.rename(tmp, file);
 }
 
+// ───────────── Postgres adapter (DATABASE_URL) ─────────────
+
+type Sql = import("postgres").Sql;
+let pg: Promise<Sql> | null = null;
+
+function postgresEnabled() {
+  return Boolean(process.env.DATABASE_URL);
+}
+
+function sqlClient(): Promise<Sql> {
+  pg ??= (async () => {
+    const { default: postgres } = await import("postgres");
+    const url = process.env.DATABASE_URL!;
+    const local = /@(localhost|127.0.0.1)[:/]/.test(url);
+    // prepare:false keeps it compatible with transaction-mode poolers (Supabase :6543).
+    const sql = postgres(url, { prepare: false, max: 1, idle_timeout: 20, ssl: local ? false : "require" });
+    await sql`create table if not exists shoremigo_state (id int primary key, doc jsonb not null, updated_at timestamptz not null default now())`;
+    await sql`insert into shoremigo_state (id, doc) values (1, ${sql.json(empty() as never)}) on conflict (id) do nothing`;
+    return sql;
+  })();
+  pg.catch(() => (pg = null));
+  return pg;
+}
+
+async function pgTx<T>(fn: (db: DbShape) => T | Promise<T>): Promise<T> {
+  const sql = await sqlClient();
+  return sql.begin(async (t) => {
+    const [row] = await t`select doc from shoremigo_state where id = 1 for update`;
+    const db: DbShape = { ...empty(), ...((row?.doc as Partial<DbShape>) ?? {}) };
+    const out = await fn(db);
+    await t`update shoremigo_state set doc = ${t.json(db as never)}, updated_at = now() where id = 1`;
+    return out;
+  }) as Promise<T>;
+}
+
+async function pgRead<T>(fn: (db: DbShape) => T): Promise<T> {
+  const sql = await sqlClient();
+  const [row] = await sql`select doc from shoremigo_state where id = 1`;
+  return fn({ ...empty(), ...((row?.doc as Partial<DbShape>) ?? {}) });
+}
+
 /** Serialized read-modify-write so concurrent requests can't oversell inventory. */
 export function tx<T>(fn: (db: DbShape) => T | Promise<T>): Promise<T> {
+  if (postgresEnabled()) return pgTx(fn);
   const run = queue.then(async () => {
     const db = await load();
     const out = await fn(db);
@@ -65,6 +116,7 @@ export function tx<T>(fn: (db: DbShape) => T | Promise<T>): Promise<T> {
 }
 
 export async function read<T>(fn: (db: DbShape) => T): Promise<T> {
+  if (postgresEnabled()) return pgRead(fn);
   await queue;
   return fn(await load());
 }

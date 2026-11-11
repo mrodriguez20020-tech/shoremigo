@@ -186,9 +186,14 @@ All audio is synthesized in the browser (Web Audio): surf, breeze and distant bi
 
 ## Deployment
 
-The default store is a JSON file (`.data/db.json`), which suits local demos and a **single long-running instance** (Render, Fly.io or Railway with a volume, or a VM). On serverless platforms (Vercel) the file lives in `/tmp` and is **not durable across instances**. For a hosted judge demo, use a single-instance host or implement the Supabase adapter (`supabase/schema.sql` mirrors the data model; adapter not yet wired).
+**Storage.** Locally the app uses a JSON file (`.data/db.json`). When `DATABASE_URL` is set it uses **Postgres** instead (Supabase or Neon). The state is one JSONB row, and every transaction locks it (`SELECT … FOR UPDATE`), so capacity checks stay atomic across serverless instances and roll back on error. Vercel **requires** `DATABASE_URL`; the app refuses to fall back to a per-instance `/tmp` file there. The single-document design suits a demo-scale dataset; `supabase/schema.sql` is the normalized schema for a production build.
 
-Production checklist: set `SESSION_SECRET`, `OPERATOR_PASSCODE`, PayPal sandbox credentials and `GEMINI_API_KEY`; never commit `.env.local`.
+**Vercel (sandbox only)**
+1. Create a Postgres database (Supabase free tier: Project → Connect → *Transaction pooler* URL, port 6543).
+2. `vercel link`, then add these environment variables (Production): `DATABASE_URL`, `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET` (sandbox app), `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_FALLBACK_MODELS`, `SESSION_SECRET` (32+ random chars), `OPERATOR_PASSCODE`.
+3. `vercel deploy --prod`.
+
+The PayPal API base is hard-coded to `api-m.sandbox.paypal.com`; there is no live-mode switch. Set a quota or budget on the Gemini key, since public visitors can use the concierge. If the quota is hit, Migo falls back to labeled offline mode.
 
 ---
 
@@ -199,10 +204,14 @@ Production checklist: set `SESSION_SECRET`, `OPERATOR_PASSCODE`, PayPal sandbox 
 - LastBoard feasibility (fixed, flexible, tender, buffer, validation), rescue ranking, seat filtering, refund-only fallback, schedule conflicts, money formatting
 - Migo state machine (celebrate only after verification, docking, attention)
 - Adventure Match filtering (feasibility, seats, budget, time, port)
+- Operator inventory: capacity floor (confirmed + held), vehicle cap, close/reopen sales, hold expiry, audit
+- Postgres adapter (`tests/postgres-store.test.ts`, runs when `PG_TEST_URL` is set): persistence, rollback, no oversell under concurrency
 - Booking + PayPal service flows against a **fake PayPal test double** (`tests/fake-paypal.ts`): server pricing, oversell protection, idempotent capture, `ORDER_ALREADY_CAPTURED` recovery, amount mismatch, `INSTRUMENT_DECLINED`, not-configured, refunds (including `PENDING`), top-ups, operator rejection, audit trail
 - Concierge: verification gating, no-charge `prepare_booking`, Gemini tool loop with a mocked API, invalid output, timeout, offline fallback
 
 The fake PayPal double tests our logic only.
+
+**Live PayPal sandbox evidence (2026-11-11):** a full create → buyer approval → capture → duplicate-capture protection → decline → retry → Trip Rescue partial refund ($20) → full refund ($178) cycle passed, with every status read back from PayPal. Order, capture and refund ids are in [docs/VERIFICATION.md](docs/VERIFICATION.md). Buyer approval used PayPal's guest card checkout with PayPal's documented sandbox test card; a logged-in sandbox Personal wallet approval was not automated.
 
 **Live smoke test:** `npm run smoke -- http://localhost:3000 --operator-passcode=YOUR_PASSCODE` hits the real API routes and, when keys are configured, the real Gemini API and PayPal sandbox (order creation, idempotent re-creation, capture refused before approval). Buyer approval is a manual step in PayPal. Evidence is logged in [docs/VERIFICATION.md](docs/VERIFICATION.md); submission materials are in [docs/SUBMISSION.md](docs/SUBMISSION.md).
 

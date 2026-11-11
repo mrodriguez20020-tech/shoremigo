@@ -42,12 +42,15 @@ Supabase persistence adapter; PayPal webhooks; Bryntum Scheduler (pending licens
 nextjs, react, typescript, tailwindcss, motion, gemini, paypal-orders-v2, paypal-payments-v2, web-audio, vitest
 
 ## Testing instructions for judges
-1. Hosted demo: `<URL>`. Operator passcode: `<shared privately in the submission form>`.
-2. Use a PayPal **sandbox** buyer account: `<sandbox buyer email/password provided in the private judge field, if the rules allow>`.
-3. Follow the 9-step demo in README → "Reproducible demo".
-4. Demo data notice: the ship, sailing, operator and prices are fictional; delays are simulated; payments are sandbox.
+1. Hosted demo: `<DEPLOYMENT_URL>` (PayPal **sandbox** only; no real money). Source: `<GITHUB_URL>`.
+2. Pay with a PayPal sandbox buyer account, or choose **Debit or Credit Card** in the PayPal button and use PayPal's published sandbox test Visa `4012 8888 8888 1881`, any future expiry, CVV `123`, any name, ZIP `95131`.
+3. Operator console: `/operator`, passcode `<shared in the private judging field>`.
+4. Follow README → "Reproducible demo". The demo state is shared: if a Cozumel delay is already active from another visitor, use Operator → **Clear** next to Cozumel.
+5. Demo data notice: the ship, sailing, operator, tours and prices are fictional; delays are simulated; payments are sandbox. Verified sandbox transaction evidence: `docs/VERIFICATION.md`.
 
 ## 3-minute video plan
+
+The precise script with voice-over and recording checklist is in [docs/DEMO_SCRIPT.md](DEMO_SCRIPT.md).
 | Time | Shot | Proof shown |
 |---|---|---|
 | 0:00–0:20 | Intro horizon reveal → daylight hero, Migo waves | Brand, problem in one line |

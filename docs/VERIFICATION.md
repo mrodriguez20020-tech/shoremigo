@@ -136,3 +136,10 @@ The owner created a new US sandbox Business account and REST app (credentials on
 | Cancel option on another booking | full refund `COMPLETED`, booking `cancelled_refunded` | |
 | Declined card (sandbox negative testing) | buyer prompted to choose another method; booking stays pending | |
 | Gemini tool trace in concierge panel | "checked: search excursions…" with engine Gemini | |
+
+## 2026-11-11: submission readiness checks
+
+- **Secrets:** all git history (2 commits) scanned for every `.env.local` value, Google/PayPal key shapes and private keys: 0 hits. Only `.env.example` (blank values) is tracked. No data stores or logs are tracked. The only real email in history is the commit author metadata (not file content).
+- **Postgres adapter** (needed for Vercel): `tests/postgres-store.test.ts` passed 4/4 against real Postgres SQL (PGlite over the Postgres wire protocol): persistence + capture, rollback on error, no oversell under concurrent requests, inventory rules. Re-run against the provisioned database before going live.
+- **Regression:** tsc OK · Vitest 67 passed (+4 Postgres tests skipped without `PG_TEST_URL`) · lint 0 errors · production build OK (20/20 pages).
+- **Dependency audit:** `npm audit --omit=dev` reports PostCSS ≤8.5.22 nested inside `next` (1 high, 1 moderate). PostCSS runs only at build time on this repo's own CSS, never on user input at runtime; the suggested fix is a forced breaking upgrade, so it's deferred and recorded here.
