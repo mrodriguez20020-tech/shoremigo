@@ -248,6 +248,7 @@ function ExperienceSettings() {
             <div className={settings.enabled ? "" : "pointer-events-none opacity-40"}>
               <Toggle label="Ocean ambience" hint="Waves, breeze, distant birds" checked={settings.ambience} onChange={(v) => update({ ambience: v })} />
               <Toggle label="Migo's sounds" checked={settings.character} onChange={(v) => update({ character: v })} />
+              <Toggle label="Migo's footsteps" hint="Soft contacts only while moving" checked={settings.footsteps} onChange={(v) => update({ footsteps: v })} />
               <label className="block py-2">
                 <span className="text-sm font-semibold">Volume</span>
                 <input

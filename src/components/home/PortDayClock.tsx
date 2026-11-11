@@ -1,5 +1,6 @@
 "use client";
 
+import { useCompanion } from "@/components/migo/CompanionProvider";
 import { motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import { POLICY, excursionsForPort, getPort } from "@/lib/domain/catalog";
@@ -15,17 +16,18 @@ const PORT = "cozumel";
 const DELAY = 90;
 
 export function PortDayClock() {
+  const { reducedMotion } = useCompanion();
   const port = getPort(PORT)!;
   const tours = excursionsForPort(PORT);
   const [late, setLate] = useState(false);
   const [auto, setAuto] = useState(true);
 
   useEffect(() => {
-    if (!auto) return;
+    if (!auto || reducedMotion) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const t = setInterval(() => setLate((l) => !l), late ? 5200 : 3800);
     return () => clearInterval(t);
-  }, [auto, late]);
+  }, [auto, late, reducedMotion]);
 
   const rows = useMemo(
     () => tours.map((e) => ({ e, f: checkFeasibility(port, e, POLICY, { delayMin: late ? DELAY : 0 }) })),
@@ -90,7 +92,7 @@ export function PortDayClock() {
           style={{ right: `calc(100% - ${pct(allAboard)})`, background: "color-mix(in oklab, var(--accent) 45%, transparent)" }}
           initial={false}
           animate={{ left: pct(arrive) }}
-          transition={{ duration: 1, ease }}
+          transition={{ duration: reducedMotion ? 0 : 0.75, ease }}
         >
           🚢 {fmtMin(arrive)} → all aboard {fmtMin(allAboard)}
         </motion.div>
@@ -110,7 +112,7 @@ export function PortDayClock() {
                   backgroundColor: bad ? "rgba(255,122,89,0.8)" : f.status === "tight" ? "rgba(243,196,99,0.85)" : "rgba(52,214,201,0.8)",
                   x: bad && late ? [0, -4, 4, 0] : 0,
                 }}
-                transition={{ duration: 0.8, ease }}
+                transition={{ duration: reducedMotion ? 0 : 0.75, ease }}
                 style={{ color: bad ? "#fff" : "#032029" }}
                 title={f.reasons[0]}
               >

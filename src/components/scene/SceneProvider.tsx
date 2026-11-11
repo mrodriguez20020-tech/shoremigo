@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import type { SceneId } from "@/lib/domain/types";
 import { migo } from "@/components/migo/bus";
 
@@ -15,18 +23,37 @@ import { migo } from "@/components/migo/bus";
  */
 interface SceneCtx {
   scene: SceneId;
-  claim: (id: string, scene: SceneId) => void;
+  claim: (id: string, scene: SceneId, element?: HTMLElement) => void;
   release: (id: string) => void;
 }
 
 const Ctx = createContext<SceneCtx | null>(null);
 
 export function SceneProvider({ children }: { children: ReactNode }) {
-  const claims = useRef<{ id: string; scene: SceneId }[]>([]);
+  const claims = useRef<
+    { id: string; scene: SceneId; element?: HTMLElement }[]
+  >([]);
   const [scene, setScene] = useState<SceneId>("day");
 
   const apply = useCallback(() => {
-    const top = claims.current.at(-1)?.scene ?? "day";
+    const center = window.innerHeight / 2;
+    const sections = claims.current
+      .filter((c) => c.element?.isConnected)
+      .map((c) => {
+        const r = c.element!.getBoundingClientRect();
+        const distance =
+          center < r.top
+            ? r.top - center
+            : center > r.bottom
+              ? center - r.bottom
+              : 0;
+        return { ...c, distance };
+      })
+      .sort((a, b) => a.distance - b.distance);
+    const top =
+      sections[0]?.scene ??
+      claims.current.find((c) => c.id === "route")?.scene ??
+      "day";
     setScene(top);
     document.documentElement.dataset.scene = top;
   }, []);
@@ -41,9 +68,9 @@ export function SceneProvider({ children }: { children: ReactNode }) {
   }, [scene]);
 
   const claim = useCallback(
-    (id: string, s: SceneId) => {
+    (id: string, s: SceneId, element?: HTMLElement) => {
       claims.current = claims.current.filter((c) => c.id !== id);
-      claims.current.push({ id, scene: s });
+      claims.current.push({ id, scene: s, element });
       apply();
     },
     [apply],
@@ -57,7 +84,23 @@ export function SceneProvider({ children }: { children: ReactNode }) {
     [apply],
   );
 
-  return <Ctx.Provider value={{ scene, claim, release }}>{children}</Ctx.Provider>;
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      if (claims.current.filter((c) => c.element).length < 2) return;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(apply);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [apply]);
+
+  return (
+    <Ctx.Provider value={{ scene, claim, release }}>{children}</Ctx.Provider>
+  );
 }
 
 export function useScene() {
@@ -78,19 +121,36 @@ export function SceneRoute({ scene }: { scene: SceneId }) {
 }
 
 /** Claims a scene while the referenced element is the dominant thing on screen. */
-export function useSceneWhileVisible(ref: React.RefObject<HTMLElement | null>, scene: SceneId, threshold = 0.45) {
+export function useSceneWhileVisible(
+  ref: React.RefObject<HTMLElement | null>,
+  scene: SceneId,
+  threshold = 0.45,
+) {
   const { claim, release } = useScene();
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const id = `section-${scene}-${Math.random().toString(36).slice(2, 7)}`;
-    const io = new IntersectionObserver(
-      ([entry]) => (entry.intersectionRatio >= threshold ? claim(id, scene) : release(id)),
-      { threshold: [0, threshold, 1] },
-    );
-    io.observe(el);
+    let io: IntersectionObserver;
+    const observe = () => {
+      io?.disconnect();
+      // Pixels are intentional: IntersectionObserver resolves percentage root
+      // margins against viewport width, which breaks short ultrawide displays.
+      const inset = Math.round(
+        window.innerHeight * Math.min(threshold / 2, 0.4),
+      );
+      io = new IntersectionObserver(
+        ([entry]) =>
+          entry.isIntersecting ? claim(id, scene, el) : release(id),
+        { rootMargin: `-${inset}px 0px -${inset}px 0px`, threshold: 0 },
+      );
+      io.observe(el);
+    };
+    observe();
+    window.addEventListener("resize", observe);
     return () => {
       io.disconnect();
+      window.removeEventListener("resize", observe);
       release(id);
     };
   }, [ref, scene, threshold, claim, release]);

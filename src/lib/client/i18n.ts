@@ -13,6 +13,14 @@ export const LANGS: { id: Lang; label: string }[] = [
 ];
 
 const en = {
+  "welcome.escape": "Your Caribbean escape",
+  "welcome.headline": "Welcome to your next adventure.",
+  "welcome.meet": "Meet Migo.",
+  "welcome.companion": "Every port has a story. Let’s find yours.",
+  "welcome.begin": "Before we set sail",
+  "welcome.signature": "Extraordinary days ashore",
+  "welcome.imagery": "Fictional vessel & island · concept rendering",
+
   "nav.explore": "Explore",
   "nav.ships": "Ships & Rooms",
   "nav.trip": "My Trip",
@@ -36,7 +44,7 @@ const en = {
   "welcome.rememberHint": "Stored only in your browser. Leave unticked and they're forgotten when you close the tab.",
   "welcome.continue": "Continue",
   "welcome.skip": "Skip",
-  "migo.greeting": "Hey, explorer! I'm Migo. Ready to see what the islands have waiting for you?",
+  "migo.greeting": "Hey, explorer! I'm Migo. I'll help you make the most of every moment ashore.",
   "migo.greetingFrom": "Hey, explorer! I'm Migo. Joining us from {country}? Ready to see what the islands have waiting for you?",
   "migo.cta": "Show me",
   "hero.eyebrow": "Your adventure doesn't stop when plans change",
@@ -63,6 +71,14 @@ export type Key = keyof typeof en;
 type Dict = Record<Key, string>;
 
 const es: Dict = {
+  "welcome.escape": "Tu escapada al Caribe",
+  "welcome.headline": "Bienvenido a tu próxima aventura.",
+  "welcome.meet": "Conoce a Migo.",
+  "welcome.companion": "Cada puerto tiene una historia. Busquemos la tuya.",
+  "welcome.begin": "Antes de zarpar",
+  "welcome.signature": "Días extraordinarios en tierra",
+  "welcome.imagery": "Barco e isla ficticios · imagen conceptual",
+
   "nav.explore": "Explorar",
   "nav.ships": "Barcos y cabinas",
   "nav.trip": "Mi viaje",
@@ -110,6 +126,14 @@ const es: Dict = {
 };
 
 const fr: Dict = {
+  "welcome.escape": "Votre escapade caribéenne",
+  "welcome.headline": "Bienvenue dans votre prochaine aventure.",
+  "welcome.meet": "Voici Migo.",
+  "welcome.companion": "Chaque port a son histoire. Trouvons la vôtre.",
+  "welcome.begin": "Avant de prendre le large",
+  "welcome.signature": "Des escales extraordinaires",
+  "welcome.imagery": "Navire et île fictifs · illustration conceptuelle",
+
   "nav.explore": "Explorer",
   "nav.ships": "Navires et cabines",
   "nav.trip": "Mon voyage",
@@ -157,6 +181,14 @@ const fr: Dict = {
 };
 
 const pt: Dict = {
+  "welcome.escape": "Sua escapada caribenha",
+  "welcome.headline": "Bem-vindo à sua próxima aventura.",
+  "welcome.meet": "Conheça o Migo.",
+  "welcome.companion": "Cada porto tem uma história. Vamos encontrar a sua.",
+  "welcome.begin": "Antes de zarpar",
+  "welcome.signature": "Dias extraordinários em terra",
+  "welcome.imagery": "Navio e ilha fictícios · imagem conceitual",
+
   "nav.explore": "Explorar",
   "nav.ships": "Navios e cabines",
   "nav.trip": "Minha viagem",

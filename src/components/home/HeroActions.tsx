@@ -12,9 +12,9 @@ export function HeroActions() {
   const { openConcierge } = useCompanion();
   const { t } = usePrefs();
   return (
-    <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center" data-migo-avoid>
+    <div className="hero-actions mt-10 flex flex-col gap-3 sm:flex-row sm:items-center" data-migo-avoid>
       <form
-        className="surface flex items-center gap-2 rounded-full p-1.5 pl-5"
+        className="hero-search flex items-center gap-3 p-2 pl-5"
         onSubmit={(e) => {
           e.preventDefault();
           go(`/excursions?port=${port}`);

@@ -45,20 +45,20 @@
 
 :root {
   --scene-ease: cubic-bezier(0.65, 0, 0.35, 1);
-  --scene-dur: 1800ms;
+  --scene-dur: 750ms;
   transition:
     --sky-1 var(--scene-dur) var(--scene-ease), --sky-2 var(--scene-dur) var(--scene-ease), --sky-3 var(--scene-dur) var(--scene-ease),
     --sun var(--scene-dur) var(--scene-ease), --sun-glow var(--scene-dur) var(--scene-ease), --sea-1 var(--scene-dur) var(--scene-ease),
     --sea-2 var(--scene-dur) var(--scene-ease), --glint var(--scene-dur) var(--scene-ease), --land var(--scene-dur) var(--scene-ease),
-    --land-rim var(--scene-dur) var(--scene-ease), --mist var(--scene-dur) var(--scene-ease), --ink 900ms var(--scene-ease),
-    --ink-soft 900ms var(--scene-ease), --surface 900ms var(--scene-ease), --surface-line 900ms var(--scene-ease),
+    --land-rim var(--scene-dur) var(--scene-ease), --mist var(--scene-dur) var(--scene-ease), --ink var(--scene-dur) var(--scene-ease),
+    --ink-soft var(--scene-dur) var(--scene-ease), --surface var(--scene-dur) var(--scene-ease), --surface-line var(--scene-dur) var(--scene-ease),
     --accent var(--scene-dur) var(--scene-ease), --accent-ink var(--scene-dur) var(--scene-ease), --warm var(--scene-dur) var(--scene-ease),
     --migo-tint var(--scene-dur) var(--scene-ease), --migo-rim var(--scene-dur) var(--scene-ease), --migo-shadow var(--scene-dur) var(--scene-ease),
     --compass var(--scene-dur) var(--scene-ease), --sun-y var(--scene-dur) var(--scene-ease), --sun-x var(--scene-dur) var(--scene-ease),
     --sun-size var(--scene-dur) var(--scene-ease), --stars var(--scene-dur) var(--scene-ease), --glint-a var(--scene-dur) var(--scene-ease),
     --migo-tint-a var(--scene-dur) var(--scene-ease), --migo-rim-a var(--scene-dur) var(--scene-ease), --migo-bright var(--scene-dur) var(--scene-ease),
     --migo-sat var(--scene-dur) var(--scene-ease), --migo-shadow-a var(--scene-dur) var(--scene-ease), --compass-a var(--scene-dur) var(--scene-ease),
-    --rim-angle var(--scene-dur) var(--scene-ease), --shadow-skew var(--scene-dur) var(--scene-ease);
+    --rim-angle var(--scene-dur) var(--scene-ease), --shadow-skew var(--scene-dur) var(--scene-ease), --ocean-hour var(--scene-dur) var(--scene-ease);
 }
 
 /* Bright tropical daylight: sun high to the right, crisp turquoise sea. */
@@ -69,7 +69,7 @@
   --land: #0e5446; --land-rim: #9ff0cf; --mist: rgba(255, 255, 255, 0.32);
   --ink: #f9f6ee; --ink-soft: rgba(249, 246, 238, 0.82);
   --surface: rgba(6, 34, 54, 0.46); --surface-line: rgba(255, 255, 255, 0.18);
-  --accent: #40c7c5; --accent-ink: #062a35; --warm: #f69a8e;
+  --accent: #e8c895; --accent-ink: #152c32; --warm: #f69a8e;
   --migo-tint: #fff4d6; --migo-tint-a: 0.06; --migo-rim: #ffffff; --migo-rim-a: 0.38; --rim-angle: 135deg;
   --migo-bright: 1.04; --migo-sat: 1.06; --migo-shadow: #053049; --migo-shadow-a: 0.34; --shadow-skew: -8;
   --compass: #ffd27a; --compass-a: 0.3;
@@ -215,13 +215,12 @@ html[data-scene="neutral"] .surface-strong { background: rgba(255, 255, 255, 0.9
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  border-radius: 999px;
+  border-radius: 8px;
   padding: 0.85rem 1.4rem;
   font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: 0.01em;
   transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s, background-color 0.4s, color 0.4s;
-  will-change: transform;
 }
 .btn:active { transform: scale(0.97); }
 .btn-primary {
@@ -299,7 +298,10 @@ html[data-scene="neutral"] .surface-strong { background: rgba(255, 255, 255, 0.9
     scroll-behavior: auto !important;
   }
 }
+html[data-motion="reduced"] { --scene-dur: 1ms; scroll-behavior: auto; }
 html[data-motion="reduced"] *, html[data-motion="reduced"] *::before, html[data-motion="reduced"] *::after {
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
   animation-duration: 0.001ms !important;
   animation-iteration-count: 1 !important;
 }
@@ -308,3 +310,125 @@ html[data-motion="reduced"] *, html[data-motion="reduced"] *::before, html[data-
   .scene-fg .palm-left { display: none; }
   .scene-fg .palm-right { height: 42vh; opacity: 0.85; }
 }
+
+/* Phase 1 · Cinematic Luxury. Photography is illustrative, never inventory evidence. */
+.luxury-kicker { color: #e8c895; font-size: 10px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; }
+.welcome-world { background: #081e27; color: #fff8ef; --ink: #fff8ef; --accent: #e8c895; --accent-ink: #182b2e; --surface-line: rgba(255,255,255,.25); }
+.welcome-photo { object-position: 38% center; }
+.welcome-shade { background: linear-gradient(90deg, rgba(4,26,34,.65), rgba(4,26,34,.15) 55%, rgba(4,26,34,.48)), linear-gradient(0deg, rgba(4,26,34,.7), transparent 50%, rgba(4,26,34,.3)); }
+.welcome-skip { color: #fff8ef; border-bottom: 1px solid #ffffff65; padding: 10px 0; font-size: 12px; letter-spacing: .05em; cursor: pointer; display: flex; align-items: center; gap: 24px; }
+.welcome-card { padding: clamp(24px, 3vw, 42px); background: rgba(8,30,38,.86); border: 1px solid rgba(255,245,225,.24); border-radius: 16px; box-shadow: 0 28px 90px #00182240; backdrop-filter: blur(24px); }
+.welcome-card .field { border-radius: 6px; background: #ffffff09; min-height: 48px; color: #fff8ef; }
+.welcome-card option { background: #102f39; color: #fff8ef; }
+.welcome-language { border: 1px solid #ffffff35; border-radius: 6px; padding: 12px 5px; text-align: center; font-size: 12px; cursor: pointer; transition: background .2s, border-color .2s; }
+.welcome-language:hover { border-color: #e8c895; }
+.welcome-language.is-selected { color: #f2d6ab; border-color: #e8c895; background: #e8c89516; }
+.welcome-language:has(:focus-visible) { outline: 2px solid #e8c895; outline-offset: 3px; }
+.welcome-continue { display: flex; align-items: center; justify-content: space-between; border-radius: 6px; padding: 16px 20px; background: #e8c895; color: #152c32; font-size: 14px; font-weight: 700; cursor: pointer; transition: background .2s; }
+.welcome-continue:hover { background: #f3d9b2; }
+.home-page { background: #081e27; }
+.hero-shade { background: linear-gradient(90deg, rgba(4,24,32,.8), rgba(4,24,32,.25) 75%), linear-gradient(0deg, #081e27, transparent 50%, rgba(4,24,32,.35)); }
+.luxury-hero { color: #fff8ef; --ink: #fff8ef; --ink-soft: #e4e8e3; --accent: #e8c895; --accent-ink: #152c32; }
+.hero-note { text-shadow: 0 2px 16px #06182090; }
+.hero-search { background: #08232bd9; border: 1px solid #ffffff50; border-radius: 9px; backdrop-filter: blur(14px); }
+.hero-actions .btn-ghost { background: transparent; border-color: #ffffff65; }
+.photo-caption { padding: 12px 24px; text-align: center; font-size: 10px; letter-spacing: .08em; color: #bdc8c8; border-bottom: 1px solid #ffffff15; }
+.home-page .surface { border-radius: 12px; background: #ffffff06; box-shadow: none; }
+.home-page .surface-strong { border-radius: 12px; background: #ffffff06; box-shadow: none; }
+.home-page #discover { background: #0c252d; }
+.home-page #ports { background: #f2eee5; color: #122f37; --ink: #122f37; --ink-soft: #425c62; --accent: #126f71; --accent-ink: #fff; --surface-line: #12303a28; }
+.home-page #ports .surface-strong { background: #fff9; }
+.golden-scene { background: #151522; }
+.scene-photo { opacity: .25; transition: opacity var(--scene-dur) var(--scene-ease); }
+html[data-scene="sunset"] .scene-photo { opacity: 1; }
+@media (max-width: 1023px) {
+  .welcome-grid { gap: 28px; grid-template-columns: 1fr 1fr; }
+  .welcome-story h1 { font-size: clamp(3rem, 6vw, 5rem); }
+  .welcome-companion { flex-direction: column; align-items: flex-start; }
+  .welcome-migo { margin-left: -15px; }
+}
+@media (max-width: 639px) {
+  .welcome-grid { grid-template-columns: 1fr; padding-top: 30px; padding-bottom: 24px; gap: 24px; }
+  .welcome-story h1 { font-size: clamp(2.6rem, 11vw, 4rem); max-width: 11ch; margin-top: 12px; }
+  .welcome-companion { flex-direction: row; gap: 6px; margin-top: 12px; align-items: center; }
+  .welcome-migo { width: 90px; height: 90px; margin-left: -8px; }
+  .welcome-migo > div { transform: scale(.5); transform-origin: left top; }
+  .welcome-companion > div:last-child { padding-left: 14px; max-width: 230px; }
+  .welcome-companion p:first-child { font-size: 22px; }
+  .welcome-companion p:last-child { font-size: 12px; margin-top: 4px; }
+  .welcome-card { padding: 24px 20px; }
+  .hero-actions { align-items: stretch; }
+  .hero-search { flex-wrap: wrap; padding: 14px; gap: 10px; }
+  .hero-search select { min-width: 60%; }
+  .hero-search .btn { width: 100%; }
+  .hero-note { display: none; }
+}
+@media (max-width: 639px) {
+  .welcome-card h2 { font-size: 26px; }
+  .welcome-card > p { font-size: 12px; }
+  .welcome-card form { gap: 16px; margin-top: 20px; }
+  .welcome-card form > fieldset > div { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .welcome-language { font-size: 10px; padding: 12px 2px; }
+}
+
+/* Phase 1.5 · One fictional world, relit rather than replaced at golden hour. */
+@property --ocean-hour { syntax: "<number>"; inherits: true; initial-value: 0; }
+:root { --ocean-hour: 0; }
+html[data-scene="shade"] { --ocean-hour: .12; }
+html[data-scene="sunset"] { --ocean-hour: 1; }
+html[data-scene="night"] { --ocean-hour: .9; }
+.ocean-scene { position: absolute; inset: 0; overflow: hidden; pointer-events: none; background: #123d4b; contain: paint; }
+.ocean-camera { position: absolute; inset: -1%; animation: oceanApproach 44s ease-in-out infinite alternate; }
+.ocean-plate { width: 100%; height: 100%; object-fit: cover; object-position: 63% center; opacity: 1; filter: sepia(calc(var(--ocean-hour) * .45)) saturate(calc(1 + var(--ocean-hour) * .16)) brightness(calc(1 - var(--ocean-hour) * .23)); }
+.ocean-water { position: absolute; inset: 0; background: url('/cinematic/island-ocean.webp') 63% center / cover; mask-image: linear-gradient(transparent 51%, #0009 78%, #000b); opacity: .25; animation: oceanRipple 12s ease-in-out infinite alternate; filter: sepia(calc(var(--ocean-hour) * .45)) brightness(calc(1 - var(--ocean-hour) * .23)); }
+.ocean-cloud-light { position: absolute; inset: 0 0 57%; opacity: .07; background: radial-gradient(ellipse at 65% 40%, #ffefcd, transparent 58%); animation: cloudLight 36s ease-in-out infinite alternate; }
+.ocean-vessel { position: absolute; width: min(47vw, 740px); right: 1%; top: 40%; animation: auroraProgress 38s ease-in-out infinite alternate; }
+.aurora-render { position: relative; z-index: 1; width: 100%; height: auto; filter: drop-shadow(0 3px 3px #032a3f45) sepia(calc(var(--ocean-hour) * .35)) saturate(calc(1 + var(--ocean-hour) * .1)) brightness(calc(1 - var(--ocean-hour) * .2)); }
+.aurora-reflection { display: none; }
+.ocean-wake { position: absolute; left: -48%; bottom: -12%; width: 80%; height: 65%; opacity: .6; }
+.ocean-golden-light { position: absolute; inset: 0; background: linear-gradient(#201b49 0%, #b87e91 32%, #f8ba68 48%, #e09b56 61%, #132b49 100%); mix-blend-mode: soft-light; opacity: var(--ocean-hour); }
+.ocean-depth { position: absolute; inset: 0; background: linear-gradient(0deg, #041a29ab, transparent 33%, #0b29340d); }
+.ocean-intro .ocean-vessel { width: min(52vw, 800px); top: 35%; }
+.ocean-welcome .ocean-vessel { right: 30%; top: 43%; width: min(34vw, 560px); }
+.intro-brand-shade { background: linear-gradient(90deg, #041b2aa6, transparent); }
+.hero-shade { background: linear-gradient(90deg, #041923e8, #04192370 45%, transparent 78%), linear-gradient(0deg, #081e27, transparent 48%, #04192333); }
+.hero-vessel-caption { align-self: end; margin-bottom: -115px; padding-left: 40px; color: #fff9ed; text-shadow: 0 1px 8px #031b27; }
+.hero-vessel-caption p { margin-top: 10px; font-size: 11px; line-height: 1.8; opacity: .8; }
+.luxury-hero h1 { font-size: clamp(3.4rem, 5.6vw, 6rem); max-width: 12ch; }
+.golden-scene .scene-photo { opacity: 1; }
+.golden-scene .ocean-vessel { top: 27%; right: 6%; width: min(42vw, 680px); }
+.welcome-shade { background: linear-gradient(90deg, #041b2ab0, #041b2a26 54%, #041b2a50), linear-gradient(0deg, #041b2aaa, transparent 65%); }
+.welcome-story h1 { font-size: clamp(3rem, 5vw, 5.8rem); max-width: 11ch; }
+.welcome-migo { position: relative; }
+.welcome-migo::after { content: ''; position: absolute; bottom: -2px; left: -15px; right: -20px; height: 8px; background: linear-gradient(90deg, transparent, #d9e5df26, transparent); border-radius: 50%; }
+html[data-approach="true"] .luxury-hero .ocean-camera { animation: shoreArrival .9s cubic-bezier(.2,.7,.3,1) both; }
+[data-migo-stage]::after { content: ''; position: absolute; z-index: -1; left: -8%; bottom: -2px; width: 116%; height: 5px; background: linear-gradient(90deg, transparent, #e8ddbf22, transparent); border-radius: 50%; }
+@keyframes oceanApproach { from { transform: scale(1); } to { transform: scale(1.018); } }
+@keyframes auroraProgress { from { transform: translate3d(0,0,0); } to { transform: translate3d(14px,-3px,0); } }
+@keyframes oceanRipple { from { transform: translate3d(-1px,0,0); } to { transform: translate3d(1px,1px,0); } }
+@keyframes cloudLight { from { transform: translateX(-1%); } to { transform: translateX(1%); } }
+@keyframes shoreArrival { from { transform: scale(1); } to { transform: scale(1.018); } }
+@media (max-width: 1023px) {
+  .ocean-vessel { width: 52vw; right: -1%; top: 39%; }
+  .hero-vessel-caption { display: none; }
+  .golden-scene .ocean-vessel { top: 14%; width: 54vw; right: -2%; }
+  .ocean-welcome .ocean-vessel { width: 44vw; top: 27%; right: 12%; }
+}
+@media (max-width: 639px) {
+  .luxury-hero { padding-top: 130px; }
+  .luxury-hero h1 { font-size: clamp(2.65rem, 12vw, 3.25rem); max-width: 13ch; }
+  .hero-ocean-space { height: 170px; }
+  .ocean-vessel { width: 86vw; right: -2%; top: 370px; }
+  .ocean-plate { object-position: 61% center; }
+  .ocean-water { background-position: 61% center; animation: none; }
+  .ocean-camera { animation: none; }
+  .ocean-cloud-light { animation: none; }
+  .ocean-welcome .ocean-vessel { width: 75vw; top: 19%; right: -12%; opacity: .75; }
+  .ocean-intro .ocean-vessel { width: 94vw; top: 25%; right: -4%; }
+  .golden-scene .ocean-vessel { top: 20%; width: 90vw; right: -15%; opacity: .7; }
+  .welcome-story h1 { font-size: clamp(2.6rem, 10vw, 3.6rem); }
+}
+.companion-ground { position: fixed; pointer-events: none; z-index: 39; inset: auto 0 0; height: 18px; background: linear-gradient(#cad8d21a, #112c35 22%, #071d26); border-top: 1px solid #dce7df15; }
+@media (max-width: 639px) { [data-migo-stage]::after { height: 3px; } }
+.companion-ground[data-surface="sand"] { background: linear-gradient(#e9d4a242, #776b52 24%, #263535); }
+@media (max-width: 359px) { .ocean-hero .ocean-vessel { top: 415px; } }

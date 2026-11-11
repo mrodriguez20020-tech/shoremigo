@@ -145,7 +145,7 @@ Rescue ranks feasible same-port alternatives with enough seats by same category,
 ### Scene-aware visual rendering
 
 - **One lighting state for the whole world.** `SceneProvider` keeps a stack of scene claims (the route's base scene plus sections in view) and writes the top one to `<html data-scene>`.
-- Each scene (`day`, `shade`, `sunset`, `night`, `neutral`) sets ~35 CSS custom properties: sky, sun position and size, sea, glitter, land rim light, UI surfaces, ink, accent, and Migo's lighting. They are registered with `@property`, so the browser **interpolates** them, and the sky, sea, cards and Migo relight together over 1.8 s.
+- Each scene (`day`, `shade`, `sunset`, `night`, `neutral`) sets ~35 CSS custom properties: sky, sun position and size, sea, glitter, land rim light, UI surfaces, ink, accent, and Migo's lighting. They are registered with `@property`, so the browser **interpolates** them, and the sky, sea, cards and Migo relight together over 750 ms.
 - **Environment** (`SceneBackdrop`): original vector layers (sky gradient, stars, sun with bloom, sun-under-lit clouds, islands with atmospheric perspective, ship silhouette, sea, glitter path, wave lines, mist, rim-lit palms). Animation uses transforms and opacity only; pointer parallax writes two CSS variables; palms use scroll parallax.
 - **Migo lighting** (`SpriteMigo`) is honest 2.5D image-space compositing on flat artwork, not physically based 3D:
   1. grounding shadow: color, opacity and skew from the scene (long and cool at sunset)
@@ -226,3 +226,17 @@ Code is MIT (`LICENSE`). The Migo artwork was created by the ShoreMigo team with
 ## Bryntum
 
 The operator schedule is an in-house timeline over a Bryntum-compatible `resources/events` model (`lib/domain/schedule.ts`), computed live from bookings and simulated disruptions. Bryntum Scheduler is a commercial package that requires licensed (or trial) registry access, which this repo does not assume. Once access is confirmed, the view can be swapped without changing the data model.
+
+
+### Cinematic Luxury · Phase 1
+
+The welcome and homepage now use locally hosted, licensed illustrative photography, a navy/ivory/champagne palette, and the original Migo wave artwork. Country and language remain independent; choices are session-only unless the visitor opts into remembering them. Skip/Escape, keyboard focus containment/restoration, reduced motion, and the manual pause setting are supported. Fonts are bundled locally with their OFL licenses; builds no longer fetch Google Fonts.
+
+Scene lighting and sunset photography interpolate over **750 ms**. Sections claim a scene when entering a central viewport band so tall mobile sections still activate it. Booking, payment, concierge, inventory, operator and Trip Rescue logic are unchanged.
+
+Run `npm test`, `npm run lint`, `npm run typecheck`, and `npm run build`. For browser regression tests, install Chromium with `npx playwright install chromium`, run the production server, then `npm run test:ui`. Set `PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium` to use an existing system Chromium. Set `CAPTURE_PREVIEWS=1` to save responsive review screenshots in `docs/previews/`. See [Phase 1 review](docs/CINEMATIC_PHASE_1.md) and [asset provenance](ASSETS.md).
+
+
+### Cinematic Luxury · Phase 1.5
+
+The shared fictional Aurora Tide environment, contact-driven Migo motion/audio, responsive captures, actual browser recording and remaining rig limitations are documented in [the Phase 1.5 review](docs/CINEMATIC_PHASE_15.md). Assets and business logic from Phase 1 are preserved; this update does not deploy or merge the redesign.

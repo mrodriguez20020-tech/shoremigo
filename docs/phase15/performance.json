@@ -1,0 +1,50 @@
+{
+  "environment": "Headless system Chromium in managed Linux; desktop viewport emulation, not physical device or GPU benchmarks. Short RAF samples, not proof of universally sustained 60fps. Recording captures actual app animation; audio is the app output after explicit opt-in.",
+  "measurements": [
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "frames": 101,
+      "meanIntervalMs": 24.916831683168322,
+      "p95IntervalMs": 33.399999999999636
+    },
+    {
+      "viewport": "tablet",
+      "width": 820,
+      "height": 1180,
+      "frames": 145,
+      "meanIntervalMs": 17.35586206896552,
+      "p95IntervalMs": 16.799999999999272,
+      "longTasks": 0,
+      "maxLongTaskMs": 0,
+      "cls": 0,
+      "overflow": false
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "frames": 150,
+      "meanIntervalMs": 16.77733333333333,
+      "p95IntervalMs": 16.700000000000728,
+      "longTasks": 0,
+      "maxLongTaskMs": 0,
+      "cls": 0,
+      "overflow": false
+    },
+    {
+      "viewport": "narrow",
+      "width": 320,
+      "height": 700,
+      "frames": 151,
+      "meanIntervalMs": 16.666225165562917,
+      "p95IntervalMs": 16.799999999999272,
+      "longTasks": 0,
+      "maxLongTaskMs": 0,
+      "cls": 0,
+      "overflow": false
+    }
+  ],
+  "browserErrors": []
+}

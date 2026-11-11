@@ -10,7 +10,7 @@ Evidence for payments, AI and deployment is in [VERIFICATION.md](VERIFICATION.md
 | Localization | PARTIAL | Translated: navigation, welcome, Migo greeting, homepage hero + discovery. Other pages fall back to English, as the picker states. |
 | Homepage | IMPLEMENTED | "Your Caribbean adventure starts here", port selector, live LastBoard port-day clock, four discovery tiles (Explore & Adventure, Taste & Indulge, Ships & Rooms, Relax & Unwind), How ShoreMigo works, Adventure Match, golden-hour scene, Trip Rescue story. |
 | Navigation | IMPLEMENTED | Explore · Ships & Rooms · My Trip · Bookings · Crew; Account menu (booking sign-in, language & region, Taste, Relax, Adventure Match, operator console); mobile menu with the same links. No dead links. |
-| Visual system | PARTIAL | Approved palette applied (deep ocean, sea glass, aqua, coral, amber, ivory), scene lighting, original vector art throughout. **Photography: DEFERRED** (no licensed, correctly identified photos available; nothing generated is passed off as a real place). |
+| Visual system | PHASE 1 IMPLEMENTED | Cinematic Luxury Phase 1.5 welcome/homepage: locally hosted licensed illustrative photography, navy/ivory/champagne palette, original Migo entrance, 750 ms sunset relighting, responsive layouts and reduced motion. Existing vector environments remain on functional routes. Original fictional Aurora Tide ocean scene, limited-pose contact-driven Migo stepping and optional synthesized contacts. See CINEMATIC_PHASE_15.md and MIGO_ASSET_PLAN.md. |
 | Migo | IMPLEMENTED (2D sprite) | Approved character sprites; event-driven states (idle, walk, wave, curious/point, thinking, concerned, celebrate only after server-verified capture, docked during checkout/operator/welcome); **drag-and-release with safe snapping** (avoids marked forms/CTAs) and arrow-key alternative; **hop to the chat panel and back**; reduced-motion, hide/pause controls; opt-in synthesized sounds. True 3D rig: DEFERRED. Distinct reassuring/apologetic/sleeping poses: PARTIAL (mapped onto existing 8 poses). |
 | Explore | IMPLEMENTED | Port + category filters, live seats/price/feasibility per tour, detail pages with LastBoard timeline, reserve form. |
 | Relax & Unwind | IMPLEMENTED | `/excursions?mood=relax`: gentlest experiences (intensity 1) from the same live inventory; linked from homepage, header and Explore. |
@@ -36,7 +36,7 @@ Evidence for payments, AI and deployment is in [VERIFICATION.md](VERIFICATION.md
 | Devpost | PARTIAL | Materials in [SUBMISSION.md](SUBMISSION.md); final submission is the owner's action. |
 
 ## Deferred roadmap (intent and acceptance criteria)
-- **Licensed photography:** a per-asset source/license manifest in ASSETS.md; every photo matches its named place or dish; responsive AVIF/WebP.
+- **Destination-specific photography:** Phase 1 uses clearly labeled atmospheric stock photos, documented in ASSETS.md. Future destination, vessel and dish photography needs verified subject identity before placement as inventory imagery.
 - **Itinerary builder:** add several experiences to My Trip; LastBoard checks overlaps, transfers and the port window across items; impossible plans explained with alternatives.
 - **Time slots:** several departures per experience, each with its own capacity and holds.
 - **Real restaurant listings:** verified venue data, official links, no invented partnerships.

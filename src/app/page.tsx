@@ -1,3 +1,4 @@
+import { OceanScene } from "@/components/scene/OceanScene";
 import { SAILING, getExcursion } from "@/lib/domain/catalog";
 import { HeroCopy } from "@/components/home/HeroCopy";
 import { Discovery } from "@/components/home/Discovery";
@@ -17,41 +18,42 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 export default function Home() {
   const sunset = getExcursion("och-sunset-sail")!;
   return (
-    <>
+    <div className="home-page">
       <SceneRoute scene="day" />
       <HomeWelcome />
 
       {/* ── Hero ───────────────────────────────────────── */}
-      <section className="relative flex min-h-dvh items-center px-5 pb-32 pt-28 sm:px-10">
-        <div className="mx-auto grid w-full max-w-[1400px] grid-cols-[minmax(0,1fr)] items-center gap-12 xl:grid-cols-[1.15fr_0.85fr]">
+      <section className="luxury-hero relative flex min-h-dvh items-center px-6 pb-32 pt-36 sm:px-12 lg:px-20">
+        <OceanScene />
+        <div className="hero-shade absolute inset-0" />
+        <div className="relative mx-auto grid w-full max-w-[1400px] grid-cols-[minmax(0,1fr)] items-end gap-12 xl:grid-cols-[1.05fr_0.95fr]">
           <div className="min-w-0">
-            <HeroCopy />
+            <div data-migo-tip-avoid><HeroCopy /></div>
             <Reveal delay={0.3}>
               <HeroActions />
             </Reveal>
             <Reveal delay={0.45}>
               <ul className="mt-12 flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold text-ink-soft">
-                <li>◆ PayPal sandbox checkout</li>
-                <li>◆ LastBoard schedule engine</li>
-                <li>◆ AI concierge with verified tools</li>
+                <li>Ship-aware planning</li>
+                <li>Island experiences</li>
+                <li>Your personal companion</li>
               </ul>
             </Reveal>
           </div>
-          <Reveal delay={0.5} className="hidden self-start xl:mt-10 xl:block" y={40}>
-            <PortDayClock />
-          </Reveal>
+          <div className="hero-vessel-caption" aria-hidden><span className="luxury-kicker">Aurora Tide</span><p>Our fictional exploration cruiser.<br />An original concept rendering.</p></div>
         </div>
         <a
           href="#ports"
           className="absolute bottom-10 left-1/2 -translate-x-1/2 text-xs font-bold tracking-[0.3em] text-ink-soft uppercase"
           aria-label="Scroll to ports"
         >
-          <span className="block animate-[bob_2.6s_ease-in-out_infinite]">
+          <span className="block">
             Scroll ↓
           </span>
         </a>
       </section>
 
+      <p className="photo-caption">Aurora Tide · fictional vessel and island · AI-generated concept rendering · demo sailing</p>
       <Discovery />
 
       {/* ── Ports ──────────────────────────────────────── */}
@@ -60,7 +62,7 @@ export default function Home() {
           <Reveal>
             <p className="eyebrow">Four ports · one week</p>
             <h2 className="font-display mt-3 max-w-3xl text-5xl leading-[1.02] sm:text-6xl">
-              Every port call, matched to the minute.
+              A new island. A new possibility.
             </h2>
             <p className="mt-5 max-w-2xl text-lg text-ink-soft">
               Port time is short and fixed. Every tour on ShoreMigo is checked
@@ -68,7 +70,7 @@ export default function Home() {
               can book it.
             </p>
           </Reveal>
-          <Reveal className="mt-10 max-w-2xl xl:hidden">
+          <Reveal className="mt-10 max-w-2xl">
             <PortDayClock />
           </Reveal>
           <div className="mt-12">
@@ -92,10 +94,14 @@ export default function Home() {
       {/* ── Golden Hour (signature sunset scene) ───────── */}
       <SceneSection
         scene="sunset"
-        className="relative flex min-h-[130vh] items-center px-5 py-32 sm:px-10"
+        id="golden-hour"
+        className="golden-scene relative flex min-h-dvh items-center overflow-hidden px-6 py-28 sm:px-12 lg:px-20"
         threshold={0.4}
       >
-        <div className="mx-auto grid w-full max-w-[1400px] items-end gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+        <OceanScene variant="sunset" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#151522]/90 via-[#151522]/45 to-[#151522]/25" />
+        <p className="absolute bottom-6 left-6 text-[10px] tracking-wider text-white/70 sm:left-12">Fictional Aurora Tide and island · concept rendering, not Ocho Rios or the listed excursion</p>
+        <div className="relative mx-auto grid w-full max-w-[1400px] items-end gap-12 lg:grid-cols-[1.2fr_0.8fr]">
           <Reveal>
             <p className="eyebrow">Ocho Rios · golden hour</p>
             <h2 className="font-display mt-4 text-[clamp(3rem,7vw,6.5rem)] leading-[0.95] tracking-[-0.02em] [text-shadow:0_4px_60px_rgba(80,20,40,0.45)]">
@@ -113,6 +119,7 @@ export default function Home() {
           <Reveal delay={0.15}>
             <TideLink
               href={`/excursions/${sunset.id}`}
+              data-migo-avoid
               className="surface group block rounded-[28px] p-7 transition hover:-translate-y-1"
             >
               <p className="eyebrow">Featured excursion</p>
@@ -228,6 +235,6 @@ export default function Home() {
       </section>
 
       <SiteFooter />
-    </>
+    </div>
   );
 }
