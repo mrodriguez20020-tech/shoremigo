@@ -5,6 +5,7 @@ import { fmtDuration, fmtMin, fmtUsd, toMin } from "@/lib/domain/time";
 import type { Category } from "@/lib/domain/types";
 import { availabilitySnapshot, getBooking, openRescueFor } from "@/lib/server/bookings";
 import * as paypal from "@/lib/server/paypal";
+import { DEMO_VENUE, LOCAL_FLAVOURS, SHIP_VENUES } from "@/lib/domain/dining";
 
 /**
  * Approved, read-only concierge tools. The LLM can only see what these return.
@@ -99,6 +100,12 @@ export const TOOL_DECLARATIONS = [
     name: "get_trip_rescue",
     description: "The open Trip Rescue proposal for the verified booking, if a simulated delay affected it.",
     parameters: { type: "object", properties: {} },
+  },
+  {
+    name: "get_dining_guide",
+    description:
+      "Local dish guide (what dishes are, by region), the sample menu of the fictional demo venue Tidewalk Kitchen, and the demo ship's onboard dining. Menus are samples with illustrative prices and are NOT bookable; bookable food experiences come from search_excursions with category 'food'.",
+    parameters: { type: "object", properties: { section: { type: "string", description: "optional: breakfast, street, mains, drinks or desserts" } } },
   },
 ] as const;
 
@@ -284,6 +291,23 @@ export async function runTool(name: string, rawArgs: Record<string, unknown>, ct
         out.push({ kind: p.kind, amount: fmtUsd(p.amountCents), recorded_status: p.status, live_paypal_status: live_status, purpose: p.purpose });
       }
       return { result: { environment: "PayPal sandbox", payments: out } };
+    }
+    case "get_dining_guide": {
+      const want = typeof args.section === "string" ? String(args.section).toLowerCase() : "";
+      const sections = DEMO_VENUE.sections.filter((s) => !want || s.id === want || s.title.toLowerCase().includes(want));
+      return {
+        result: {
+          source_status: "Dish guide is factual; menus are SAMPLE menus at fictional demo venues with illustrative USD prices. Not bookable. No allergen guarantees.",
+          dishes: LOCAL_FLAVOURS.map((d) => ({ name: d.name, region: d.region, what_it_is: d.description })),
+          demo_venue: {
+            name: DEMO_VENUE.name,
+            where: DEMO_VENUE.where,
+            menu: sections.map((s) => ({ section: s.title, items: s.items.map((i) => ({ name: i.name, sample_price: fmtUsd(i.priceCents), notes: i.tags ?? [] })) })),
+          },
+          ship_dining: SHIP_VENUES.map((v) => ({ name: v.name, where: v.where, sections: v.sections.map((s) => s.title) })),
+          bookable_food_experiences: EXCURSIONS.filter((e) => e.category === "food").map((e) => e.title),
+        },
+      };
     }
     case "get_trip_rescue": {
       if (!ctx.verifiedBookingId) return needVerification();

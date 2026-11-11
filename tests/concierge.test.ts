@@ -155,3 +155,19 @@ describe("offline concierge (no LLM configured)", () => {
     expect(await store.read((db) => db.bookings.length)).toBe(0);
   });
 });
+
+describe("dining guide tool", () => {
+  it("labels menus as samples, exposes only catalog food experiences as bookable, and filters sections", async () => {
+    const out = (await runTool("get_dining_guide", { section: "desserts" }, { verifiedBookingId: null })).result as {
+      source_status: string;
+      dishes: { name: string }[];
+      demo_venue: { menu: { section: string }[] };
+      bookable_food_experiences: string[];
+    };
+    expect(out.source_status).toMatch(/SAMPLE/);
+    expect(out.source_status).toMatch(/Not bookable/);
+    expect(out.dishes.map((d) => d.name)).toContain("Doubles");
+    expect(out.demo_venue.menu.map((m) => m.section)).toEqual(["Desserts & sweets"]);
+    expect(out.bookable_food_experiences.length).toBeGreaterThan(0);
+  });
+});
