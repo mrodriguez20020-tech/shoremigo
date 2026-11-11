@@ -22,7 +22,7 @@
 @property --ink-soft { syntax: "<color>"; inherits: true; initial-value: rgba(251, 247, 238, 0.78); }
 @property --surface { syntax: "<color>"; inherits: true; initial-value: rgba(8, 30, 48, 0.5); }
 @property --surface-line { syntax: "<color>"; inherits: true; initial-value: rgba(255, 255, 255, 0.16); }
-@property --accent { syntax: "<color>"; inherits: true; initial-value: #2fd1c5; }
+@property --accent { syntax: "<color>"; inherits: true; initial-value: #40c7c5; }
 @property --accent-ink { syntax: "<color>"; inherits: true; initial-value: #04212c; }
 @property --warm { syntax: "<color>"; inherits: true; initial-value: #ff7a59; }
 @property --migo-tint { syntax: "<color>"; inherits: true; initial-value: #fff4d6; }
@@ -67,9 +67,9 @@
   --sun: #fffaf0; --sun-glow: rgba(255, 244, 214, 0.65);
   --sea-1: #45cdd6; --sea-2: #07496f; --glint: #fffdf2; --glint-a: 0.5;
   --land: #0e5446; --land-rim: #9ff0cf; --mist: rgba(255, 255, 255, 0.32);
-  --ink: #fffaf1; --ink-soft: rgba(255, 250, 241, 0.82);
+  --ink: #f9f6ee; --ink-soft: rgba(249, 246, 238, 0.82);
   --surface: rgba(6, 34, 54, 0.46); --surface-line: rgba(255, 255, 255, 0.18);
-  --accent: #34d6c9; --accent-ink: #032029; --warm: #ff7a59;
+  --accent: #40c7c5; --accent-ink: #062a35; --warm: #f69a8e;
   --migo-tint: #fff4d6; --migo-tint-a: 0.06; --migo-rim: #ffffff; --migo-rim-a: 0.38; --rim-angle: 135deg;
   --migo-bright: 1.04; --migo-sat: 1.06; --migo-shadow: #053049; --migo-shadow-a: 0.34; --shadow-skew: -8;
   --compass: #ffd27a; --compass-a: 0.3;
@@ -136,11 +136,13 @@
 @theme inline {
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --color-navy: #071a2c;
-  --color-ivory: #fbf6ec;
-  --color-turquoise: #2fd1c5;
+  --color-navy: #0d2f43;
+  --color-ivory: #f9f6ee;
+  --color-turquoise: #40c7c5;
+  --color-aqua: #65d6cf;
+  --color-amber: #f4c777;
   --color-seaglass: #8fd9c0;
-  --color-coral: #ff7a59;
+  --color-coral: #f69a8e;
   --color-champagne: #f3d9a4;
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);

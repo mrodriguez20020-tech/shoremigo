@@ -59,7 +59,7 @@ export function PortDayClock() {
                 setLate(o.v);
               }}
               aria-pressed={late === o.v}
-              className={`rounded-full px-3 py-1.5 transition ${late === o.v ? (o.v ? "bg-warm text-white" : "bg-accent text-accent-ink") : "text-ink-soft"}`}
+              className={`rounded-full px-3 py-1.5 transition ${late === o.v ? (o.v ? "bg-warm text-navy" : "bg-accent text-accent-ink") : "text-ink-soft"}`}
             >
               {o.l}
             </button>

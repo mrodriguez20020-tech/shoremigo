@@ -1,4 +1,6 @@
 import { SAILING, getExcursion } from "@/lib/domain/catalog";
+import { HeroCopy } from "@/components/home/HeroCopy";
+import { Discovery } from "@/components/home/Discovery";
 import { fmtUsd } from "@/lib/domain/time";
 import { SceneRoute } from "@/components/scene/SceneProvider";
 import { SceneSection } from "@/components/home/SceneSection";
@@ -23,29 +25,7 @@ export default function Home() {
       <section className="relative flex min-h-dvh items-center px-5 pb-32 pt-28 sm:px-10">
         <div className="mx-auto grid w-full max-w-[1400px] items-center gap-12 xl:grid-cols-[1.15fr_0.85fr]">
           <div>
-            <Reveal>
-              <p className="eyebrow flex flex-wrap items-center gap-3">
-                <span>
-                  {SAILING.ship} · {SAILING.name}
-                </span>
-                <span className="demo-tag">Demo sailing</span>
-              </p>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <h1 className="font-display mt-6 max-w-[14ch] text-[clamp(2.9rem,6.2vw,6.2rem)] leading-[0.94] tracking-[-0.03em] [text-shadow:0_2px_40px_rgba(4,30,50,0.35)]">
-                Your adventure doesn&apos;t stop when{" "}
-                <em className="shimmer-text not-italic sm:italic">
-                  plans change.
-                </em>
-              </h1>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <p className="mt-7 max-w-xl text-lg leading-relaxed text-ink-soft sm:text-xl [text-shadow:0_1px_20px_rgba(4,30,50,0.4)]">
-                ShoreMigo finds shore excursions that fit your ship&apos;s real
-                schedule, books them with PayPal, and if your ship runs late,
-                rescues your day with an alternative that still works.
-              </p>
-            </Reveal>
+            <HeroCopy />
             <Reveal delay={0.3}>
               <HeroActions />
             </Reveal>
@@ -71,6 +51,8 @@ export default function Home() {
           </span>
         </a>
       </section>
+
+      <Discovery />
 
       {/* ── Ports ──────────────────────────────────────── */}
       <section id="ports" className="relative px-5 py-24 sm:px-10">

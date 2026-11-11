@@ -10,6 +10,8 @@ import { MigoStage } from "@/components/migo/MigoStage";
 import { SceneBackdrop } from "@/components/scene/SceneBackdrop";
 import { SceneProvider } from "@/components/scene/SceneProvider";
 import { TideProvider } from "@/components/transition/TideTransition";
+import { PrefsProvider } from "@/components/prefs/PrefsProvider";
+import { WelcomePortal } from "@/components/prefs/WelcomePortal";
 
 // Both fonts are SIL Open Font License, self-hosted at build time by next/font.
 const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", axes: ["SOFT", "opsz"], style: ["normal", "italic"] });
@@ -27,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" data-scene="day" className={`${fraunces.variable} ${manrope.variable}`}>
       <body className="min-h-dvh">
+        <PrefsProvider>
         <SceneProvider>
           <AudioProvider>
             <CompanionProvider>
@@ -39,10 +42,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <MigoStage />
                 <ConciergePanel />
                 <Intro />
+                <WelcomePortal />
               </TideProvider>
             </CompanionProvider>
           </AudioProvider>
         </SceneProvider>
+        </PrefsProvider>
       </body>
     </html>
   );

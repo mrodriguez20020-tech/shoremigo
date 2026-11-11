@@ -8,17 +8,26 @@ import { useAudio } from "@/components/audio/AudioProvider";
 import { useCompanion } from "@/components/migo/CompanionProvider";
 import { TideLink } from "@/components/transition/TideTransition";
 import { ProofDrawer } from "@/components/proof/ProofDrawer";
+import { usePrefs } from "@/components/prefs/PrefsProvider";
+import type { Key } from "@/lib/client/i18n";
 
-const NAV = [
-  { href: "/excursions", label: "Explore" },
-  { href: "/#match", label: "Adventure Match" },
-  { href: "/trip", label: "My trip" },
-  { href: "/operator", label: "Operator" },
+const NAV: { href: string; key: Key }[] = [
+  { href: "/excursions", key: "nav.explore" },
+  { href: "/ships", key: "nav.ships" },
+  { href: "/trip", key: "nav.trip" },
+  { href: "/bookings", key: "nav.bookings" },
+  { href: "/crew", key: "nav.crew" },
+];
+const DISCOVER: { href: string; key: Key }[] = [
+  { href: "/taste", key: "nav.taste" },
+  { href: "/excursions?mood=relax", key: "nav.relax" },
+  { href: "/#match", key: "nav.match" },
 ];
 
 export function SiteHeader() {
   const pathname = usePathname();
   const { openConcierge } = useCompanion();
+  const { t, openPortal } = usePrefs();
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
 
@@ -52,7 +61,7 @@ export function SiteHeader() {
                 className={`whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-semibold transition ${active ? "bg-white/10 text-ink" : "text-ink-soft hover:text-ink"}`}
                 aria-current={active ? "page" : undefined}
               >
-                {n.label}
+                {t(n.key)}
               </TideLink>
             );
           })}
@@ -60,8 +69,9 @@ export function SiteHeader() {
         <div className="ml-auto flex items-center gap-2">
           <ProofDrawer />
           <ExperienceSettings />
+          <AccountMenu />
           <button className="btn btn-primary hidden whitespace-nowrap !py-2 text-sm sm:inline-flex" onClick={() => openConcierge()}>
-            Ask Migo
+            {t("nav.askMigo")}
           </button>
           <button className="btn btn-ghost !h-10 !w-10 !p-0 lg:hidden" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu((m) => !m)}>
             ☰
@@ -79,16 +89,95 @@ export function SiteHeader() {
           >
             {NAV.map((n) => (
               <TideLink key={n.href} href={n.href} className="rounded-2xl px-4 py-3 font-semibold text-ink">
-                {n.label}
+                {t(n.key)}
               </TideLink>
             ))}
+            <div className="mx-4 my-1 border-t border-line" />
+            {DISCOVER.map((n) => (
+              <TideLink key={n.href} href={n.href} className="rounded-2xl px-4 py-2.5 text-sm font-semibold text-ink-soft">
+                {t(n.key)}
+              </TideLink>
+            ))}
+            <button
+              className="rounded-2xl px-4 py-2.5 text-left text-sm font-semibold text-ink-soft"
+              onClick={() => {
+                setMenu(false);
+                openPortal();
+              }}
+            >
+              {t("nav.language")}
+            </button>
+            <TideLink href="/operator" className="rounded-2xl px-4 py-2.5 text-sm font-semibold text-ink-soft">
+              {t("nav.operator")}
+            </TideLink>
             <button className="btn btn-primary mt-1" onClick={() => openConcierge()}>
-              Ask Migo
+              {t("nav.askMigo")}
             </button>
           </motion.nav>
         )}
       </AnimatePresence>
     </header>
+  );
+}
+
+function AccountMenu() {
+  const { t, openPortal, prefs } = usePrefs();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => !ref.current?.contains(e.target as Node) && setOpen(false);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  const item = "block w-full rounded-2xl px-4 py-2.5 text-left text-sm font-semibold transition hover:bg-white/10";
+  return (
+    <div className="relative hidden lg:block" ref={ref}>
+      <button className="btn btn-ghost !h-10 !px-3 text-sm" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" />
+        </svg>
+        <span className="ml-1.5 uppercase">{prefs.lang}</span>
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            role="menu"
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.18 }}
+            className="surface-strong absolute right-0 mt-3 w-64 rounded-3xl p-2"
+          >
+            <p className="px-4 pb-1 pt-2 text-[10px] font-bold tracking-[0.2em] text-ink-soft uppercase">{t("nav.account")}</p>
+            <TideLink role="menuitem" href="/trip" className={item}>
+              {t("nav.signin")}
+            </TideLink>
+            <button role="menuitem" className={item} onClick={() => { setOpen(false); openPortal(); }}>
+              {t("nav.language")}
+            </button>
+            <div className="mx-3 my-1 border-t border-line" />
+            {DISCOVER.map((n) => (
+              <TideLink key={n.href} role="menuitem" href={n.href} className={item}>
+                {t(n.key)}
+              </TideLink>
+            ))}
+            <div className="mx-3 my-1 border-t border-line" />
+            <TideLink role="menuitem" href="/operator" className={item}>
+              {t("nav.operator")}
+            </TideLink>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 

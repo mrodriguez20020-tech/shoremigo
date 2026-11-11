@@ -20,17 +20,20 @@ const CATS: { id: Category; label: string }[] = [
   { id: "food", label: "Food" },
 ];
 
-export default async function ExcursionsPage({ searchParams }: { searchParams: Promise<{ port?: string; category?: string }> }) {
+export default async function ExcursionsPage({ searchParams }: { searchParams: Promise<{ port?: string; category?: string; mood?: string }> }) {
   const sp = await searchParams;
   const port = sp.port && getPort(sp.port) ? sp.port : undefined;
   const category = CATS.some((c) => c.id === sp.category) ? (sp.category as Category) : undefined;
+  // Relax & Unwind: the gentlest experiences (intensity 1) from the same live inventory.
+  const relax = sp.mood === "relax";
   const snap = await availabilitySnapshot();
-  const list = EXCURSIONS.filter((e) => (!port || e.portId === port) && (!category || e.category === category));
+  const list = EXCURSIONS.filter((e) => (!port || e.portId === port) && (!category || e.category === category) && (!relax || e.intensity === 1));
   const portObj = port ? getPort(port) : undefined;
-  const qs = (p?: string, c?: string) => {
+  const qs = (p?: string, c?: string, m?: string) => {
     const u = new URLSearchParams();
     if (p) u.set("port", p);
     if (c) u.set("category", c);
+    if (m) u.set("mood", m);
     const s = u.toString();
     return `/excursions${s ? `?${s}` : ""}`;
   };
@@ -41,8 +44,18 @@ export default async function ExcursionsPage({ searchParams }: { searchParams: P
       <section className="px-5 pb-12 pt-32 sm:px-10">
         <div className="mx-auto max-w-[1400px]">
           <Reveal>
-            <p className="eyebrow">Explore · {portObj ? `${portObj.name}, ${portObj.country}` : "All ports"}</p>
-            <h1 className="font-display mt-3 text-5xl leading-[1.02] sm:text-7xl">{portObj ? `Your day in ${portObj.name}.` : "Find your perfect port day."}</h1>
+            <p className="eyebrow">
+              {relax ? "Relax & Unwind" : "Explore"} · {portObj ? `${portObj.name}, ${portObj.country}` : "All ports"}
+            </p>
+            <h1 className="font-display mt-3 text-5xl leading-[1.02] sm:text-7xl">
+              {relax ? "Slow down. The island will wait." : portObj ? `Your day in ${portObj.name}.` : "Find your perfect port day."}
+            </h1>
+            {relax && (
+              <p className="mt-4 max-w-2xl text-lg text-ink-soft">
+                Sandbars, gentle sails, beach time and unhurried culture: the lowest-intensity experiences across the sailing, with the same live seats, prices and
+                schedule checks as every other tour.
+              </p>
+            )}
             {portObj && (
               <p className="mt-4 text-lg text-ink-soft">
                 Ship in port {fmtMin(toMin(portObj.arrive))} to {fmtMin(toMin(portObj.allAboard))} (all aboard)
@@ -61,8 +74,14 @@ export default async function ExcursionsPage({ searchParams }: { searchParams: P
             ))}
           </nav>
           <nav className="mt-3 flex flex-wrap gap-2" aria-label="Filter by category">
-            <TideLink href={qs(port)} className={`rounded-full px-3 py-1.5 text-xs font-bold ${!category ? "bg-white/15" : "text-ink-soft"}`}>
+            <TideLink href={qs(port)} className={`rounded-full px-3 py-1.5 text-xs font-bold ${!category && !relax ? "bg-white/15" : "text-ink-soft"}`}>
               Any style
+            </TideLink>
+            <TideLink href={qs(port, undefined, relax ? undefined : "relax")} className={`rounded-full px-3 py-1.5 text-xs font-bold ${relax ? "bg-white/15" : "text-ink-soft"}`}>
+              Relax &amp; Unwind
+            </TideLink>
+            <TideLink href="/taste" className="rounded-full px-3 py-1.5 text-xs font-bold text-ink-soft">
+              Taste &amp; Indulge →
             </TideLink>
             {CATS.map((c) => (
               <TideLink key={c.id} href={qs(port, c.id)} className={`rounded-full px-3 py-1.5 text-xs font-bold ${category === c.id ? "bg-white/15" : "text-ink-soft"}`}>
