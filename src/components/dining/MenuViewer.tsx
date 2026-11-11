@@ -18,7 +18,7 @@ export function MenuViewer({ venue, initial }: { venue: Venue; initial?: string 
   const [tab, setTab] = useState(initial ?? venue.sections[0].id);
   const section = venue.sections.find((s) => s.id === tab) ?? venue.sections[0];
   return (
-    <div className="surface rounded-[28px] p-5 sm:p-7">
+    <div className="surface rounded-[28px] p-5 sm:p-7" data-migo-avoid>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="eyebrow">{venue.where}</p>

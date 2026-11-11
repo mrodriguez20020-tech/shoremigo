@@ -6,7 +6,7 @@ ShoreMigo is a cruise shore-excursion companion: discover tours that fit your sh
 
 Built for the PayPal AI Hackathon 2026.
 
-**Live demo:** https://shoremigo.vercel.app (PayPal **sandbox** only; no real money) · **Judge guide:** [docs/SUBMISSION.md](docs/SUBMISSION.md#testing-instructions-for-judges) · **Evidence:** [docs/VERIFICATION.md](docs/VERIFICATION.md)
+**Live demo:** https://shoremigo.vercel.app (PayPal **sandbox** only; no real money) · **Status matrix:** [docs/STATUS.md](docs/STATUS.md) · **Judge guide:** [docs/SUBMISSION.md](docs/SUBMISSION.md#testing-instructions-for-judges) · **Evidence:** [docs/VERIFICATION.md](docs/VERIFICATION.md)
 
 ```
 DISCOVER → PERSONALIZE → VALIDATE → BOOK → ADAPT → RECOVER

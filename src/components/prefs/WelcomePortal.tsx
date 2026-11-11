@@ -31,7 +31,7 @@ export function WelcomePortal() {
       openPortal();
     };
     window.addEventListener(INTRO_DONE_EVENT, open);
-    const fallback = setTimeout(open, 4200);
+    const fallback = setTimeout(open, 9000); // only if the intro never reports finishing
     return () => {
       window.removeEventListener(INTRO_DONE_EVENT, open);
       clearTimeout(fallback);

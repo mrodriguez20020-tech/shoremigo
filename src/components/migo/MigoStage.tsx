@@ -24,6 +24,12 @@ export function MigoStage() {
   const seen = useRef(new Set<string>());
   const dir = useRef<1 | -1>(1);
   const xRef = useRef(24);
+  // Drag-and-release (desktop, roaming only) and the hop between lane and chat.
+  const [dragging, setDragging] = useState(false);
+  const [hopping, setHopping] = useState(false);
+  const dragRef = useRef<{ startClient: number; startX: number; moved: boolean } | null>(null);
+  const suppressClick = useRef(false);
+  const prevMode = useRef(state.mode);
 
   const mobile = vw < 720;
   const size = mobile ? 84 : 124;
@@ -46,8 +52,45 @@ export function MigoStage() {
     return () => window.removeEventListener("resize", onR);
   }, []);
 
+  // A short, purposeful hop when moving between his lane and the chat panel.
+  useEffect(() => {
+    const was = prevMode.current;
+    prevMode.current = state.mode;
+    if (reducedMotion || mobile) return;
+    const toChat = was === "roam" && state.mode === "attend";
+    const back = was === "attend" && state.mode === "roam";
+    if (!toChat && !back) return;
+    setHopping(true);
+    const t = setTimeout(() => setHopping(false), 760);
+    return () => clearTimeout(t);
+  }, [state.mode, reducedMotion, mobile]);
+
+  /** Nearest lane position whose footprint doesn't cover a marked control (data-migo-avoid). */
+  const safeSnap = (want: number) => {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const max = Math.max(16, w - size - 16);
+    const zones = [...document.querySelectorAll<HTMLElement>("[data-migo-avoid]")].map((el) => el.getBoundingClientRect());
+    const blocked = (px: number) => zones.some((z) => z.left < px + size && z.right > px && z.top < h && z.bottom > h - size - 20);
+    const clamp = (px: number) => Math.max(16, Math.min(max, px));
+    const start = clamp(want);
+    if (!blocked(start)) return start;
+    for (let d = 24; d < w; d += 24) {
+      for (const px of [start - d, start + d]) if (px >= 16 && px <= max && !blocked(px)) return px;
+    }
+    return start;
+  };
+  const moveTo = (px: number) => {
+    const nx = safeSnap(px);
+    setFacing(nx < xRef.current ? -1 : 1);
+    xRef.current = nx;
+    setX(nx);
+    setStrolling(false);
+  };
+  const canDrag = state.mode === "roam" && !mobile && !reducedMotion;
+
   // On phones Migo is a compact corner launcher rather than a walker, so he never covers page controls.
-  const roaming = state.mode === "roam" && !reducedMotion && !mobile;
+  const roaming = state.mode === "roam" && !reducedMotion && !mobile && !dragging;
   const expression = state.expression === "walking" && (!strolling || !roaming) ? "idle" : state.expression;
   const walking = expression === "walking";
 
@@ -159,8 +202,9 @@ export function MigoStage() {
     scale = 0.68;
     bottom = 6;
   }
+  if (dragging && state.mode === "roam") bottom = 26;
   const faceTo: 1 | -1 = state.mode === "attend" ? 1 : state.mode === "docked" ? 1 : facing;
-  const pose = poseFor(expression, frame);
+  const pose = dragging || hopping ? "jump" : poseFor(expression, frame);
 
   if (state.mode === "hidden") {
     return (
@@ -177,8 +221,14 @@ export function MigoStage() {
         className="fixed z-40"
         style={{ left: 0 }}
         initial={false}
-        animate={{ x: targetX, bottom, scale, opacity: state.mode === "docked" ? 0.85 : 1 }}
-        transition={walking ? { duration: 0 } : { type: "spring", stiffness: 120, damping: 20, mass: 0.9 }}
+        animate={{ x: targetX, bottom: hopping ? [10, 120, bottom] : bottom, scale, opacity: state.mode === "docked" ? 0.85 : 1 }}
+        transition={
+          walking || dragging
+            ? { duration: 0 }
+            : hopping
+              ? { duration: 0.7, ease: [0.3, 0.7, 0.4, 1], bottom: { duration: 0.7, times: [0, 0.45, 1], ease: ["easeOut", "easeIn"] } }
+              : { type: "spring", stiffness: 120, damping: 20, mass: 0.9 }
+        }
       >
         <AnimatePresence>
           {bubble && state.mode === "roam" && (
@@ -231,16 +281,60 @@ export function MigoStage() {
           <button
             type="button"
             onClick={() => {
+              if (suppressClick.current) {
+                suppressClick.current = false;
+                return;
+              }
               if (state.panelOpen) closeConcierge();
               else {
                 migo.emit({ type: "user:poke" });
                 openConcierge();
               }
             }}
+            onPointerDown={(e) => {
+              if (!canDrag || e.button !== 0) return;
+              dragRef.current = { startClient: e.clientX, startX: xRef.current, moved: false };
+              e.currentTarget.setPointerCapture(e.pointerId);
+            }}
+            onPointerMove={(e) => {
+              const d = dragRef.current;
+              if (!d) return;
+              const dx = e.clientX - d.startClient;
+              if (!d.moved && Math.abs(dx) < 6) return;
+              if (!d.moved) {
+                d.moved = true;
+                setDragging(true);
+                setBubble(null);
+              }
+              const nx = Math.max(16, Math.min(window.innerWidth - size - 16, d.startX + dx));
+              setFacing(dx < 0 ? -1 : 1);
+              xRef.current = nx;
+              setX(nx);
+            }}
+            onPointerUp={() => {
+              const d = dragRef.current;
+              dragRef.current = null;
+              if (!d?.moved) return;
+              suppressClick.current = true;
+              setDragging(false);
+              moveTo(xRef.current);
+              track("migo.dragged", {});
+            }}
+            onPointerCancel={() => {
+              dragRef.current = null;
+              setDragging(false);
+            }}
+            onKeyDown={(e) => {
+              if (!canDrag || (e.key !== "ArrowLeft" && e.key !== "ArrowRight")) return;
+              e.preventDefault();
+              moveTo(xRef.current + (e.key === "ArrowLeft" ? -1 : 1) * (e.shiftKey ? 160 : 48));
+            }}
+            title={canDrag ? "Click to chat · drag (or use arrow keys) to move Migo" : undefined}
+            aria-keyshortcuts={canDrag ? "ArrowLeft ArrowRight" : undefined}
             aria-label={state.panelOpen ? "Close Migo's concierge panel" : "Open Migo, your AI concierge"}
             aria-expanded={state.panelOpen}
             aria-controls="migo-concierge"
-            className="block cursor-pointer rounded-full focus-visible:outline-offset-[-6px]"
+            className={`block rounded-full focus-visible:outline-offset-[-6px] ${canDrag ? (dragging ? "cursor-grabbing touch-none" : "cursor-grab") : "cursor-pointer"}`}
             style={{ animation: !walking && !reducedMotion ? "bob 3.4s ease-in-out infinite" : undefined }}
           >
             <motion.div

@@ -23,8 +23,8 @@ export default function Home() {
 
       {/* ── Hero ───────────────────────────────────────── */}
       <section className="relative flex min-h-dvh items-center px-5 pb-32 pt-28 sm:px-10">
-        <div className="mx-auto grid w-full max-w-[1400px] items-center gap-12 xl:grid-cols-[1.15fr_0.85fr]">
-          <div>
+        <div className="mx-auto grid w-full max-w-[1400px] grid-cols-[minmax(0,1fr)] items-center gap-12 xl:grid-cols-[1.15fr_0.85fr]">
+          <div className="min-w-0">
             <HeroCopy />
             <Reveal delay={0.3}>
               <HeroActions />

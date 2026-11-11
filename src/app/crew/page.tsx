@@ -38,7 +38,7 @@ export default function CrewPage() {
             interactive concept; referral tracking and commissions are not live.
           </p>
 
-          <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="mt-12 grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[0.9fr_1.1fr]">
             <article className="surface relative overflow-hidden rounded-[28px] p-7">
               <div className="pointer-events-none absolute -right-4 -top-2 opacity-90" aria-hidden>
                 <SpriteMigo pose="point" size={120} reflection={false} />
@@ -67,7 +67,7 @@ export default function CrewPage() {
               </div>
             </article>
 
-            <div className="grid gap-6">
+            <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-6">
               <div className="surface rounded-[28px] p-7">
                 <p className="font-display text-2xl">Your referral link</p>
                 <label className="mt-4 grid gap-1.5 text-sm font-semibold">
@@ -75,7 +75,7 @@ export default function CrewPage() {
                   <input className="field" value={handle} onChange={(e) => setHandle(e.target.value)} maxLength={30} />
                 </label>
                 <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                  <code className="flex-1 overflow-x-auto whitespace-nowrap rounded-2xl bg-black/20 px-4 py-3 text-sm">{link}</code>
+                  <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap rounded-2xl bg-black/20 px-4 py-3 text-sm">{link}</code>
                   <button
                     className="btn btn-primary !py-2 text-sm"
                     onClick={async () => {

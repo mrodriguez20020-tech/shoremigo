@@ -11,6 +11,7 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["tests/**/*.test.ts"],
+    setupFiles: ["tests/setup-isolated-data.ts"],
     env: { SHOREMIGO_DATA_DIR: path.resolve(__dirname, ".data-test"), SESSION_SECRET: "test-secret-0123456789" },
   },
 });

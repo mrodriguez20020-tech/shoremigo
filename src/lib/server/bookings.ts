@@ -586,12 +586,14 @@ export const ENGAGEMENT_TYPES = [
   "rescue.viewed",
   "rescue.approved",
   "proactive.disabled",
+  "welcome.portal",
+  "migo.dragged",
 ] as const;
 
 export async function recordEngagement(type: string, props: Record<string, unknown>) {
   if (!(ENGAGEMENT_TYPES as readonly string[]).includes(type)) throw new DomainError("Unknown event type", "bad_event");
   // Only short scalar props, keyed by allow-listed names. No names, emails or free text.
-  const allowed = ["excursionId", "portId", "category", "page", "step", "count", "intensity", "scene"];
+  const allowed = ["excursionId", "portId", "category", "page", "step", "count", "intensity", "scene", "action", "lang", "country_set"];
   const clean: Record<string, string | number | boolean> = {};
   for (const k of allowed) {
     const v = props[k];
