@@ -219,7 +219,7 @@ The fake PayPal double tests our logic only.
 
 ## Assets & licensing
 
-Code is MIT (`LICENSE`). The Migo artwork is owned by the ShoreMigo team and is **not** MIT-licensed. Environment art, excursion art and audio are original; fonts are SIL OFL. Full terms and the dependency audit are in [ASSETS.md](ASSETS.md).
+Code is MIT (`LICENSE`). The Migo artwork was created by the ShoreMigo team with an AI image tool and is **not** MIT-licensed. Environment art, excursion art and audio are original; fonts are SIL OFL. Full terms and the dependency audit are in [ASSETS.md](ASSETS.md).
 
 ## Bryntum
 
