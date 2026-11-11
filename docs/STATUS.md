@@ -30,8 +30,8 @@ Evidence for payments, AI and deployment is in [VERIFICATION.md](VERIFICATION.md
 | Operator | IMPLEMENTED | Passcode-protected console: KPIs, disruption control, schedule/resource clashes, Inventory tab, Trip Rescue reviews, bookings with PayPal re-verify, audit trail, engagement. |
 | Crew | IMPLEMENTED (concept demo) | `/crew`: fictional creator profile, generated referral link, illustrative earnings estimate. No tracking, commissions or payouts (stated on page). |
 | Mobile / accessibility | IMPLEMENTED (checked) | No horizontal overflow at 390 px on home, Explore, Relax, Taste, Ships, Bookings, Crew; keyboard tabs/decks/cabin views; focusable Migo with arrow keys; reduced motion; opt-in audio. A full screen-reader audit is not done. |
-| Deployment | IMPLEMENTED | https://shoremigo.vercel.app (Vercel + Neon Postgres, sandbox only). The new pages in this file are **not deployed yet** (awaiting approval). |
-| GitHub | IMPLEMENTED | https://github.com/mrodriguez20020-tech/shoremigo (public, MIT for code; Migo artwork excluded from MIT). The commits in this file are **not pushed yet** (awaiting approval). |
+| Deployment | IMPLEMENTED | https://shoremigo.vercel.app (Vercel + Neon Postgres, sandbox only). All pages in this file deployed 2026-11-11 (commit 786facc); production smoke test 22/22 after deploy. |
+| GitHub | IMPLEMENTED | https://github.com/mrodriguez20020-tech/shoremigo (public, MIT for code; Migo artwork excluded from MIT). All commits pushed (main = 786facc). |
 | Video | MISSING | Owner to record from [DEMO_SCRIPT.md](DEMO_SCRIPT.md) and upload to YouTube. |
 | Devpost | PARTIAL | Materials in [SUBMISSION.md](SUBMISSION.md); final submission is the owner's action. |
 
