@@ -1,5 +1,6 @@
 "use client";
 
+import { MotionConfig } from "motion/react";
 import { createContext, useCallback, useContext, useEffect, useReducer, useRef, useState, type ReactNode } from "react";
 import { migo, type MigoEvent } from "./bus";
 import { initialMigo, migoReducer, type MigoAction, type MigoState } from "./machine";
@@ -115,7 +116,7 @@ export function CompanionProvider({ children }: { children: ReactNode }) {
         consumePrompt,
       }}
     >
-      {children}
+      <MotionConfig reducedMotion={reducedMotion || prefs.motionPaused ? "always" : "never"}>{children}</MotionConfig>
     </Ctx.Provider>
   );
 }

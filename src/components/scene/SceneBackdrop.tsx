@@ -1,5 +1,7 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+import { useCompanion } from "@/components/migo/CompanionProvider";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useEffect, useMemo, useRef } from "react";
 
@@ -21,6 +23,8 @@ function seeded(n: number) {
 }
 
 export function SceneBackdrop() {
+  const { reducedMotion } = useCompanion();
+  const pathname = usePathname();
   const root = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
   const palmY = useTransform(scrollY, [0, 1200], [0, -120]);
@@ -49,7 +53,7 @@ export function SceneBackdrop() {
 
   useEffect(() => {
     const el = root.current;
-    if (!el || window.matchMedia("(pointer: coarse)").matches) return;
+    if (!el || pathname === "/" || reducedMotion || window.matchMedia("(pointer: coarse)").matches) return;
     let raf = 0;
     const onMove = (e: PointerEvent) => {
       cancelAnimationFrame(raf);
@@ -59,10 +63,14 @@ export function SceneBackdrop() {
       });
     };
     window.addEventListener("pointermove", onMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onMove);
-  }, []);
+    return () => { window.removeEventListener("pointermove", onMove); cancelAnimationFrame(raf); el.style.removeProperty("--px"); el.style.removeProperty("--py"); };
+  }, [reducedMotion, pathname]);
 
-  const par = (n: number) => ({ transform: `translate3d(calc(var(--px, 0) * ${n}px), calc(var(--py, 0) * ${n * 0.4}px), 0)` });
+  const par = (n: number) => ({ transform: reducedMotion ? "none" : `translate3d(calc(var(--px, 0) * ${n}px), calc(var(--py, 0) * ${n * 0.4}px), 0)` });
+
+  // The photographic homepage supplies its own environment. Avoid running the
+  // hidden vector layers there; retain them on all existing functional routes.
+  if (pathname === "/") return null;
 
   return (
     <div ref={root} className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden>
@@ -136,7 +144,7 @@ export function SceneBackdrop() {
       {/* far islands + cruise ship on the horizon (atmospheric perspective) */}
       <motion.svg
         className="absolute inset-x-0 w-full"
-        style={{ top: `calc(${HORIZON}% - 9vh)`, height: "9.2vh", y: islandY }}
+        style={{ top: `calc(${HORIZON}% - 9vh)`, height: "9.2vh", y: reducedMotion ? 0 : islandY }}
         viewBox="0 0 1600 100"
         preserveAspectRatio="none"
       >
@@ -204,7 +212,7 @@ export function SceneBackdrop() {
       <div className="absolute inset-x-0" style={{ top: `calc(${HORIZON}% - 6vh)`, height: "14vh", background: "linear-gradient(to bottom, transparent, var(--mist), transparent)", filter: "blur(10px)" }} />
 
       {/* foreground palms (rim-lit by the scene's light) */}
-      <motion.div className="scene-fg absolute inset-0" style={{ y: palmY }}>
+      <motion.div className="scene-fg absolute inset-0" style={{ y: reducedMotion ? 0 : palmY }}>
         <Palm className="palm-left absolute -left-[15vw] bottom-[-8vh] h-[78vh] opacity-95" sway={0} />
         <Palm className="palm-right absolute -right-[8vw] bottom-[-10vh] h-[64vh] -scale-x-100 opacity-95" sway={1.3} />
       </motion.div>

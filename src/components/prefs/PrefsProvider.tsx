@@ -79,9 +79,12 @@ export function PrefsProvider({ children }: { children: React.ReactNode }) {
 
   const t = useCallback((key: Key, vars?: Record<string, string>) => translate(prefs.lang, key, vars), [prefs.lang]);
 
+  const openPortal = useCallback(() => setPortalOpen(true), []);
+  const closePortal = useCallback(() => setPortalOpen(false), []);
+
   const value = useMemo(
-    () => ({ prefs, ready, setPrefs, t, portalOpen, openPortal: () => setPortalOpen(true), closePortal: () => setPortalOpen(false) }),
-    [prefs, ready, setPrefs, t, portalOpen],
+    () => ({ prefs, ready, setPrefs, t, portalOpen, openPortal, closePortal }),
+    [prefs, ready, setPrefs, t, portalOpen, openPortal, closePortal],
   );
   return <PrefsCtx.Provider value={value}>{children}</PrefsCtx.Provider>;
 }

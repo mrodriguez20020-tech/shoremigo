@@ -13,12 +13,12 @@ export function HeroCopy() {
           <span>
             {SAILING.ship} · {SAILING.name}
           </span>
-          <span className="demo-tag">Demo sailing</span>
+          <span className="rounded-full border border-white/30 px-3 py-1 text-[9px] font-medium tracking-widest">Demo sailing</span>
         </p>
       </Reveal>
       <Reveal delay={0.1}>
-        <h1 className="font-display mt-6 max-w-[15ch] text-[clamp(2.9rem,6.2vw,6.2rem)] leading-[0.94] tracking-[-0.03em] [text-shadow:0_2px_40px_rgba(4,30,50,0.35)]">
-          {t("hero.title1")} <em className="shimmer-text not-italic sm:italic">{t("hero.title2")}</em>
+        <h1 className="font-display mt-6 max-w-[14ch] text-[clamp(3.5rem,6.4vw,7rem)] leading-[1.02] tracking-[-0.03em] [text-shadow:0_2px_40px_rgba(4,30,50,0.35)]">
+          {t("hero.title1")} <em className="text-[#e8c895]">{t("hero.title2")}</em>
         </h1>
       </Reveal>
       <Reveal delay={0.2}>

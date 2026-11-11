@@ -16,6 +16,7 @@ export function MigoStage() {
   const { state, prefs, setPrefs, reducedMotion, hide, show, openConcierge, closeConcierge } = useCompanion();
   const [vw, setVw] = useState(1280);
   const [vh, setVh] = useState(800);
+  const [mobileBottom, setMobileBottom] = useState(10);
   const [x, setX] = useState(24);
   const [facing, setFacing] = useState<1 | -1>(1);
   const [frame, setFrame] = useState<0 | 1>(0);
@@ -51,6 +52,32 @@ export function MigoStage() {
     window.addEventListener("resize", onR);
     return () => window.removeEventListener("resize", onR);
   }, []);
+
+  // The compact phone launcher also avoids marked controls vertically. A fixed
+  // corner alone can overlap a full-width form when it reaches the viewport edge.
+  useEffect(() => {
+    if (!mobile || state.mode !== "roam") return;
+    let raf = 0;
+    const place = () => {
+      const h = window.innerHeight;
+      const left = window.innerWidth - size - 10;
+      const zones = Array.from(document.querySelectorAll<HTMLElement>("[data-migo-avoid]"), (el) => el.getBoundingClientRect());
+      let next = 10;
+      for (let i = 0; i <= zones.length; i++) {
+        const hit = zones.find((z) => z.left < left + size && z.right > left && z.top < h - next && z.bottom > h - next - size);
+        if (!hit) break;
+        next = h - hit.top + 12;
+      }
+      setMobileBottom(Math.max(10, Math.min(h - size - 90, next)));
+    };
+    const schedule = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(place); };
+    place();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    const observer = new ResizeObserver(schedule);
+    observer.observe(document.body);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", schedule); window.removeEventListener("resize", schedule); observer.disconnect(); };
+  }, [mobile, size, state.mode]);
 
   // A short, purposeful hop when moving between his lane and the chat panel.
   useEffect(() => {
@@ -192,7 +219,7 @@ export function MigoStage() {
 
   // Where Migo stands for each mode.
   let targetX = mobile ? vw - size - 10 : reducedMotion ? 16 : x;
-  let bottom = 10;
+  let bottom = mobile ? mobileBottom : 10;
   let scale = 1;
   if (state.mode === "attend") {
     targetX = mobile ? vw - size - 12 : Math.max(16, vw - Math.min(PANEL_W, vw - 32) - size - 24);
@@ -219,11 +246,12 @@ export function MigoStage() {
 
       <motion.div
         className="fixed z-40"
+        data-migo-stage
         style={{ left: 0 }}
         initial={false}
         animate={{ x: targetX, bottom: hopping ? [10, 120, bottom] : bottom, scale, opacity: state.mode === "docked" ? 0.85 : 1 }}
         transition={
-          walking || dragging
+          reducedMotion || walking || dragging
             ? { duration: 0 }
             : hopping
               ? { duration: 0.7, ease: [0.3, 0.7, 0.4, 1], bottom: { duration: 0.7, times: [0, 0.45, 1], ease: ["easeOut", "easeIn"] } }

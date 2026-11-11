@@ -84,13 +84,23 @@ export function useSceneWhileVisible(ref: React.RefObject<HTMLElement | null>, s
     const el = ref.current;
     if (!el) return;
     const id = `section-${scene}-${Math.random().toString(36).slice(2, 7)}`;
-    const io = new IntersectionObserver(
-      ([entry]) => (entry.intersectionRatio >= threshold ? claim(id, scene) : release(id)),
-      { threshold: [0, threshold, 1] },
-    );
-    io.observe(el);
+    let io: IntersectionObserver;
+    const observe = () => {
+      io?.disconnect();
+      // Pixels are intentional: IntersectionObserver resolves percentage root
+      // margins against viewport width, which breaks short ultrawide displays.
+      const inset = Math.round(window.innerHeight * Math.min(threshold / 2, 0.4));
+      io = new IntersectionObserver(
+        ([entry]) => (entry.isIntersecting ? claim(id, scene) : release(id)),
+        { rootMargin: `-${inset}px 0px -${inset}px 0px`, threshold: 0 },
+      );
+      io.observe(el);
+    };
+    observe();
+    window.addEventListener("resize", observe);
     return () => {
       io.disconnect();
+      window.removeEventListener("resize", observe);
       release(id);
     };
   }, [ref, scene, threshold, claim, release]);

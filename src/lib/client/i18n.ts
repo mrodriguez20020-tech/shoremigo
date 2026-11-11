@@ -13,6 +13,14 @@ export const LANGS: { id: Lang; label: string }[] = [
 ];
 
 const en = {
+  "welcome.escape": "Your Caribbean escape",
+  "welcome.headline": "A little closer to paradise.",
+  "welcome.meet": "Meet Migo.",
+  "welcome.companion": "Your island companion. A little local knowledge for a remarkable day ashore.",
+  "welcome.begin": "Before we set sail",
+  "welcome.signature": "Extraordinary days ashore",
+  "welcome.imagery": "Illustrative photography · not a listed destination",
+
   "nav.explore": "Explore",
   "nav.ships": "Ships & Rooms",
   "nav.trip": "My Trip",
@@ -63,6 +71,14 @@ export type Key = keyof typeof en;
 type Dict = Record<Key, string>;
 
 const es: Dict = {
+  "welcome.escape": "Tu escapada al Caribe",
+  "welcome.headline": "Un poco más cerca del paraíso.",
+  "welcome.meet": "Conoce a Migo.",
+  "welcome.companion": "Tu compañero de isla. Un poco de conocimiento local para un día extraordinario en tierra.",
+  "welcome.begin": "Antes de zarpar",
+  "welcome.signature": "Días extraordinarios en tierra",
+  "welcome.imagery": "Fotografía ilustrativa · no es un destino del catálogo",
+
   "nav.explore": "Explorar",
   "nav.ships": "Barcos y cabinas",
   "nav.trip": "Mi viaje",
@@ -110,6 +126,14 @@ const es: Dict = {
 };
 
 const fr: Dict = {
+  "welcome.escape": "Votre escapade caribéenne",
+  "welcome.headline": "Un peu plus près du paradis.",
+  "welcome.meet": "Voici Migo.",
+  "welcome.companion": "Votre compagnon des îles. Des conseils locaux pour une journée remarquable à terre.",
+  "welcome.begin": "Avant de prendre le large",
+  "welcome.signature": "Des escales extraordinaires",
+  "welcome.imagery": "Photographie illustrative · pas une destination proposée",
+
   "nav.explore": "Explorer",
   "nav.ships": "Navires et cabines",
   "nav.trip": "Mon voyage",
@@ -157,6 +181,14 @@ const fr: Dict = {
 };
 
 const pt: Dict = {
+  "welcome.escape": "Sua escapada caribenha",
+  "welcome.headline": "Um pouco mais perto do paraíso.",
+  "welcome.meet": "Conheça o Migo.",
+  "welcome.companion": "Seu companheiro de ilha. Dicas locais para um dia extraordinário em terra.",
+  "welcome.begin": "Antes de zarpar",
+  "welcome.signature": "Dias extraordinários em terra",
+  "welcome.imagery": "Fotografia ilustrativa · não é um destino do catálogo",
+
   "nav.explore": "Explorar",
   "nav.ships": "Navios e cabines",
   "nav.trip": "Minha viagem",

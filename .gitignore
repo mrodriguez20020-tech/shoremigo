@@ -51,3 +51,8 @@ next-env.d.ts
 .live-server.log
 *.log
 /.next-*/
+
+# Local validation artifacts
+/work/
+/test-results/
+/playwright-report/

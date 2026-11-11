@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { AudioProvider } from "@/components/audio/AudioProvider";
 import { ConciergePanel } from "@/components/concierge/ConciergePanel";
@@ -13,9 +13,15 @@ import { TideProvider } from "@/components/transition/TideTransition";
 import { PrefsProvider } from "@/components/prefs/PrefsProvider";
 import { WelcomePortal } from "@/components/prefs/WelcomePortal";
 
-// Both fonts are SIL Open Font License, self-hosted at build time by next/font.
-const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", axes: ["SOFT", "opsz"], style: ["normal", "italic"] });
-const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
+// SIL Open Font License; bundled locally so production builds need no font-service network access.
+const fraunces = localFont({
+  src: [
+    { path: "./fonts/Fraunces.ttf", style: "normal", weight: "100 900" },
+    { path: "./fonts/Fraunces-Italic.ttf", style: "italic", weight: "100 900" },
+  ],
+  variable: "--font-fraunces", display: "swap",
+});
+const manrope = localFont({ src: "./fonts/Manrope.ttf", weight: "200 800", variable: "--font-manrope", display: "swap" });
 
 export const metadata: Metadata = {
   title: "ShoreMigo · Cruise shore excursions that adapt with you",

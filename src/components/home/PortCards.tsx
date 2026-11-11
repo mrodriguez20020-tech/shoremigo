@@ -1,5 +1,6 @@
 "use client";
 
+import { useCompanion } from "@/components/migo/CompanionProvider";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { PORTS, excursionsForPort } from "@/lib/domain/catalog";
 import { fmtMin, toMin } from "@/lib/domain/time";
@@ -20,6 +21,7 @@ export function PortCards() {
 }
 
 function PortCard({ port }: { port: PortCall }) {
+  const { reducedMotion } = useCompanion();
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
   const rx = useSpring(useTransform(my, [0, 1], [6, -6]), { stiffness: 150, damping: 18 });
@@ -32,6 +34,7 @@ function PortCard({ port }: { port: PortCall }) {
     <TideLink href={`/excursions?port=${port.id}`} className="block [perspective:900px]" aria-label={`${port.name}: ${count} excursions`}>
       <motion.div
         onPointerMove={(e) => {
+          if (reducedMotion) return;
           const r = e.currentTarget.getBoundingClientRect();
           mx.set((e.clientX - r.left) / r.width);
           my.set((e.clientY - r.top) / r.height);
@@ -40,8 +43,8 @@ function PortCard({ port }: { port: PortCall }) {
           mx.set(0.5);
           my.set(0.5);
         }}
-        style={{ rotateX: rx, rotateY: ry, background: `linear-gradient(165deg, ${port.art.from}, ${port.art.to})` }}
-        whileHover={{ y: -6 }}
+        style={{ rotateX: reducedMotion ? 0 : rx, rotateY: reducedMotion ? 0 : ry, background: `linear-gradient(165deg, ${port.art.from}, ${port.art.to})` }}
+        whileHover={reducedMotion ? undefined : { y: -6 }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
         className="group relative flex aspect-[3/4] flex-col justify-end overflow-hidden rounded-[28px] p-6 text-[#fffaf1] shadow-[0_40px_80px_-40px_rgba(0,0,0,0.6)] [transform-style:preserve-3d]"
       >
