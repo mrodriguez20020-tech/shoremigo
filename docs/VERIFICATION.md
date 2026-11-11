@@ -143,3 +143,19 @@ The owner created a new US sandbox Business account and REST app (credentials on
 - **Postgres adapter** (needed for Vercel): `tests/postgres-store.test.ts` passed 4/4 against real Postgres SQL (PGlite over the Postgres wire protocol): persistence + capture, rollback on error, no oversell under concurrent requests, inventory rules. Re-run against the provisioned database before going live.
 - **Regression:** tsc OK · Vitest 67 passed (+4 Postgres tests skipped without `PG_TEST_URL`) · lint 0 errors · production build OK (20/20 pages).
 - **Dependency audit:** `npm audit --omit=dev` reports PostCSS ≤8.5.22 nested inside `next` (1 high, 1 moderate). PostCSS runs only at build time on this repo's own CSS, never on user input at runtime; the suggested fix is a forced breaking upgrade, so it's deferred and recorded here.
+
+## 2026-11-11: production deployment (https://shoremigo.vercel.app)
+
+Vercel production + Neon Postgres (via the Vercel Marketplace), PayPal sandbox app on US seller `QLPRBDFBW79U4`. Environment values were copied from `.env.local` into Vercel's encrypted env without being printed.
+
+| Check | Result | Evidence |
+|---|---|---|
+| Postgres adapter on Neon | PASS | `tests/postgres-store.test.ts` 4/4 against the Neon database (test table dropped afterwards) |
+| Cross-instance locking on Neon | PASS | 10 separate connections doing concurrent `SELECT … FOR UPDATE` read-modify-write: final counter 10, no lost updates |
+| Live smoke test vs production | PASS 22/22 | validation, server pricing, verification gates, forged cookie, operator passcode, delay infeasibility, sandbox order `59975218C7145304C`, idempotency, `ORDER_NOT_APPROVED` before approval, order mismatch |
+| Gemini in production | PASS (after config change) | first `gemini-3.6-flash` → 429 RESOURCE_EXHAUSTED (key quota), so the concierge fell back to labeled offline mode. Switched the Vercel env to `GEMINI_MODEL=gemini-flash-lite-latest` (fallback 3.6-flash); now `engine: gemini`, tool `search_excursions`, correct prices/times, 2–4 s |
+| Real sandbox payment on production | PASS | booking `SM-4GZHN` → order `15078595DB1506352` `COMPLETED`, capture `2DT20635YV409640L` 65.00 USD (read back from PayPal); audit `booking.created > paypal.order.created > paypal.capture.verified > booking.confirmed` |
+| Pages / headers | PASS | `/`, `/excursions`, tour detail, `/trip`, `/operator` → 200 in < 1 s; HSTS, X-Frame-Options, Referrer-Policy present |
+| Desktop 1280×800 / mobile 390×844 | PASS | intro → hero + live LastBoard clock; Explore grid; operator login; mobile header collapses, no horizontal overflow (scrollWidth 390) |
+
+Not re-run on production (verified locally on the same sandbox app, see above): refunds and Trip Rescue. Refunds use the same server code and PayPal app.

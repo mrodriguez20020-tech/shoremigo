@@ -6,6 +6,8 @@ ShoreMigo is a cruise shore-excursion companion: discover tours that fit your sh
 
 Built for the PayPal AI Hackathon 2026.
 
+**Live demo:** https://shoremigo.vercel.app (PayPal **sandbox** only; no real money) · **Judge guide:** [docs/SUBMISSION.md](docs/SUBMISSION.md#testing-instructions-for-judges) · **Evidence:** [docs/VERIFICATION.md](docs/VERIFICATION.md)
+
 ```
 DISCOVER → PERSONALIZE → VALIDATE → BOOK → ADAPT → RECOVER
  explore    Adventure     LastBoard   PayPal   simulated   Trip Rescue:
@@ -193,7 +195,7 @@ All audio is synthesized in the browser (Web Audio): surf, breeze and distant bi
 2. `vercel link`, then add these environment variables (Production): `DATABASE_URL`, `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET` (sandbox app), `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_FALLBACK_MODELS`, `SESSION_SECRET` (32+ random chars), `OPERATOR_PASSCODE`.
 3. `vercel deploy --prod`.
 
-The PayPal API base is hard-coded to `api-m.sandbox.paypal.com`; there is no live-mode switch. Set a quota or budget on the Gemini key, since public visitors can use the concierge. If the quota is hit, Migo falls back to labeled offline mode.
+The PayPal API base is hard-coded to `api-m.sandbox.paypal.com`; there is no live-mode switch. Set a quota or budget on the Gemini key, since public visitors can use the concierge. Free-tier quotas are per model; the hosted demo runs `gemini-flash-lite-latest` with `gemini-3.6-flash` as fallback because the 3.6-flash quota was exhausted during testing. If the quota is hit, Migo falls back to labeled offline mode.
 
 ---
 

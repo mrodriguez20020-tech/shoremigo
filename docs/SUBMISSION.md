@@ -42,7 +42,7 @@ Supabase persistence adapter; PayPal webhooks; Bryntum Scheduler (pending licens
 nextjs, react, typescript, tailwindcss, motion, gemini, paypal-orders-v2, paypal-payments-v2, web-audio, vitest
 
 ## Testing instructions for judges
-1. Hosted demo: `<DEPLOYMENT_URL>` (PayPal **sandbox** only; no real money). Source: `<GITHUB_URL>`.
+1. Hosted demo: **https://shoremigo.vercel.app** (PayPal **sandbox** only; no real money). Source: https://github.com/mrodriguez20020-tech/shoremigo.
 2. Pay with a PayPal sandbox buyer account, or choose **Debit or Credit Card** in the PayPal button and use PayPal's published sandbox test Visa `4012 8888 8888 1881`, any future expiry, CVV `123`, any name, ZIP `95131`.
 3. Operator console: `/operator`, passcode `<shared in the private judging field>`.
 4. Follow README → "Reproducible demo". The demo state is shared: if a Cozumel delay is already active from another visitor, use Operator → **Clear** next to Cozumel.
