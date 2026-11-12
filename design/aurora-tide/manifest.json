@@ -1,6 +1,6 @@
 {
   "specId": "sha256:e410a0e832c1bec50b38c30f0a0a01dd09f23d4c0185d649636efed7b698d79f",
-  "generatorId": "sha256:1faa38d6a8bcee99f8cdf4da1cbd9135003b3529c2450330223ba1d22b6b58ab",
+  "generatorId": "sha256:07d4a74384d851e0830ed1feba631ae641fa2a3b296f9800bc179c08ddd2bbcc",
   "massingModelId": "sha256:fcdaaf8acd903bc70a3c6e76f2ace85c9a21b8ed2f1150e248abd6a62e58a1b8",
   "cameraId": "sha256:d3065cd505224c9a4a25744e29b9f9c8bcf01707849a4c53ab0e281dd0c859d5",
   "reviewCamera": {
@@ -339,13 +339,13 @@
     }
   },
   "files": {
-    "model/aurora-tide-massing.glb": "sha256:44bb89ee06cf47fed19ce51420ce99c67063c59273c6ffb90b515d88b4be741f",
+    "model/aurora-tide-massing.glb": "sha256:7c0fb45d51e06c123152a1ca76db6a48022d5eeddb23621586166e0d4bd3af03",
     "sheets/01-port-elevation.svg": "sha256:83cca5ca9f83556f2e58ef51d2a6f76804ae9bda9406317778542aef13fc066d",
     "sheets/02-starboard-elevation.svg": "sha256:39668eebfa3c2b89ea96f6031c980086872f49c0bb322402857438954517425e",
     "sheets/03-bow.svg": "sha256:82d660c4447456570c4dd19c2560ae053cd6589f1aabb78fb4b5cd7f374f73a2",
     "sheets/04-stern.svg": "sha256:ea25c6905f1828d1074a4cc8a8efb4193ae928daf4f1c4958f26712f01ef153e",
     "sheets/05-plan.svg": "sha256:1f8bce51467b0eeb403b77b2907024bd84772c4f29f685cca6a81c762a4d091c",
-    "sheets/06-deck7-arrangement.svg": "sha256:4681598b84fcacaaf2e731533e71191a919fed53c4f6f891d9c10a801ad7c882",
+    "sheets/06-deck7-arrangement.svg": "sha256:13b6eb70c220f0d5d4c450b82dbe510c6a4562ba789ec6477d4775ce0b53a154",
     "sheets/07-three-quarter-massing.svg": "sha256:66fb5d642b07ccdcee2e31df4d936d93f982d24d11a0665139b38f2236911733",
     "sheets/08-cabin-7214-plan.svg": "sha256:00163aa3b3ecb6cb4522ef1461c247ecc2d9bb6e99b56548af2bcc9a01e4b2b6",
     "sheets/09-deck4-lounge.svg": "sha256:7b8bc5ea29373e39f6f0ef5c2ab4102ed898cd2ad400e0be51258b87e85aedf7",

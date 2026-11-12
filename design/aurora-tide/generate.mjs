@@ -544,7 +544,7 @@ function deck7Sheet() {
   }
   const n7 = SLOTS.filter((q) => q.deck === 7), f7 = n7.filter((q) => !q.fits).length, cm = cabinModel();
   b += text(40, 46, `DECK 7 'MERIDIAN' ARRANGEMENT: ${n7.length} Premium Balcony slots; highlighted Signature Cabin 7214 (port, x ${cm.location.xFrom}–${cm.location.xTo} m; neighbours ${cm.neighbours.aft} aft, ${cm.neighbours.forward} forward).`, 15, "#0d2f43", 'font-weight="700"');
-  b += text(40, 70, `Cabins drawn over their full footprint to the canonical deck 7 side line. Amber = forward tapered balcony (7305/7306, 1.87 m, D-W02-11); salmon = not fitting (${f7} on this deck). See sheet 10.`, 12, "#4b5d63");
+  b += text(40, 70, `Cabins drawn over their full footprint to the canonical deck 7 side line. Amber = forward tapered balcony (${(A.cabinVariants ?? []).map((v) => `${v.nums.join("/")}, ${v.balconyDepth.toFixed(2)} m`).join("; ")}, D-W02-11); salmon = not fitting (${f7} on this deck). See sheet 10.`, 12, "#4b5d63");
   return sheet({ title: "deck 7 arrangement", sub: "schematic cabin layout", w: W, h: Hh, body: b, scaleNote: "1 m = 13.2 px" });
 }
 function accommodationSheet() {
