@@ -148,7 +148,7 @@ export const SHIP_VENUES: Venue[] = [
   {
     id: "sea-glass-grill",
     name: "Sea Glass Grill",
-    where: "Aurora Tide · Deck 11 pool (demo vessel)",
+    where: "Aurora Tide · Deck 7 aft pool terrace (demo vessel)",
     status: "sample",
     atmosphere: "Casual poolside grill and juice bar.",
     hours: "Sample: 11:00 AM – 6:00 PM",
@@ -161,7 +161,7 @@ export const SHIP_VENUES: Venue[] = [
   {
     id: "nightwatch",
     name: "Nightwatch Patisserie",
-    where: "Aurora Tide · Deck 6 promenade (demo vessel)",
+    where: "Aurora Tide · Deck 5 promenade (demo vessel)",
     status: "sample",
     atmosphere: "Coffee, cakes and late-night sweets on the promenade.",
     hours: "Sample: 7:00 AM – midnight",
