@@ -37,7 +37,7 @@ describe('deterministic multi-excursion LastBoard planning',()=>{
   expect(quotePlan(request([afternoon]),port,late,POLICY).conflicts.some(c=>c.kind==='port-window')).toBe(true);
  });
  it('uses the tender allowance on every item and retains the flexible-window bound',()=>{
-  const p=getPort('grand-cayman')!;const c=candidates().filter(c=>c.excursion.portId===p.id).map(c=>({...c,disruption:{delayMin:240}}));
+  const p=getPort('grand-cayman')!;const c=candidates().filter(c=>c.excursion.portId===p.id).map(c=>({...c,disruption:{delayMin:240,allAboardExtensionMin:0}}));
   const q=quotePlan({portId:p.id,guests:1,items:[{excursionId:'gcm-seven-mile'}]},p,c,POLICY);
   expect(q.items[0].feasibility.timeline.readyAtMeetingPoint).toBeGreaterThan(q.items[0].feasibility.timeline.shipArrive+POLICY.disembarkMin);
   expect(q.conflicts.some(c=>c.kind==='port-window')).toBe(true);
