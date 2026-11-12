@@ -50,6 +50,11 @@ export default async function ExcursionsPage({ searchParams }: { searchParams: P
             <h1 className="font-display mt-3 text-5xl leading-[1.02] sm:text-7xl">
               {relax ? "Slow down. The island will wait." : portObj ? `Your day in ${portObj.name}.` : "Find your perfect port day."}
             </h1>
+            <p className="mt-5 flex flex-wrap items-center gap-2 text-sm" data-discovery-links>
+              <span className="text-ink-soft">Explore first:</span>
+              <TideLink href="/discover/reef" className="rounded-full border border-white/20 px-3 py-1.5 font-semibold hover:bg-white/10">Underwater reef →</TideLink>
+              <TideLink href="/discover/canopy" className="rounded-full border border-white/20 px-3 py-1.5 font-semibold hover:bg-white/10">Rainforest canopy →</TideLink>
+            </p>
             {relax && (
               <p className="mt-4 max-w-2xl text-lg text-ink-soft">
                 Sandbars, gentle sails, beach time and unhurried culture: the lowest-intensity experiences across the sailing, with the same live seats, prices and
