@@ -24,3 +24,7 @@ Owner provisional basis: 158m/nine decks/104 staterooms/~208 guests, Cabin7214 D
 [WP-04 Taste & Indulge](WP04_BRIEF.md) is the next prepared independent package. Ownership now superseded by the accelerated dispatch above. No WP-04 source changes mixed into WP-01.
 
 **Final cinematic acceptance BLOCKED:** production manifest pending; no approved production model, modeler/render resource or matched wide/portrait film/full Migo rig. Main630d0b2/integration000a837 rechecked unchanged; PR #1/#2/#3 unmerged. No production deployment, paid resource or submission modification.
+
+## WP-04 delivery · latest
+
+Runtime/assets `e8e7b0078a1825381b98a0c6d4a0d5dacad7ad07` are ready for Claude review. [Exact implementation, checks, local evidence paths and limits](reviews/WP04_HANDOFF.md). All visual evidence remains in ignored local work/evidence; interrupted Drive uploads are not required and will not be retried. 14/14 final browser checks, 81 unit pass +4 PG skipped, type/lint/build pass, 17/17 isolated HTTP smoke. CLS .02025/.02371/0/0. The 31.20 s recording and four-viewport images are preserved. Owner/Claude review pending; full photoreal image coverage not claimed. Codex moves next to WP-07; inherited Migo placement stays in that scope.
