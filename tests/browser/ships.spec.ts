@@ -1,11 +1,11 @@
 import { expect, test, type Page } from "@playwright/test";
 
-async function enter(page: Page) {
-  await page.addInitScript(() => {
+async function enter(page: Page, motionPaused = false) {
+  await page.addInitScript((motionPaused) => {
     sessionStorage.setItem("sm.intro", "1");
     sessionStorage.setItem("sm_prefs", JSON.stringify({ lang: "en", country: null, remember: false, welcomed: true }));
-    localStorage.setItem("sm.migo.v1", JSON.stringify({ prefs: { proactive: false, motionPaused: false }, hidden: false }));
-  });
+    localStorage.setItem("sm.migo.v1", JSON.stringify({ prefs: { proactive: false, motionPaused }, hidden: false }));
+  }, motionPaused);
   await page.goto("/ships");
   await expect(page.getByRole("heading", { name: "Step aboard the Aurora Tide." })).toBeVisible();
 }
@@ -102,4 +102,12 @@ test("reduced motion and phone layout keep the cabin usable without overflow", a
   await expect.poll(() => canvasInk(page)).toBeGreaterThan(12);
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test('Cabin 7214 respects saved manual pause and cancels a live camera glide',async({page})=>{
+ await page.addInitScript(()=>{const probe=window as unknown as {cabinPaints:number};probe.cabinPaints=0;const fill=CanvasRenderingContext2D.prototype.fillRect;CanvasRenderingContext2D.prototype.fillRect=function(...a){if(this.canvas.hasAttribute('data-view'))probe.cabinPaints++;return fill.apply(this,a);};});
+ await enter(page,true);await tab(page,'Cabin 7214').click();const cabin=page.locator('[data-cabin="7214"]');await cabin.getByRole('tab',{name:/V3 · Living area/}).click();await expect(cabin.locator('canvas')).toHaveAttribute('data-view','V3-living');await page.waitForTimeout(100);
+ const count=()=>page.evaluate(()=>(window as unknown as {cabinPaints:number}).cabinPaints);let before=await count();await page.waitForTimeout(350);expect(await count()).toBe(before);
+ await page.getByRole('button',{name:/Sound and experience settings/}).click();let pause=page.getByRole('switch',{name:/Pause animations/});await pause.focus();await page.keyboard.press('Space');await expect(pause).not.toBeChecked();await page.getByRole('button',{name:/Sound and experience settings/}).click();
+ await cabin.getByRole('tab',{name:/V5 · Balcony · sea/}).click();await page.getByRole('button',{name:/Sound and experience settings/}).click();pause=page.getByRole('switch',{name:/Pause animations/});await pause.focus();await page.keyboard.press('Space');await expect(pause).toBeChecked();await page.waitForTimeout(100);before=await count();await page.waitForTimeout(350);expect(await count()).toBe(before);
 });

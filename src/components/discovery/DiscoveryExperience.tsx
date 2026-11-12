@@ -1,11 +1,12 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { DISCOVERIES, excursionsFor, type DiscoveryPoi } from "@/lib/domain/discovery";
 import { getPort } from "@/lib/domain/catalog";
 import { migo } from "@/components/migo/bus";
 import { TideLink } from "@/components/transition/TideTransition";
+import { useCompanion } from "@/components/migo/CompanionProvider";
 import { fmtUsd } from "@/lib/domain/time";
 
 const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
@@ -123,15 +124,16 @@ function Ambient({ kind, active }: { kind: "reef" | "canopy"; active: boolean })
 
 export function DiscoveryExperience({ id }: { id: "reef" | "canopy" }) {
   const cfg = DISCOVERIES[id];
-  const prefersReduced = useReducedMotion();
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => { setReduced(!!prefersReduced); }, [prefersReduced]);
+  const { reducedMotion: reduced } = useCompanion();
   const section = useRef<HTMLElement>(null);
   const [p, setP] = useState(0);
   const [inView, setInView] = useState(true);
   const [filter, setFilter] = useState<string | null>(null);
   const [open, setOpen] = useState<DiscoveryPoi | null>(null);
   const told = useRef(new Set<string>());
+  const opener = useRef<HTMLButtonElement | null>(null);
+  const panel = useRef<HTMLElement | null>(null);
+  const close = useCallback(() => { setOpen(null); opener.current?.focus({ preventScroll: true }); }, []);
 
   useEffect(() => {
     if (reduced) { setP(1); return; }
@@ -153,13 +155,20 @@ export function DiscoveryExperience({ id }: { id: "reef" | "canopy" }) {
   }, []);
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(null);
+    panel.current?.querySelector<HTMLButtonElement>('button')?.focus({ preventScroll: true });
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [open, close]);
 
   const arrived = p > 0.82;
-  const choose = (poi: DiscoveryPoi) => {
+  const choose = (poi: DiscoveryPoi, button: HTMLButtonElement) => {
+    opener.current = button;
+    // Native focus on a sticky descendant can scroll its ancestor backwards. Complete the
+    // already-entered scene before opening details, so Escape cannot remove its controls.
+    const el = section.current;
+    if (el && !reduced) window.scrollTo({ top: el.offsetTop + el.offsetHeight - innerHeight, behavior: "instant" });
+    setP(1);
     setOpen(poi);
     const ex = excursionsFor(poi)[0];
     if (!told.current.has(poi.id)) {
@@ -171,20 +180,21 @@ export function DiscoveryExperience({ id }: { id: "reef" | "canopy" }) {
 
   return (
     <>
+      <style>{`.discovery-hotspot { top:var(--discovery-poi-top); } @media(max-width:639px) { .discovery-hotspot { top:clamp(190px,var(--discovery-poi-top),calc(100svh - 116px)); } }`}</style>
       <section ref={section} className="relative" style={{ height: reduced ? "100svh" : "260svh" }} data-discovery={cfg.id} data-progress={p.toFixed(2)}>
         <div className="sticky top-0 h-[100svh] overflow-hidden">
           {cfg.id === "reef" ? <ReefScene p={p} /> : <CanopyScene p={p} />}
           <Ambient kind={cfg.id} active={!reduced && inView && p > 0.45} />
           <div className="absolute inset-0 bg-gradient-to-r from-[#081e27]/75 via-[#081e27]/20 to-transparent" />
           <div className="absolute left-0 top-0 max-w-xl px-6 pt-28 sm:px-12 lg:px-20" data-migo-avoid>
-            <p className="eyebrow flex flex-wrap items-center gap-3"><span>{cfg.kicker}</span><span className="demo-tag">Illustrated scene</span></p>
-            <h1 className="font-display mt-3 text-5xl leading-[1.02] sm:text-6xl">{cfg.title}</h1>
-            <p className="mt-4 text-lg text-ink-soft">{cfg.intro}</p>
+            <p className={`eyebrow flex flex-wrap items-center gap-3 ${arrived ? "sr-only sm:not-sr-only" : ""}`}><span>{cfg.kicker}</span><span className="demo-tag">Illustrated scene</span></p>
+            <h1 className={`font-display mt-3 leading-[1.02] sm:text-6xl ${arrived ? "text-xl" : "text-5xl"}`}>{cfg.title}</h1>
+            <p className={`mt-4 text-lg text-ink-soft ${arrived ? "sr-only sm:not-sr-only" : ""}`}>{cfg.intro}</p>
             {!arrived && <button onClick={skip} className="btn btn-ghost mt-6 !py-2 text-sm">Skip the {cfg.id === "reef" ? "descent" : "climb"} ↓</button>}
             {!arrived && !reduced && <p className="mt-4 text-[11px] tracking-[0.18em] text-white/70 uppercase" aria-live="polite">{cfg.entryLabel} · {Math.round(p * 100)}%</p>}
           </div>
           {arrived && (
-            <div className="absolute right-4 top-24 flex flex-wrap gap-2 sm:right-10" role="group" aria-label="Filter points of interest" data-migo-avoid>
+            <div className="absolute left-6 right-6 top-20 z-20 flex flex-wrap gap-2 sm:left-auto sm:right-10 sm:top-24" role="group" aria-label="Filter points of interest" data-migo-avoid>
               {cfg.filters.map((f) => (
                 <button key={f.id} aria-pressed={filter === f.id} onClick={() => setFilter(filter === f.id ? null : f.id)} className={`rounded-full px-4 py-2 text-sm font-semibold backdrop-blur ${filter === f.id ? "bg-accent text-accent-ink" : "bg-[#081e27]/70 text-white"}`}>{f.label}</button>
               ))}
@@ -193,24 +203,24 @@ export function DiscoveryExperience({ id }: { id: "reef" | "canopy" }) {
           {cfg.pois.map((poi) => {
             const dim = filter && !poi.tags.includes(filter);
             return (
-              <button key={poi.id} onClick={() => choose(poi)} aria-label={`${poi.name}: ${poi.fact}`} aria-expanded={open?.id === poi.id}
+              <button key={poi.id} onClick={(event) => choose(poi, event.currentTarget)} data-migo-avoid aria-label={`${poi.name}: ${poi.fact}`} aria-expanded={open?.id === poi.id}
                 className="discovery-hotspot absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition"
-                style={{ left: `${poi.x}%`, top: `${poi.y}%`, opacity: arrived ? (dim ? 0.25 : 1) : 0, pointerEvents: arrived ? "auto" : "none" }} tabIndex={arrived ? 0 : -1}>
+                style={{ left: `${poi.x}%`, "--discovery-poi-top": `${poi.y}%`, opacity: arrived ? (dim ? 0.25 : 1) : 0, pointerEvents: arrived ? "auto" : "none" } as CSSProperties} tabIndex={arrived ? 0 : -1}>
                 <span className="relative flex h-11 w-11 items-center justify-center">
                   {!reduced && <span className="absolute inset-0 animate-ping rounded-full bg-accent/40" />}
                   <span className="relative h-4 w-4 rounded-full border-2 border-[#081e27] bg-accent" />
                 </span>
-                <span className="pointer-events-none absolute left-1/2 top-full mt-1 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#081e27]/80 px-2.5 py-1 text-[11px] font-semibold text-white">{poi.name}</span>
+                <span className={`pointer-events-none absolute top-full mt-1 max-w-[11rem] rounded-full bg-[#081e27]/80 px-2.5 py-1 text-center text-[11px] font-semibold text-white ${poi.x < 25 ? "left-0" : poi.x > 75 ? "right-0" : "left-1/2 -translate-x-1/2"}`}>{poi.name}</span>
               </button>
             );
           })}
           <AnimatePresence>
             {open && (
-              <motion.aside key={open.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: reduced ? 0 : 0.25 }}
-                className="surface-strong absolute bottom-4 left-4 right-4 max-w-md rounded-[24px] p-5 sm:left-auto sm:right-10" role="dialog" aria-label={open.name} data-migo-avoid>
+              <motion.aside ref={panel} key={open.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: reduced ? 0 : 0.25 }}
+                className="surface-strong absolute bottom-4 left-4 right-4 z-30 max-h-[calc(100svh-96px)] max-w-md overflow-y-auto rounded-[24px] p-5 sm:left-auto sm:right-10" role="dialog" aria-label={open.name} data-migo-avoid>
                 <div className="flex items-start justify-between gap-3">
                   <div><p className="text-[10px] font-bold tracking-[0.2em] text-accent uppercase">{open.fact}</p><h2 className="font-display mt-1 text-2xl">{open.name}</h2></div>
-                  <button onClick={() => setOpen(null)} className="btn btn-ghost !h-9 !w-9 !p-0" aria-label="Close">✕</button>
+                  <button onClick={close} className="btn btn-ghost !h-9 !w-9 !p-0" aria-label="Close">✕</button>
                 </div>
                 <p className="mt-2 text-sm text-ink-soft">{open.detail}</p>
                 <ul className="mt-4 space-y-2">
@@ -224,10 +234,11 @@ export function DiscoveryExperience({ id }: { id: "reef" | "canopy" }) {
                   ))}
                 </ul>
                 <p className="mt-3 text-[11px] text-ink-soft">Times and seats are checked against your ship&apos;s schedule on the tour page.</p>
+                <p className="mt-2 text-[11px] text-ink-soft">{cfg.disclosure}</p>
               </motion.aside>
             )}
           </AnimatePresence>
-          <p className="absolute bottom-2 left-6 max-w-lg text-[10px] text-white/70 sm:left-12">{cfg.disclosure}</p>
+          <p data-migo-avoid className="absolute bottom-3 left-6 right-6 max-w-lg text-[10px] text-white/80 sm:left-12">{cfg.disclosure}</p>
         </div>
       </section>
       <section className="px-5 py-16 sm:px-10">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useReducedMotion } from "motion/react";
+import { useCompanion } from "@/components/migo/CompanionProvider";
 import { CABIN_7214, VESSEL_SOURCE } from "@/lib/domain/ship";
 
 /*
@@ -176,7 +176,7 @@ function render(ctx: CanvasRenderingContext2D, W: number, H: number, faces: Face
 }
 
 export function Cabin7214Experience() {
-  const reduced = useReducedMotion();
+  const { reducedMotion: reduced } = useCompanion();
   const canvas = useRef<HTMLCanvasElement>(null);
   const faces = useMemo(buildScene, []);
   const [view, setView] = useState("V1-entry");
