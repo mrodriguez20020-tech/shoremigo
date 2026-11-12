@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useImageFallback } from "@/lib/client/useImageFallback";
 
 const PHOTOS = {
   reef: {
@@ -50,7 +51,7 @@ const FILMS = {
 
 export function DiscoveryPhoto({ id }: { id: keyof typeof PHOTOS }) {
   const photo = PHOTOS[id];
-  const [failed, setFailed] = useState(false);
+  const { failed, ref: imgRef, onError: onImgError } = useImageFallback();
   const film = FILMS[id];
   const [showFilm, setShowFilm] = useState(false);
   const [filmFailed, setFilmFailed] = useState(false);
@@ -71,7 +72,7 @@ export function DiscoveryPhoto({ id }: { id: keyof typeof PHOTOS }) {
           {failed ? <div className="flex h-full items-center justify-center p-6 text-center text-sm text-white/80">Photograph temporarily unavailable. The source and credit remain below.</div> : <>
             {/* External openly licensed editorial photography; deliberately not imported into the MIT source license. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={photo.image} alt={photo.alt} width={1280} height={720} loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={() => setFailed(true)} className="h-full w-full object-cover" />
+            <img src={photo.image} alt={photo.alt} width={1280} height={720} loading="lazy" decoding="async" referrerPolicy="no-referrer" ref={imgRef} onError={onImgError} className="h-full w-full object-cover" />
           </>}
         </div>
         <figcaption className="p-6 text-white sm:p-8" data-migo-avoid>

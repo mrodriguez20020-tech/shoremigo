@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useImageFallback } from "@/lib/client/useImageFallback";
 import type { Excursion } from "@/lib/domain/types";
 import { ExcursionArt } from "./ExcursionArt";
 
@@ -26,13 +26,13 @@ const PHOTOS = Object.fromEntries(entries.map(([id,file,hash,author,license,loca
 
 export function ExcursionPhoto({ excursionId, art, className = "" }: { excursionId: string; art: Excursion["art"]; className?: string }) {
   const photo = PHOTOS[excursionId];
-  const [failed, setFailed] = useState(false);
+  const { failed, ref, onError } = useImageFallback();
   return <div className={`relative overflow-hidden ${className}`} data-excursion-media={photo && !failed ? "photograph" : "illustration"}>
     <ExcursionArt art={art} className="absolute inset-0 h-full w-full" />
     {photo && !failed && <>
       {/* Wikimedia's resized, openly licensed editorial image; fallback is always present. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={photo.image} alt={photo.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={() => setFailed(true)} />
+      <img src={photo.image} alt={photo.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" referrerPolicy="no-referrer" ref={ref} onError={onError} />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pb-2 pt-8 text-[10px] leading-snug text-white">
         <span className="block font-semibold">Editorial photo · {photo.location}</span>
         <span>{photo.author} · {photo.license}</span>
