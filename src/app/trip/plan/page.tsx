@@ -7,5 +7,5 @@ export const dynamic='force-dynamic';
 export const metadata:Metadata={title:'Plan your port day · ShoreMigo'};
 export default async function PlanPage({searchParams}:{searchParams:Promise<{add?:string}>}){
  const [snapshot,params]=await Promise.all([availabilitySnapshot(),searchParams]);
- return <><SceneRoute scene="shade"/><ItineraryPlanner initialAdd={typeof params.add==='string'?params.add:null} availability={snapshot.map(s=>({excursionId:s.excursionId,seatsLeft:s.seatsLeft,onSale:s.onSale}))}/></>;
+ return <div className="planner-shell"><SceneRoute scene="shade"/><ItineraryPlanner initialAdd={typeof params.add==='string'?params.add:null} availability={snapshot.map(s=>({excursionId:s.excursionId,seatsLeft:s.seatsLeft,onSale:s.onSale}))}/></div>;
 }

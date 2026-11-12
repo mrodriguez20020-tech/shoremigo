@@ -70,7 +70,7 @@ export function SceneBackdrop() {
 
   // The photographic homepage supplies its own environment. Avoid running the
   // hidden vector layers there; retain them on all existing functional routes.
-  if (pathname === "/") return null;
+  if (pathname === "/" || pathname === "/trip/plan") return null;
 
   return (
     <div ref={root} className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden>
