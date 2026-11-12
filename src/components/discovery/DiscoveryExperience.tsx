@@ -6,6 +6,7 @@ import { DISCOVERIES, excursionsFor, type DiscoveryPoi } from "@/lib/domain/disc
 import { getPort } from "@/lib/domain/catalog";
 import { migo } from "@/components/migo/bus";
 import { TideLink } from "@/components/transition/TideTransition";
+import { DiscoveryFilm } from "./DiscoveryFilm";
 import { useCompanion } from "@/components/migo/CompanionProvider";
 import { fmtUsd } from "@/lib/domain/time";
 
@@ -189,6 +190,7 @@ export function DiscoveryExperience({ id }: { id: "reef" | "canopy" }) {
           {cfg.id === "reef" ? <ReefScene p={p} /> : <CanopyScene p={p} />}
           <Ambient kind={cfg.id} active={!reduced && inView && p > 0.45} />
           <div className="absolute inset-0 bg-gradient-to-r from-[#081e27]/75 via-[#081e27]/20 to-transparent" />
+          {id === "reef" && <DiscoveryFilm active={inView && p < 0.5} />}
           <div className="absolute left-0 top-0 max-w-xl px-6 pt-28 sm:px-12 lg:px-20" data-migo-avoid>
             <p className={`eyebrow flex flex-wrap items-center gap-3 ${arrived ? "sr-only sm:not-sr-only" : ""}`}><span>{cfg.kicker}</span><span className="demo-tag">Illustrated scene</span></p>
             <h1 className={`font-display mt-3 leading-[1.02] sm:text-6xl ${arrived ? "text-xl" : "text-5xl"}`}>{cfg.title}</h1>
@@ -241,7 +243,7 @@ export function DiscoveryExperience({ id }: { id: "reef" | "canopy" }) {
               </motion.aside>
             )}
           </AnimatePresence>
-          <p data-migo-avoid className="absolute bottom-3 left-6 right-6 max-w-lg text-[10px] text-white/80 sm:left-12">{cfg.disclosure}</p>
+          <p data-migo-avoid className="absolute bottom-3 left-6 right-6 max-w-lg text-[10px] text-white/80 sm:left-12">{id === "reef" ? "Original illustrated guide with optional generic stock footage; no named destination or tour recording. Sightings are never guaranteed." : cfg.disclosure}</p>
         </div>
       </section>
       <section className="bg-[#081e27] px-5 py-16 sm:px-10">
