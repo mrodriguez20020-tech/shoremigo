@@ -1,3 +1,5 @@
+> **2026-11-12 reset addendum:** WP-01 R1/R2 runtime **1add091816f85e795fe96b57a50613845cb82c35** is pushed to PR #2: native alignment recovery and EN/ES/FR/PT golden-hour copy/disclosure. Full production browser98/98, unit84+4PG skipped, types/lint/build/isolated smoke17/17 pass. [Current evidence and limits](reviews/WP01_R1_R2.md). This is Codex implementation QA, awaiting Claude's independent review. Claude solely owns feat/premium-rc; Codex reviews detached exact commits. WP-09 expansion is paused. No new Drive uploads, merge or deployment. Entries below are preserved historical handoffs, not the latest disposition.
+
 # Current engineering handoff · WP-01 / WP-02
 
 - WP-01 application/tests **`3c7465866b20f65b401c215ae7eaf34e1fb25436`**; capture tool **`3d9aa772ae4875ebaf53b92f39107e4d2565a839`**. Draft [PR #2](https://github.com/mrodriguez20020-tech/shoremigo/pull/2), feat/wp01-cinematic-environment → design/cinematic-luxury @ 000a837adfa8bf3ed39f05be61e09a4bc3f6df3e. Later documentation changes do not alter the tested runtime.

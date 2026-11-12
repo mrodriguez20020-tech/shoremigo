@@ -1,0 +1,84 @@
+{
+  "stats": {
+    "startTime": "2026-11-12T17:05:15.447Z",
+    "duration": 434721.50700000004,
+    "expected": 98,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "phaseAndBlockEvidence": [
+    {
+      "title": "one native film pair plays silently and swaps matched phases on scene changes",
+      "annotations": [
+        {
+          "type": "phase-error-ms",
+          "description": "13.800000000000034"
+        }
+      ]
+    },
+    {
+      "title": "one native film pair plays silently and swaps matched phases on scene changes",
+      "annotations": [
+        {
+          "type": "phase-error-ms",
+          "description": "13.599999999999834"
+        }
+      ]
+    },
+    {
+      "title": "delayed native seeks are rechecked before the sunset dissolve",
+      "annotations": [
+        {
+          "type": "delayed-seek-phase-error-ms",
+          "description": "17.999999999999794"
+        }
+      ]
+    },
+    {
+      "title": "delayed native seeks are rechecked before the sunset dissolve",
+      "annotations": [
+        {
+          "type": "delayed-seek-phase-error-ms",
+          "description": "11.10000000000011"
+        }
+      ]
+    },
+    {
+      "title": "decoder jitter automatically recovers after an alignment block without dissolving the wrong phase",
+      "annotations": [
+        {
+          "type": "alignment-block-count",
+          "description": "2"
+        }
+      ]
+    },
+    {
+      "title": "decoder jitter automatically recovers after an alignment block without dissolving the wrong phase",
+      "annotations": [
+        {
+          "type": "alignment-block-count",
+          "description": "2"
+        }
+      ]
+    },
+    {
+      "title": "persistent decoder jitter has a bounded retry budget and preserves the outgoing film and truthful copy",
+      "annotations": [
+        {
+          "type": "alignment-block-count",
+          "description": "4"
+        }
+      ]
+    },
+    {
+      "title": "persistent decoder jitter has a bounded retry budget and preserves the outgoing film and truthful copy",
+      "annotations": [
+        {
+          "type": "alignment-block-count",
+          "description": "4"
+        }
+      ]
+    }
+  ]
+}
