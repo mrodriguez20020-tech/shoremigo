@@ -165,6 +165,7 @@ test("one native film pair plays silently and swaps matched phases on scene chan
     const [day, sunset] = videos as HTMLVideoElement[];
     return {
       dayPaused: day.paused,
+      normalRate: videos.every(v => (v as HTMLVideoElement).playbackRate === 1),
       sunsetPlaying: !sunset.paused,
       muted: videos.every(
         (v) =>
@@ -180,6 +181,7 @@ test("one native film pair plays silently and swaps matched phases on scene chan
   expect(aligned.dayPaused).toBe(true);
   expect(aligned.sunsetPlaying).toBe(true);
   expect(aligned.muted).toBe(true);
+  expect(aligned.normalRate).toBe(true);
   await page.locator("#ports").scrollIntoViewIfNeeded();
   await expect
     .poll(async () =>

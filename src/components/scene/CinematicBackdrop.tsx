@@ -182,6 +182,7 @@ export function CinematicBackdrop() {
     let activating = false;
     let settle: ReturnType<typeof setTimeout> | undefined;
     let abortSeek: (() => void) | undefined;
+    let abortFrame: (() => void) | undefined;
     const duration = variant.frames / variant.fps;
     const frame = 1 / variant.fps;
     const seek = (time: number) => new Promise<void>((resolve) => {
@@ -193,6 +194,10 @@ export function CinematicBackdrop() {
       abortSeek = done;
       target.addEventListener("seeked", done, { once: true });
       target.currentTime = ((time % duration) + duration) % duration;
+    });
+    const nextFrame = () => new Promise<void>(resolve => {
+      const id = requestAnimationFrame(() => { abortFrame = undefined; resolve(); });
+      abortFrame = () => { cancelAnimationFrame(id); abortFrame = undefined; resolve(); };
     });
     const show = async () => {
       if (cancelled || activating || target.readyState < 2 || target.seeking)
@@ -219,6 +224,18 @@ export function CinematicBackdrop() {
             break;
           }
           if (paired) lead += ((previous.currentTime - target.currentTime + duration * 1.5) % duration) - duration / 2;
+        }
+        if (!aligned && paired && !cancelled) {
+          // Native decoder startup can vary between seeks. Fine-sync the still-invisible
+          // target against the running outgoing clock, with a bounded settling period.
+          const deadline = performance.now() + 600;
+          while (!cancelled && !previous.paused && !target.paused && performance.now() < deadline) {
+            const error = ((previous.currentTime - target.currentTime + duration * 1.5) % duration) - duration / 2;
+            if (Math.abs(error) <= frame * 0.75) { aligned = true; break; }
+            target.playbackRate = 1 + Math.max(-0.5, Math.min(0.5, error * 8));
+            await nextFrame();
+          }
+          target.playbackRate = 1;
         }
         if (cancelled) return;
         if (!aligned) {
@@ -254,6 +271,8 @@ export function CinematicBackdrop() {
     return () => {
       cancelled = true;
       abortSeek?.();
+      abortFrame?.();
+      target.playbackRate = 1;
       if (settle) clearTimeout(settle);
       target.removeEventListener("loadeddata", show);
       target.removeEventListener("canplay", show);
