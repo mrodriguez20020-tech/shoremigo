@@ -1,3 +1,13 @@
+# Current cinematic package snapshot · 2026-11-12 UTC
+
+Remote refs observed: `main` = `630d0b251d8247fcd762ab676e5d06b79337d142`; cinematic integration = `000a837adfa8bf3ed39f05be61e09a4bc3f6df3e`. These are branch refs, not a new verification of the deployed site's runtime commit. Earlier deployment/provider records below are retained as historical evidence.
+
+WP-01's previously unpushed signature work is preserved on `feat/wp01-cinematic-environment`. Its native media integration and shared workflow are proposed for independent review; **genuine moving-water, integrated wake and matched physical sunset acceptance remain BLOCKED**. The public film manifest is `awaiting-production-media`; the current environment is a disclosed concept still and Migo retains the original limited poses. The prior Phase 1.5 ocean result was rejected as insufficiently cinematic.
+
+[Actual handoff](HANDOFF.md) · [Package states/ownership](WORK_PACKAGES.md) · [Current evidence/check results](signature/README.md) · [Exact production dependency](signature/ASSET_PRODUCTION_SPEC.md). Claude review is pending; future packages are not silently assigned or started. No production deployment, integration merge, main merge or hackathon-submission change is included.
+
+---
+
 # ShoreMigo implementation status (2026-11-11)
 
 Legend: **IMPLEMENTED** = working and checked · **PARTIAL** = exists, missing parts or verification · **MISSING** · **BLOCKED** (reason given) · **DEFERRED** (after submission, intent recorded).

@@ -159,3 +159,16 @@ Vercel production + Neon Postgres (via the Vercel Marketplace), PayPal sandbox a
 | Desktop 1280×800 / mobile 390×844 | PASS | intro → hero + live LastBoard clock; Explore grid; operator login; mobile header collapses, no horizontal overflow (scrollWidth 390) |
 
 Not re-run on production (verified locally on the same sandbox app, see above): refunds and Trip Rescue. Refunds use the same server code and PayPal app.
+
+## 2026-11-12 UTC: WP-01 isolated package checks (no deployment)
+
+Current package branch: `feat/wp01-cinematic-environment`, integration base `000a837adfa8bf3ed39f05be61e09a4bc3f6df3e`; implementation/evidence commit `a05d0053d1567e0275ced00d8ff3ed40624e1944`. Existing live sandbox/Gemini/database evidence above is preserved; it was **not rerun or replaced** by this local package verification.
+
+- Unit: **84 passed, 4 Postgres integration skipped** without `PG_TEST_URL`.
+- Graphical browser: **25 passed**, serial headed system Chromium on virtual Xorg software display, using a fixed production build. Covers previous preference/navigation/Migo/checkout checks and seven native-media failure/accessibility/phase cases with clearly marked QA film patterns.
+- **17/17 local real HTTP smoke checks** passed using isolated demo data. PayPal was unconfigured and Gemini concierge offline. No new live provider payment/refund/AI or database success is claimed.
+- TypeScript, ESLint and production build passed; lint retains three original sprite `<img>` warnings. Protected server/domain/payment/AI/Migo/audio/original-art/submission boundaries have no diff against the integration base.
+- [Actual interim recording, responsive screenshots, performance, source/asset hashes and full limitations](signature/VERIFICATION.md). The 27.7-second muted browser recording uses a **static concept**, not accepted moving-water footage. Virtual-browser still-only performance is not a final-film or physical-device benchmark; nonzero observed layout shifts are recorded.
+- `media:check` intentionally exits **2 / BLOCKED** because matching production daylight/sunset footage is absent. [Exact source/asset handoff](signature/ASSET_PRODUCTION_SPEC.md).
+
+Independent Claude review and final cinematic visual acceptance remain pending/blocked respectively. No integration/main merge or production deployment occurred. [Shared handoff](HANDOFF.md).

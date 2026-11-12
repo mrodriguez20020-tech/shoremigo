@@ -6,6 +6,8 @@ ShoreMigo is a cruise shore-excursion companion: discover tours that fit your sh
 
 Built for the PayPal AI Hackathon 2026.
 
+**Cinematic package status:** WP-01 is proposed on an isolated feature branch, not merged or deployed. Final moving-water/wake/sunset media remains missing; the current fallback is a disclosed concept still. [Shared engineering handoff](docs/HANDOFF.md) · [Current evidence and limitations](docs/signature/README.md).
+
 **Live demo:** https://shoremigo.vercel.app (PayPal **sandbox** only; no real money) · **Status matrix:** [docs/STATUS.md](docs/STATUS.md) · **Judge guide:** [docs/SUBMISSION.md](docs/SUBMISSION.md#testing-instructions-for-judges) · **Evidence:** [docs/VERIFICATION.md](docs/VERIFICATION.md)
 
 ```
@@ -240,3 +242,10 @@ Run `npm test`, `npm run lint`, `npm run typecheck`, and `npm run build`. For br
 ### Cinematic Luxury · Phase 1.5
 
 The shared fictional Aurora Tide environment, contact-driven Migo motion/audio, responsive captures, actual browser recording and remaining rig limitations are documented in [the Phase 1.5 review](docs/CINEMATIC_PHASE_15.md). Assets and business logic from Phase 1 are preserved; this update does not deploy or merge the redesign.
+
+
+### Cinematic execution and independent review
+
+The current WP-01 signature package is proposed on `feat/wp01-cinematic-environment`, targeting `design/cinematic-luxury`. **Final moving-water/wake/sunset visual acceptance is blocked by missing production footage.** The public manifest remains pending and the interim experience uses a disclosed static concept. No merge or production deployment is included.
+
+Start with [AGENTS.md](AGENTS.md) / [CLAUDE.md](CLAUDE.md), the [handoff](docs/HANDOFF.md), [work ownership](docs/WORK_PACKAGES.md), [design bible](docs/DESIGN_BIBLE.md), [acceptance gates](docs/ACCEPTANCE.md), [asset registry](docs/ASSET_REGISTRY.md) and [decision log](docs/DECISIONS.md). [Current code/evidence and limitations](docs/signature/README.md) supersede the historical cinematic presentation claims above. Existing functional/provider verification remains in [docs/VERIFICATION.md](docs/VERIFICATION.md), and asset rights remain in [ASSETS.md](ASSETS.md).
