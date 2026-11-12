@@ -1,0 +1,82 @@
+{
+  "recordedAtUTC": "2026-11-12T03:44:55.442971+00:00",
+  "integrationBase": "000a837adfa8bf3ed39f05be61e09a4bc3f6df3e",
+  "branch": "feat/wp01-cinematic-environment",
+  "gates": {
+    "engineering": "checks passed; independent review pending",
+    "visual": "BLOCKED: no matched production film/source",
+    "independentClaudeReview": "PENDING: owner dispatch required"
+  },
+  "checks": {
+    "unit": {
+      "passed": 84,
+      "skipped": 4,
+      "skipReason": "Postgres integration requires PG_TEST_URL"
+    },
+    "browser": {
+      "passed": 25,
+      "environment": "headed system Chromium, DISPLAY=:99, virtual Xorg software display"
+    },
+    "typecheck": "passed",
+    "lint": {
+      "errors": 0,
+      "existingSpriteImageWarnings": 3
+    },
+    "productionBuild": "passed; 23 generated pages",
+    "httpSmoke": {
+      "passed": 17,
+      "paypal": "not_configured",
+      "concierge": "offline",
+      "data": "isolated local store"
+    },
+    "mediaCheck": {
+      "status": "blocked as expected",
+      "exitCode": 2,
+      "report": "delivery-qc.json"
+    },
+    "protectedBoundaryDiff": "git diff 000a837 --exit-code: no API/server/domain/concierge/payment/Migo/audio/original art/submission changes"
+  },
+  "notExecuted": [
+    "new live PayPal/Gemini calls",
+    "current database integration/concurrency checks",
+    "physical mobile/GPU or full screen-reader audit",
+    "production-film visual/loop/decode/frame/transfer acceptance",
+    "production deployment or any merge"
+  ],
+  "recording": {
+    "file": "docs/signature/evidence/interim-browser-review.mp4",
+    "sha256": "145604a0330969c6aaddbcb4a74f1bbb34dfae2354b71a7aafa77dbc83c4279f",
+    "durationSeconds": 27.72,
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1280,
+        "height": 888,
+        "r_frame_rate": "25/1"
+      }
+    ],
+    "limitation": "Actual interim still-only browser experience, muted; not accepted cinematic proof"
+  },
+  "sourceSHA256": {
+    "src/app/globals.css": "6c1a2b68ff19e0555266059f5874563fffbb702cd4871beff0fe712c32655498",
+    "src/app/layout.tsx": "2ffd764ad5aa6776c48c2664bdf800ceeba2a5418c7740b836fbca67513d742b",
+    "src/app/page.tsx": "ced392c033e9408abbddbbeb09812d782b6b5c3f62ea4b7e917c693ed0afb84e",
+    "src/components/scene/CinematicBackdrop.tsx": "714f0dd3592483adc2691ec0c74b03b24b7d043b313814b4fb51f5da1905b9f0",
+    "src/components/scene/OceanScene.tsx": "47c4afdd0e18e4e734f6ac8687b7a0e66de66686f85ab0ea72415ac985adc054",
+    "src/components/intro/Intro.tsx": "0600fb32c6bc8ee28925a3b18892a3425e8505ea46ab74e688057559700a8b20",
+    "src/components/prefs/WelcomePortal.tsx": "3c347be0a44a936529e5bf01523a5844f2165e787e02d5df9eb44e437e291895",
+    "src/lib/client/i18n.ts": "1f554e749e91224071fb9eb1cdb2041bc2c5948288b680938e80454b6e7963be",
+    "src/lib/cinematic/media.ts": "4603d0edba64ff3fd7ed52ba201d30eab511f889c0ccef33b3019c39cd4208be",
+    "public/cinematic/film/manifest.json": "5d625233732001263ae0210847baf9f1df15ea4bd0e8808fb00efd9202f7225f",
+    "public/cinematic/signature-still.webp": "cd926768ce9d88277689698c659506c3f2b45b4a6d7dfd9badf56e46fee42ceb",
+    "scripts/check-cinematic-delivery.mjs": "734a593debef0e3f44ab8446ca1dfbff5ec332f0c415933fd834eb9e22694fb6",
+    "scripts/capture-signature-review.mjs": "5cbbbeeec4afecf7120631a7626c7d45aafcd8b05641a9065cf2cd1700c156ae",
+    "tests/cinematic-media.test.ts": "a703f3e574ac2a336e8c011ca8ec889ce5ba0c6e330f45c15870c47a1f69492e",
+    "tests/browser/cinematic.spec.ts": "ac60d250b3c6313aeb1eb819caf8a2682608f3ce2627781b2755886a09f6c3fa",
+    "tests/browser/phase15.spec.ts": "7d65bbf14a636411a7653e4758749eb43140701c21505d98dbb240fd3a445c55",
+    "tests/browser/signature.spec.ts": "b78c347ccbe121f492cab2a92d062a67906a4cea88d0dbb4bbd55eea28409beb",
+    "playwright.config.ts": "67fc21c2610e73ae6bb872b62be2b3682cc3704ac9edfd7f3e8fe86bb0e4fda1",
+    "package.json": "17dc67792e468f9f576cd9decb1a9ca9eb7836ced60d48bccd0b8b78372205c0"
+  }
+}

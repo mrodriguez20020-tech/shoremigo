@@ -1,0 +1,9 @@
+{
+  "manifest": "public/cinematic/film/manifest.json",
+  "productionMediaReady": false,
+  "visualApproval": "required separately",
+  "checks": [],
+  "errors": [
+    "Matched production footage is not supplied. The public manifest explicitly remains awaiting-production-media."
+  ]
+}

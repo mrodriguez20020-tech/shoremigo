@@ -14,11 +14,11 @@ test("welcome traps focus, Escape skips, and country/language never persist with
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole("combobox")).toBeFocused();
   await expect(dialog.getByRole("checkbox")).not.toBeChecked();
-  await dialog.getByRole("button", { name: "Continue" }).focus();
+  await dialog.getByRole("button", { name: "Begin exploring" }).focus();
   await page.keyboard.press("Tab");
   await expect(dialog.getByRole("button", { name: "Skip" })).toBeFocused();
   await page.keyboard.press("Shift+Tab");
-  await expect(dialog.getByRole("button", { name: "Continue" })).toBeFocused();
+  await expect(dialog.getByRole("button", { name: "Begin exploring" })).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);
   expect(await sessionPrefs(page)).toMatchObject({
@@ -54,7 +54,7 @@ test("country and language are independent; consent can be granted and revoked",
   await page.getByRole("dialog").getByRole("checkbox").check();
   await page
     .getByRole("dialog")
-    .getByRole("button", { name: "Continuar", exact: true })
+    .getByRole("button", { name: "Empezar a explorar", exact: true })
     .click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
   expect(
@@ -78,7 +78,7 @@ test("country and language are independent; consent can be granted and revoked",
   await page.getByRole("dialog").getByRole("checkbox").uncheck();
   await page
     .getByRole("dialog")
-    .getByRole("button", { name: "Continuar", exact: true })
+    .getByRole("button", { name: "Empezar a explorar", exact: true })
     .click();
   expect(
     await page.evaluate(() => localStorage.getItem("sm_prefs")),
@@ -102,7 +102,7 @@ test("blocked browser storage still permits entering the app", async ({
   });
   await page.goto("/");
   await expect(welcome(page)).toBeVisible();
-  await welcome(page).getByRole("button", { name: "Continue" }).click();
+  await welcome(page).getByRole("button", { name: "Begin exploring" }).click();
   await expect(welcome(page)).toHaveCount(0);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Your Caribbean adventure",
@@ -181,7 +181,7 @@ for (const viewport of [
       ),
     ).toBe(750);
     await page.waitForTimeout(850);
-    await expect(page.locator(".scene-photo")).toHaveCSS("opacity", "1");
+    await expect(page.locator(".cinematic-poster")).toHaveCSS("opacity", "1");
     if (process.env.CAPTURE_PREVIEWS)
       await page.screenshot({
         path: `docs/previews/sunset-${viewport.name}.png`,
@@ -248,5 +248,5 @@ test("manual pause stops scene transitions and an ultrawide sunset remains reach
     .click();
   await page.locator("#golden-hour").scrollIntoViewIfNeeded();
   await expect(page.locator("html")).toHaveAttribute("data-scene", "sunset");
-  await expect(page.locator(".scene-photo")).toHaveCSS("opacity", "1");
+  await expect(page.locator(".cinematic-poster")).toHaveCSS("opacity", "1");
 });

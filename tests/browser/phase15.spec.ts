@@ -69,7 +69,7 @@ test("welcome notices, takes the two supplied steps, waves, and can be skipped i
   await dialog.getByRole("button", { name: "Skip" }).click();
   await expect(dialog).toHaveCount(0);
   await expect(
-    page.locator('[data-ocean-scene="hero"] [data-aurora-tide]'),
+    page.locator("[data-cinematic-backdrop]"),
   ).toBeVisible();
 });
 
@@ -87,22 +87,27 @@ test("foot contacts alternate, travel holds at contact, and sound is off by defa
   const result = await evidence(page);
   expect(result.contacts[0].foot).not.toBe(result.contacts[1].foot);
   expect(result.sounds).toHaveLength(0);
-  await expect(page.locator("[data-migo-stage]")).toHaveAttribute(
-    "data-gait",
-    "contact",
-    { timeout: 12_000 },
-  );
-  const position = await page
-    .locator("[data-migo-stage]")
-    .getAttribute("data-travel");
-  await page.waitForTimeout(50);
-  if (
-    (await page.locator("[data-migo-stage]").getAttribute("data-gait")) ===
-    "contact"
-  )
-    expect(
-      await page.locator("[data-migo-stage]").getAttribute("data-travel"),
-    ).toBe(position);
+  // Observe the rendered event: Playwright's backoff polling can miss a 156 ms hold.
+  const hold = await page.evaluate(() => new Promise<{ before: number; after: number; phase: string | undefined }>((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      window.removeEventListener("sm:migo-contact", onContact);
+      reject(new Error("No rendered contact within 12 seconds"));
+    }, 12000);
+    function onContact() {
+      window.removeEventListener("sm:migo-contact", onContact);
+      requestAnimationFrame(() => {
+        const stage = document.querySelector<HTMLElement>("[data-migo-stage]")!;
+        const before = stage.getBoundingClientRect().x;
+        setTimeout(() => {
+          clearTimeout(timeout);
+          resolve({ before, after: stage.getBoundingClientRect().x, phase: stage.dataset.gait });
+        }, 50);
+      });
+    }
+    window.addEventListener("sm:migo-contact", onContact);
+  }));
+  expect(hold.phase).toBe("contact");
+  expect(Math.abs(hold.after - hold.before)).toBeLessThan(0.1);
   await settings(page).click();
   await page.getByText("Pause animations", { exact: true }).click();
   await expect(page.locator("[data-migo-stage]")).toHaveAttribute(
@@ -171,7 +176,7 @@ test("rapid scrolling settles on the right scene and keeps the same vessel asset
 }) => {
   await returning(page);
   const sources = await page
-    .locator(".aurora-render")
+    .locator(".cinematic-poster")
     .evaluateAll((images) =>
       images.map((el) => (el as HTMLImageElement).getAttribute("src")),
     );
@@ -201,9 +206,9 @@ test("rapid scrolling settles on the right scene and keeps the same vessel asset
     await page
       .locator("html")
       .evaluate((el) =>
-        Number(getComputedStyle(el).getPropertyValue("--ocean-hour")),
+        el.dataset.scene,
       ),
-  ).toBe(1);
+  ).toBe("sunset");
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   await expect(page.locator("html")).toHaveAttribute("data-scene", "day");
 });
@@ -296,8 +301,17 @@ test("desktop keyboard and drag release leave Migo clear of marked controls", as
   const launcher = page.getByRole("button", {
     name: "Open Migo, your AI concierge",
   });
-  const before = await launcher.boundingBox();
+  // Wait for client placement; the server's initial x=24 is not the interactive starting point.
+  await expect.poll(async () => (await launcher.boundingBox())!.x).toBeGreaterThan(1000);
   await launcher.focus();
+  // Stop autonomous travel with a real keyboard action, then wait for the move to settle.
+  await page.keyboard.press("ArrowRight");
+  await expect.poll(async () => {
+    const first = (await launcher.boundingBox())!.x;
+    await page.waitForTimeout(120);
+    return Math.abs(first - (await launcher.boundingBox())!.x);
+  }).toBeLessThan(0.1);
+  const before = await launcher.boundingBox();
   await page.keyboard.press("ArrowLeft");
   await expect
     .poll(async () => (await launcher.boundingBox())!.x)

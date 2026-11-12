@@ -22,7 +22,7 @@ Photos are stored locally as optimized WebP files. They are atmospheric editoria
 |---|---|---|---|
 | Fictional island/ocean plate | `public/cinematic/island-ocean.webp` | Created for this task using OpenAI image generation, 2026-11-11. User-generated output under OpenAI terms, including commercial use; not part of the source-code MIT license. | Fictional, Caribbean-inspired setting; no actual destination identity claimed |
 | Aurora Tide concept render | `public/cinematic/aurora-tide.webp` | Original fictional vessel generated for this task using OpenAI image generation with the ocean plate as lighting/camera reference. Same rights basis as above. | Fictional vessel; 2D concept rendering, not a real cruise ship photo, live 3D model or accurate deck plan |
-| Wake, contact shadows, scene grading | `OceanScene.tsx`, `globals.css`, `SpriteMigo.tsx` | Original code, MIT | Composited presentation, not water physics |
+| Phase 1.5 wake/grade (removed from current environment), Migo contact shadows | Historical `OceanScene.tsx`/CSS; current `SpriteMigo.tsx` | Original code, MIT | The former ocean approximations are rejected; no physical water is claimed |
 | Deck/cabin/sand contacts and landing | `src/components/audio/engine.ts` | Original short Web Audio noise synthesis; no recording, loop, sample or external effect | Opt-in only; synchronized to rendered contacts/landing |
 | Browser evidence | `docs/phase15/` | Captured locally from this application with Playwright; contains the authorized assets listed here | Actual browser recording; audio begins only after recorded explicit sound opt-in |
 
@@ -37,3 +37,13 @@ The PayPal JS SDK is loaded at runtime from `paypal.com` under PayPal's develope
 ## Names and marks
 
 "PayPal", "Gemini" and "Bryntum" are trademarks of their owners and are used only to describe integrations. Port names (Cozumel, Roatán, Grand Cayman, Ocho Rios) are real places. The ship *Aurora Tide*, the operator "Tidewalk Tours", and all guides, vehicles and prices are fictional demo data.
+
+## Signature interim delivery
+
+| Asset | Location | Source / rights basis | Disclosure |
+|---|---|---|---|
+| Integrated Aurora Tide / ocean concept still | `public/cinematic/signature-still.webp` | Created for this task using OpenAI image generation on 2026-11-11, using the approved original vessel and ocean concepts as references; generated output under applicable OpenAI terms, including commercial use. Excluded from MIT code license. | Fictional, AI-generated **static** atmosphere; not footage, not a real destination/ship photograph, not an approved 3D model or a verified unseen-side design |
+| Native-media engineering patterns | Generated locally by FFmpeg from `tests/browser/signature.spec.ts`, ignored `work/signature/fixtures/` | Procedural test-source patterns and text; no external footage or audio | Clearly marked test data only; never public cinematic media or visual acceptance evidence |
+| Interim review screenshots/recording | `docs/signature/evidence/` | Actual headed Chromium capture of this application and the authorized assets above | Still fallback only; muted recording; does not establish moving-water/sunset quality |
+
+No new motion footage, third-party 3D model, stock ocean film, music or external audio sample was licensed or added. The rejected local Blender proof is not a production asset. The public film manifest remains pending; no fabricated production geometry/camera identifiers or video rights are supplied. [Production source/rights requirements](docs/signature/ASSET_PRODUCTION_SPEC.md). Original Migo files are unchanged.

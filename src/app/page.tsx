@@ -40,7 +40,7 @@ export default function Home() {
               </ul>
             </Reveal>
           </div>
-          <div className="hero-vessel-caption" aria-hidden><span className="luxury-kicker">Aurora Tide</span><p>Our fictional exploration cruiser.<br />An original concept rendering.</p></div>
+          <div className="hero-vessel-caption" aria-hidden><span className="luxury-kicker">Aurora Tide</span><p>Our fictional exploration cruiser.<br />An original concept still.</p></div>
         </div>
         <a
           href="#ports"
@@ -53,7 +53,7 @@ export default function Home() {
         </a>
       </section>
 
-      <p className="photo-caption">Aurora Tide · fictional vessel and island · AI-generated concept rendering · demo sailing</p>
+      <p className="photo-caption">Aurora Tide · fictional vessel and island · AI-generated concept still · demo sailing</p>
       <Discovery />
 
       {/* ── Ports ──────────────────────────────────────── */}
@@ -100,7 +100,7 @@ export default function Home() {
       >
         <OceanScene variant="sunset" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#151522]/90 via-[#151522]/45 to-[#151522]/25" />
-        <p className="absolute bottom-6 left-6 text-[10px] tracking-wider text-white/70 sm:left-12">Fictional Aurora Tide and island · concept rendering, not Ocho Rios or the listed excursion</p>
+        <p className="absolute bottom-6 left-6 text-[10px] tracking-wider text-white/70 sm:left-12">Fictional Aurora Tide and island · concept still, not Ocho Rios or the listed excursion</p>
         <div className="relative mx-auto grid w-full max-w-[1400px] items-end gap-12 lg:grid-cols-[1.2fr_0.8fr]">
           <Reveal>
             <p className="eyebrow">Ocho Rios · golden hour</p>
