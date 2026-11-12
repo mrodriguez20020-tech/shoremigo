@@ -161,6 +161,23 @@ for (const [name, width, height] of [["desktop", 1440, 1000], ["tablet", 820, 11
   await screenshot(p, `golden-editorial-${name}`);
   await p.close();
 }
+const reduced = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: "reduce" });
+await reduced.addInitScript(() => {
+  sessionStorage.setItem("sm.intro", "1");
+  sessionStorage.setItem("sm_prefs", JSON.stringify({ lang:"en", country:null, remember:false, welcomed:true }));
+  localStorage.setItem("sm.migo.v1", JSON.stringify({ prefs:{ proactive:false, motionPaused:false }, hidden:false }));
+});
+await reduced.goto(base);
+await reduced.locator('[data-placement-ready="true"]').waitFor();
+await reduced.locator(".golden-window").evaluate(el => window.scrollTo({ top:scrollY + el.getBoundingClientRect().top, behavior:"instant" }));
+await expect.poll(() => reduced.evaluate(() => {
+  const a = document.querySelector("[data-migo-stage]").getBoundingClientRect();
+  const b = document.querySelector(".golden-disclosure").getBoundingClientRect();
+  return a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom;
+})).toBe(true);
+await screenshot(reduced, "golden-reduced-desktop");
+await captureMask(reduced, "desktop-reduced", "golden");
+await reduced.close();
 await writeFile(`${dir}/composition.json`, JSON.stringify({ note: "Actual UI rectangles for production crop/safe-area review, not a vessel geometry approval. Golden coordinates are viewport pixels with the cinematic window aligned to the top. Masks use the interim EN interface; final film contact sheets in both lights/all languages remain required.", viewports: composition, masks }, null, 2) + "\n");
 await writeFile(`${dir}/performance.json`, JSON.stringify({
   status: "Interim still only. Moving-water and sunset-film acceptance BLOCKED.",
