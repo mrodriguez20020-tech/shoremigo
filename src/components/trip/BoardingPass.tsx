@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MEETING_POINTS, getExcursion, getPort } from "@/lib/domain/catalog";
 import { fmtMin, fmtUsd } from "@/lib/domain/time";
 import { CompassMark } from "@/components/brand/Wordmark";
@@ -32,6 +32,16 @@ export function BoardingPass({
   const refunded = booking.payments.filter((p) => p.kind === "refund").reduce((n, p) => n + p.amountCents, 0);
   const date = new Date(port.date + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
   const [shared, setShared] = useState<string | null>(null);
+  // Real verification link + QR, issued by the server for the verified guest. No placeholder QR is ever drawn.
+  const [pass, setPass] = useState<{ url: string; svg: string } | null>(null);
+  useEffect(() => {
+    let live = true;
+    fetch("/api/trip/pass", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => { if (live && j?.url && j?.svg) setPass({ url: j.url, svg: j.svg }); })
+      .catch(() => {});
+    return () => { live = false; };
+  }, [booking.ref, booking.status]);
 
   const share = async () => {
     const text = `My ShoreMigo shore day: ${ex.title} in ${port.name} on ${date}, departing ${fmtMin(departsMin)}. Ref ${booking.ref}.`;
@@ -53,7 +63,8 @@ export function BoardingPass({
       initial={{ opacity: 0, y: 30, rotateX: 12 }}
       animate={{ opacity: 1, y: 0, rotateX: 0 }}
       transition={{ duration: 1, ease: [0.2, 0.8, 0.2, 1] }}
-      className="relative mx-auto max-w-4xl [perspective:1200px]"
+      className="print-pass relative mx-auto max-w-4xl [perspective:1200px]"
+      data-shore-pass
     >
       <div
         className="relative grid overflow-hidden rounded-[28px] text-[#1b1530] shadow-[0_50px_100px_-40px_rgba(40,10,40,0.7)] md:grid-cols-[1fr_260px]"
@@ -125,9 +136,20 @@ export function BoardingPass({
               </p>
             )}
           </div>
-          <button onClick={share} className="rounded-full bg-[#1b1530] px-4 py-2.5 text-sm font-bold text-[#fff3dc] transition hover:-translate-y-0.5">
-            {shared ?? "Share my shore day"}
-          </button>
+          {pass && (
+            <a href={pass.url} target="_blank" rel="noreferrer" className="block w-fit" aria-label="Shore Pass verification link (also encoded in this QR code)">
+              <span className="block h-28 w-28 [&_svg]:h-full [&_svg]:w-full" data-pass-qr dangerouslySetInnerHTML={{ __html: pass.svg }} />
+              <span className="mt-1 block text-[10px] font-bold tracking-[0.16em] text-[#7a5a6a] uppercase">Scan to verify</span>
+            </a>
+          )}
+          <div className="no-print flex flex-col gap-2">
+            <button onClick={share} className="rounded-full bg-[#1b1530] px-4 py-2.5 text-sm font-bold text-[#fff3dc] transition hover:-translate-y-0.5">
+              {shared ?? "Share my shore day"}
+            </button>
+            <button onClick={() => window.print()} className="rounded-full border-2 border-[#1b1530] px-4 py-2 text-sm font-bold transition hover:-translate-y-0.5">
+              Print or save as PDF
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>

@@ -53,7 +53,7 @@ Evidence for payments, AI and deployment is in [VERIFICATION.md](VERIFICATION.md
 | Inventory | IMPLEMENTED | Server-owned capacity, 15-min holds with expiry, operator capacity/sales controls (can't go below committed seats or above vehicle), atomic Postgres transactions on Vercel (verified across 10 concurrent connections), audit. Per-session time slots (multiple departures per tour): DEFERRED. |
 | PayPal | IMPLEMENTED (sandbox) | Create → buyer approval → server capture → verify amount/currency/status/custom_id → persist. Verified live: captures, duplicate-capture protection, decline + retry, refunds (partial and full). The earlier COMPLIANCE_VIOLATION was the old seller account; resolved with a US sandbox business account. Sandbox Personal-wallet login approval: not automated (card guest path used). |
 | Bookings | IMPLEMENTED | `/bookings`: verified booking with booking status and PayPal capture/refund records as recorded; checked with a rebooked + partially refunded booking. |
-| Shore Pass | IMPLEMENTED | Confirmation pass with PayPal capture status stamp; shareable text without last name/email. PDF export and QR: DEFERRED (no fake QR). |
+| Shore Pass | IMPLEMENTED | Confirmation pass with PayPal capture status stamp; shareable text without last name/email. **QR code resolving to a real, signed verification page** (`/pass/<token>`: live status, first name only, revoked automatically when cancelled/refunded) and **print / Save as PDF** (single-page print stylesheet). Added 2026-11-12. |
 | Trip Rescue | IMPLEMENTED | Simulated delay → LastBoard infeasibility → alternatives with live seats → operator review → customer consent → PayPal refund/top-up → persisted rebooking; replay protection. Verified live (local) with real sandbox refunds. |
 | Operator | IMPLEMENTED | Passcode-protected console: KPIs, disruption control, schedule/resource clashes, Inventory tab, Trip Rescue reviews, bookings with PayPal re-verify, audit trail, engagement. |
 | Crew | IMPLEMENTED (concept demo) | `/crew`: fictional creator profile, generated referral link, illustrative earnings estimate. No tracking, commissions or payouts (stated on page). |
@@ -71,4 +71,4 @@ Evidence for payments, AI and deployment is in [VERIFICATION.md](VERIFICATION.md
 - **Full translation:** all pages in ES/FR/PT with reviewed copy.
 - **Migo 3D/Rive rig** of the same character, with the 15 states as separate animations.
 - **Crew backend:** attribution, commission terms and payouts only after operator agreements.
-- **Shore Pass PDF and a QR code** that resolves to a real verification endpoint.
+

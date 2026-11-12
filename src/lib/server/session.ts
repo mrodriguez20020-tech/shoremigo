@@ -91,3 +91,24 @@ export function recordLoginFailure(key: string, now = Date.now()) {
 export function operatorCookieValue() {
   return createHmac("sha256", secret()).update(process.env.OPERATOR_PASSCODE ?? "").digest("base64url");
 }
+
+// ───────────── Shore Pass verification links ─────────────
+// A pass token proves only "this booking id was issued a Shore Pass". It is NOT a trip session:
+// it grants read access to a minimal public verification view, never to booking or payment details.
+// Status is read live on every verification, so a cancelled booking's pass stops verifying.
+
+export function passToken(bookingId: string) {
+  const mac = createHmac("sha256", secret()).update(`shore-pass:${bookingId}`).digest("base64url").slice(0, 24);
+  return `${bookingId}.${mac}`;
+}
+
+export function verifyPassToken(token: string | undefined | null): string | null {
+  if (!token || token.length > 120) return null;
+  const i = token.lastIndexOf(".");
+  if (i <= 0) return null;
+  const id = token.slice(0, i);
+  const expected = passToken(id);
+  const a = Buffer.from(token);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b) ? id : null;
+}

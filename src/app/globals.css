@@ -472,3 +472,15 @@ html:has([data-discovery="canopy"]) { --atm-glow: rgba(250, 236, 190, 0.12); --a
 html:has(.taste-page) { --atm-glow: rgba(240, 170, 110, 0.13); --atm-tint: rgba(90, 40, 30, 0.16); --atm-glow-pos: 85% 12%; --atm-deep: rgba(14, 10, 8, 0.50); }
 /* phones: lighter vignette so edges stay readable */
 @media (max-width: 639px) { body::before { inset: 0; background-size: 100% 100%; } :root { --atm-deep: rgba(4, 16, 26, 0.35); } }
+
+/* Shore Pass print / "Save as PDF": only the pass, no chrome, motion settled. */
+@media print {
+  html, body { background: #fff !important; height: 100% !important; overflow: hidden !important; }
+  body > *:not(:has(.print-pass)) { display: none !important; }
+  body * { visibility: hidden !important; }
+  .print-pass, .print-pass * { visibility: visible !important; }
+  .print-pass { position: fixed !important; inset: 0 0 auto 0 !important; width: 100% !important; transform: none !important; opacity: 1 !important; }
+  .print-pass .no-print { display: none !important; }
+  .print-pass * { animation: none !important; transition: none !important; }
+  @page { margin: 12mm; }
+}
