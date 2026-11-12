@@ -1,13 +1,14 @@
 {
-  "sourceCommit": "79173ba06c73b0743cd19f960e326fcdfd2e5741",
-  "captureToolCommit": "9872f1e1234cc6e77604d84996ffe9449113f2f6",
-  "package": "WP-01 engineering review; final visual acceptance BLOCKED",
-  "tag": "wp01-review-79173ba06c73",
-  "releaseUrl": "https://github.com/mrodriguez20020-tech/shoremigo/releases/tag/wp01-review-79173ba06c73",
-  "rights": "ASSETS.md at sourceCommit; media not relicensed as code MIT",
-  "scope": "Actual browser public pending manifest, static concept, no fixture film injection. Six viewports; UI masks EN only. Short Linux/Xorg still-only performance; no physical-device/live-provider/production-film validation.",
-  "logicalPayloadBytes": 4801326,
-  "budgetNote": "Slightly above preferred 4 MB logical bundle to retain six viewport states, technical masks and a 27.68 s actual recording; no new binary evidence in Git history. Archive duplicates download convenience on existing free GitHub storage.",
+  "sourceCommit": "3c7465866b20f65b401c215ae7eaf34e1fb25436",
+  "captureToolCommit": "3d9aa772ae4875ebaf53b92f39107e4d2565a839",
+  "artifactFolderUrl": "https://drive.google.com/drive/folders/16JQ68qmLUxMpvWY5WGU8yPgPt4Ixp0-S",
+  "access": "Owner-only sharing preserved; authenticated authorized access required. Not a public-download claim.",
+  "purpose": "WP-01 engineering review; no product release/deployment; cinematic acceptance BLOCKED",
+  "scope": "Actual public pending manifest; no fixture-video injection; six viewport layouts plus reduced-motion state. Still-only short virtual-Xorg performance.",
+  "rights": "ASSETS.md at sourceCommit; code MIT does not relicense media",
+  "githubUpload": "uploads.github.com rejected supplied credential with HTTP401; no usable prerelease asset set published",
+  "logicalPayloadBytes": 4920166,
+  "budgetNote": "Slightly above preferred 4MB to retain six viewport states, masks, reduced-motion proof and one actual browser recording; no binary review evidence added to Git.",
   "videoProbe": {
     "programs": [],
     "stream_groups": [],
@@ -21,341 +22,404 @@
       }
     ],
     "format": {
-      "duration": "27.680000"
+      "duration": "27.720000"
     }
   },
   "files": [
     {
-      "name": "README.md",
-      "bytes": 2100,
-      "sha256": "f9abcfa796dcc228dcbc3929c55088f3a96cef7ebc6194913499441d826f1cc1",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/README.md"
+      "name": "README.txt",
+      "bytes": 471,
+      "sha256": "db06ee6f4b320a10eee337508b8ab9d1a4f2ba46a036811d5360e8137db6a093",
+      "archivePath": "README.txt"
     },
     {
       "name": "browser-runs.json",
-      "bytes": 3905,
-      "sha256": "ea345a5cd1a3b27dcf75a5cfea59591418387f0b15874536ec82d8f187130c2d",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/browser-runs.json"
+      "bytes": 3879,
+      "sha256": "32005b6d673cc7b8b980630b2785db02bc58ffe5616362b37787c5f9ae4a5e21",
+      "archivePath": "browser-runs.json"
     },
     {
       "name": "composition.json",
-      "bytes": 41798,
-      "sha256": "d7721a9bdff9849b28d4818928a5e9e55ed5ba8ba39efcd231ceb8178e43a617",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/composition.json"
+      "bytes": 44126,
+      "sha256": "f1eb1fa5d9d18332904dc050ee4ae5dd58952e2db927fc49a0b4bf60e7d1f6d8",
+      "archivePath": "composition.json"
     },
     {
       "name": "golden-editorial-desktop-short.jpg",
-      "bytes": 127308,
-      "sha256": "7971d6afdb1961c84d80d3bddbfbb9e174945f0ff720c69b6a64e9889b9ff420",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-editorial-desktop-short.jpg"
+      "bytes": 127211,
+      "sha256": "72ea0296e57783fbcc1f10666e67d6de8f132ff3ffe77d9f044f720e80e92c4e",
+      "archivePath": "golden-editorial-desktop-short.jpg"
     },
     {
       "name": "golden-editorial-desktop.jpg",
-      "bytes": 211594,
-      "sha256": "6bea27b0ccc78ba5e8fa81c4ae8ad118046a9083a7fd2eebd84100ba2192a48a",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-editorial-desktop.jpg"
+      "bytes": 211645,
+      "sha256": "180192bbca9f8cb5118874e1be84fac2a852126ff35ef82888f6ca87411df66e",
+      "archivePath": "golden-editorial-desktop.jpg"
     },
     {
       "name": "golden-editorial-mobile.jpg",
       "bytes": 54893,
-      "sha256": "7d720f2168853ffa09e26da1c63267028bfe5703b72814c01c3843bd93c1fe8d",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-editorial-mobile.jpg"
+      "sha256": "7fa3dbe9bf79b0e5c145bb09e227340efd28a1382b63cf165016111245706b79",
+      "archivePath": "golden-editorial-mobile.jpg"
     },
     {
       "name": "golden-editorial-narrow.jpg",
-      "bytes": 48269,
-      "sha256": "c7d1fe868de5ae02f640ea8f4e5119af31730cdd2261443cb7c5130ac33daddb",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-editorial-narrow.jpg"
+      "bytes": 48242,
+      "sha256": "6c08694b7fa0e740289fffffc9cfa58a887425bbadff02da1cb174d11f8e66c1",
+      "archivePath": "golden-editorial-narrow.jpg"
     },
     {
       "name": "golden-editorial-phone-landscape.jpg",
-      "bytes": 52304,
-      "sha256": "fd7cf01b37cf972bc0d202169e167abc6737a242fa7e0f9b2ba8def12595a3f5",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-editorial-phone-landscape.jpg"
+      "bytes": 52272,
+      "sha256": "c172151e9ff983210d9d031bee3f6b576a669d9c4ab053ea86fe8a5ec6b18007",
+      "archivePath": "golden-editorial-phone-landscape.jpg"
     },
     {
       "name": "golden-editorial-tablet.jpg",
-      "bytes": 106370,
-      "sha256": "42e02740581c5cd9b707a510262284a43cbeaf64cc6f73e7a01f67ec71369e51",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-editorial-tablet.jpg"
+      "bytes": 106329,
+      "sha256": "0a8418c642d466cf7b86624e817859ce8ed9a543182f46ce6acb0a0b67d5a027",
+      "archivePath": "golden-editorial-tablet.jpg"
     },
     {
       "name": "golden-hour-desktop-short.jpg",
-      "bytes": 127017,
-      "sha256": "1191e971da61377a82b4baee1ee71325aad6988717dbc25a216ca6867f8ebcb3",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-hour-desktop-short.jpg"
+      "bytes": 127322,
+      "sha256": "b5b7fcabf7336096d830f48960e37d4a01ef741bae4bd709f80dba5bef8dc766",
+      "archivePath": "golden-hour-desktop-short.jpg"
     },
     {
       "name": "golden-hour-desktop.jpg",
-      "bytes": 211919,
-      "sha256": "da9cc9276036ac5151365684b4afaa4d18157b6e4939d328b00ec6ade9e9b5d8",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-hour-desktop.jpg"
+      "bytes": 211780,
+      "sha256": "922ae742ba3f52b311828cc4112139cbd02beb59f388d474d65bd6758c8b8649",
+      "archivePath": "golden-hour-desktop.jpg"
     },
     {
       "name": "golden-hour-mobile.jpg",
-      "bytes": 48921,
-      "sha256": "e10d3ba29037976e5c9667cdb6bc136e7ef195778846dfed447fc62ed8b4a6ee",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-hour-mobile.jpg"
+      "bytes": 48903,
+      "sha256": "7d907e6b0bd2f53c5de9ac18d95c371c7abc075b60842f0ef24466505ca3d798",
+      "archivePath": "golden-hour-mobile.jpg"
     },
     {
       "name": "golden-hour-narrow.jpg",
-      "bytes": 38301,
-      "sha256": "c806552dd59c6469aa3bb298e1338c163e5f5938e35b74cb7635df117f91514a",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-hour-narrow.jpg"
+      "bytes": 38334,
+      "sha256": "0eccfc9aa0bc19ec8d625e9eb0b687232ed60329ad2c11b40c9348a16f32abc6",
+      "archivePath": "golden-hour-narrow.jpg"
     },
     {
       "name": "golden-hour-phone-landscape.jpg",
-      "bytes": 53526,
-      "sha256": "55a5c39f769e29a13a231761619ee40693927e34daa93f7a8222dfc8f474536a",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-hour-phone-landscape.jpg"
+      "bytes": 53529,
+      "sha256": "05a4ef52da2a5ba7679d852cec8cb3845faf651a41638db042dccfa9a706d53b",
+      "archivePath": "golden-hour-phone-landscape.jpg"
     },
     {
       "name": "golden-hour-tablet.jpg",
-      "bytes": 89319,
-      "sha256": "3083d9f44b22a332a3ad5698ac4601514bb3656198724a6794814d54a8ba7cc2",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-hour-tablet.jpg"
+      "bytes": 89023,
+      "sha256": "35634aada06b165bcf16812d6e9db0e5182e1b88a18516c156dfd675d1d6ff7e",
+      "archivePath": "golden-hour-tablet.jpg"
+    },
+    {
+      "name": "golden-reduced-desktop.jpg",
+      "bytes": 212091,
+      "sha256": "733e0a724ad089a4b9c5d575c9099c3ccedc218b04737d6905c8967b76688539",
+      "archivePath": "golden-reduced-desktop.jpg"
     },
     {
       "name": "hero-launcher-desktop-short.jpg",
-      "bytes": 121018,
-      "sha256": "ed19e089349046af33d6874f782b26831324540d1984205b5618f68fe98975b8",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/hero-launcher-desktop-short.jpg"
+      "bytes": 121014,
+      "sha256": "451b3fb9cf184b0f7a9b5836e4b140450d4a0358fb223988c06fa1adc4ea9b84",
+      "archivePath": "hero-launcher-desktop-short.jpg"
     },
     {
       "name": "hero-launcher-mobile.jpg",
-      "bytes": 66233,
-      "sha256": "e31e3a6ec6ad99ddedcb0745b9453d381d99e67cc531f81b552d17ab0063c957",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/hero-launcher-mobile.jpg"
+      "bytes": 66251,
+      "sha256": "40a47bee59ebbe365f5620e3eb02714c55d89fd5360e882f0069df70baea4d04",
+      "archivePath": "hero-launcher-mobile.jpg"
     },
     {
       "name": "hero-launcher-narrow.jpg",
-      "bytes": 54376,
-      "sha256": "f41d6cc6c0af2c55b2dcee9b3b7acb3f59c814cb6d4d60959197364455181f57",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/hero-launcher-narrow.jpg"
+      "bytes": 54331,
+      "sha256": "4d3a93b690dbf519eb1785ba6b4f23fed8cd262fb4e778cdf7350b22aea57b7a",
+      "archivePath": "hero-launcher-narrow.jpg"
     },
     {
       "name": "hero-launcher-phone-landscape.jpg",
-      "bytes": 56465,
-      "sha256": "461c9babfe74bc373ea87485be03fe1e43b87c99e9b281d439886418257df3af",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/hero-launcher-phone-landscape.jpg"
+      "bytes": 56516,
+      "sha256": "0463bb43f82a12b5fc0af44939ca95a64e88e1e44d178188b72965887fb3eed4",
+      "archivePath": "hero-launcher-phone-landscape.jpg"
     },
     {
       "name": "hero-launcher-tablet.jpg",
-      "bytes": 110429,
-      "sha256": "f2f68961056e382d74fe96161f6afa0ed6265f4af10f6f25d1c40494237a2ce4",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/hero-launcher-tablet.jpg"
+      "bytes": 110457,
+      "sha256": "e434b1676b0a425cda825d9aa2ddc1c1a8a1c8e276b1bcf024389a56a4f9f4bf",
+      "archivePath": "hero-launcher-tablet.jpg"
     },
     {
       "name": "home-desktop-short.jpg",
-      "bytes": 121005,
-      "sha256": "b6868a8bd3ab51222b8cf0a5dc1095c6e454fa5c2582f098ec4bf55d7997c96b",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/home-desktop-short.jpg"
+      "bytes": 120967,
+      "sha256": "24f28c13334eae3b8f1810ca3b20899b58bb6f2a0b11332ab87f3474f5839836",
+      "archivePath": "home-desktop-short.jpg"
     },
     {
       "name": "home-desktop.jpg",
-      "bytes": 180345,
-      "sha256": "df875c04fa0af62552865e944ffe04151d102e1988f17eb416f674796506a049",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/home-desktop.jpg"
+      "bytes": 180126,
+      "sha256": "c9ae2f617dcec1f830df7f5c5fbf706cdb6d17ae79a8b3d3f61b1f3c89f911fa",
+      "archivePath": "home-desktop.jpg"
     },
     {
       "name": "home-mobile.jpg",
-      "bytes": 66259,
-      "sha256": "1ca56560a174d89ee46757a291c0760adf16090e68bd0c374ae10f0aafdcfe48",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/home-mobile.jpg"
+      "bytes": 66241,
+      "sha256": "74400f38509102fbf78b824a2f53a92c94d4e2d34eed5754cb68a742c56c5a78",
+      "archivePath": "home-mobile.jpg"
     },
     {
       "name": "home-narrow.jpg",
       "bytes": 50892,
       "sha256": "473f5cc64d261c50c89fa7e67cd95fa8ad36e381ac1499f6dbca47f8fa7ab37c",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/home-narrow.jpg"
+      "archivePath": "home-narrow.jpg"
     },
     {
       "name": "home-phone-landscape.jpg",
-      "bytes": 60502,
-      "sha256": "27b677fc0e4d3c58525d90babc0ec3b76ab9e50e368fcc8f7ad745b3d0b7b86c",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/home-phone-landscape.jpg"
+      "bytes": 60501,
+      "sha256": "b2b323e4f8b2d3ecba8fdaeab50a8331456f0a5bf461e479cde96fc87ff1c341",
+      "archivePath": "home-phone-landscape.jpg"
     },
     {
       "name": "home-tablet.jpg",
-      "bytes": 110409,
-      "sha256": "c8ec6dbeedbacc04a13e0586e31faaa2ba86c3e8693e83aff8729191f2ce2286",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/home-tablet.jpg"
+      "bytes": 110407,
+      "sha256": "f046b264dbdfeb42a55b772d68cb3ff7af774e89eb98c30213f4aaebe1052b11",
+      "archivePath": "home-tablet.jpg"
     },
     {
       "name": "interim-browser-review.mp4",
-      "bytes": 1970578,
-      "sha256": "759145b2aedad725278c80ca79aeeb312312a62be6f33d44d96c97105f5f8dd6",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/interim-browser-review.mp4"
+      "bytes": 1875925,
+      "sha256": "e3577393e902e8983fe0a650fa25a049840f564e85fe715af697bd1f5da4f295",
+      "archivePath": "interim-browser-review.mp4"
     },
     {
       "name": "mask-desktop-golden.svg",
       "bytes": 1128,
       "sha256": "5c635a3bdc718fdaea517b0f8b6091dc548c9ab84694bf1b15b5dff9a8ccf7be",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-desktop-golden.svg"
+      "archivePath": "mask-desktop-golden.svg"
     },
     {
       "name": "mask-desktop-hero.svg",
       "bytes": 1228,
       "sha256": "a5a08781f42155e83a4132509a907fb60047559a20ef251dd45ee7f6edcbc8db",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-desktop-hero.svg"
+      "archivePath": "mask-desktop-hero.svg"
+    },
+    {
+      "name": "mask-desktop-reduced-golden.svg",
+      "bytes": 1168,
+      "sha256": "c207237bc50c8c592825d5aad44ce397852fcf7adfc62bad5cc66a0a1947f869",
+      "archivePath": "mask-desktop-reduced-golden.svg"
     },
     {
       "name": "mask-desktop-short-golden.svg",
       "bytes": 1081,
-      "sha256": "e3e47df077f2ef6ecd24e8761a425f31f93a4cf10f4eecdb7a53c452a04a9489",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-desktop-short-golden.svg"
+      "sha256": "d755c7cfc4b5d02c849ec6c11ad632f303c351ce212ef2bdbbc74b91b39d1c98",
+      "archivePath": "mask-desktop-short-golden.svg"
     },
     {
       "name": "mask-desktop-short-hero.svg",
       "bytes": 1086,
       "sha256": "a6a4225a8a7fad2ae31b200379574c9fc2be44d9476581acc5479ceedb1e8abc",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-desktop-short-hero.svg"
+      "archivePath": "mask-desktop-short-hero.svg"
     },
     {
       "name": "mask-desktop-short-welcome.svg",
       "bytes": 1493,
       "sha256": "0d997a5b1226075ca35f609c16f1aab87261cf208561bbdc5afce79bb484c3e1",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-desktop-short-welcome.svg"
+      "archivePath": "mask-desktop-short-welcome.svg"
     },
     {
       "name": "mask-desktop-welcome.svg",
       "bytes": 1632,
       "sha256": "6fb3a28e424d3a59c46c95eaf89e64158a8edbe80271a400b1951d76f535dc79",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-desktop-welcome.svg"
+      "archivePath": "mask-desktop-welcome.svg"
     },
     {
       "name": "mask-mobile-golden.svg",
       "bytes": 657,
       "sha256": "36fb68ffefe3630f5c81b324db48ec034471ff3951c741737aef08bfaf3c6878",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-mobile-golden.svg"
+      "archivePath": "mask-mobile-golden.svg"
     },
     {
       "name": "mask-mobile-hero.svg",
       "bytes": 970,
       "sha256": "9fdbb7b97ee808444687b67b047229a6ad3bbbebdc255fd923fedf884d101f02",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-mobile-hero.svg"
+      "archivePath": "mask-mobile-hero.svg"
     },
     {
       "name": "mask-mobile-welcome.svg",
       "bytes": 1341,
       "sha256": "bdd6230824ec5dbb390f1166dd5a43cbba40439882a5a3c9f0694c7ca4a33008",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-mobile-welcome.svg"
+      "archivePath": "mask-mobile-welcome.svg"
     },
     {
       "name": "mask-narrow-golden.svg",
       "bytes": 659,
       "sha256": "8e30cdbea19ea0618fb33bf5844babea9cb74b14b7ba47d9cf599f44e399d8e2",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-narrow-golden.svg"
+      "archivePath": "mask-narrow-golden.svg"
     },
     {
       "name": "mask-narrow-hero.svg",
       "bytes": 753,
       "sha256": "91df69e3e23065adb1fefa1526056e9d8fdb090bc479b678eb4f86a228b90c3f",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-narrow-hero.svg"
+      "archivePath": "mask-narrow-hero.svg"
     },
     {
       "name": "mask-narrow-welcome.svg",
       "bytes": 1126,
       "sha256": "c0651bffa922266c81e6e304981f43b56ae5a6dcb63e01a8985e6be34118063a",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-narrow-welcome.svg"
+      "archivePath": "mask-narrow-welcome.svg"
     },
     {
       "name": "mask-phone-landscape-golden.svg",
       "bytes": 664,
       "sha256": "f9b9479edac328d04869c10c8e7a5397d3ad73046c14e6ca15a8c3ff8adb15f6",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-phone-landscape-golden.svg"
+      "archivePath": "mask-phone-landscape-golden.svg"
     },
     {
       "name": "mask-phone-landscape-hero.svg",
       "bytes": 657,
       "sha256": "70283e72dac1b2ec49539bb9eda3a33ba6cd7a7030e45b159045f7c72fe0b9c7",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-phone-landscape-hero.svg"
+      "archivePath": "mask-phone-landscape-hero.svg"
     },
     {
       "name": "mask-phone-landscape-welcome.svg",
       "bytes": 1046,
       "sha256": "a6c0c80edfa748fb666cde55c650cf6fc88d4ad6f1eafb6464a897a2e4a4c26f",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-phone-landscape-welcome.svg"
+      "archivePath": "mask-phone-landscape-welcome.svg"
     },
     {
       "name": "mask-tablet-golden.svg",
-      "bytes": 672,
-      "sha256": "48540638123701fd2ccd0e36876da9ec66ae48aef165593eb33c57e35b7391e6",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-tablet-golden.svg"
+      "bytes": 671,
+      "sha256": "db64f3c1b4f12a10e1ea4bd1df78d3833da3f05c8592fa6996105a1f1ea6ee27",
+      "archivePath": "mask-tablet-golden.svg"
     },
     {
       "name": "mask-tablet-hero.svg",
       "bytes": 1089,
       "sha256": "fb80d6f0479a5bc93f2d95d98a989098c3966bc0b6b3c61e80f2feaaa11c7d89",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-tablet-hero.svg"
+      "archivePath": "mask-tablet-hero.svg"
     },
     {
       "name": "mask-tablet-welcome.svg",
       "bytes": 1477,
       "sha256": "8534f6b84029a940de9668de412fd2c3906a15e3a71660131675d754e5924ada",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/mask-tablet-welcome.svg"
+      "archivePath": "mask-tablet-welcome.svg"
     },
     {
       "name": "performance.json",
-      "bytes": 3915,
-      "sha256": "cdc60c58d182705ccfebe36c3189e93ff7ec8ce6c0c427beccacec88be23c983",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/performance.json"
+      "bytes": 3924,
+      "sha256": "4814096606792530164189f37cd9469e7a9cee3029f11620b8756fb5e86a0bf7",
+      "archivePath": "performance.json"
     },
     {
       "name": "preferences-narrow.jpg",
       "bytes": 48734,
       "sha256": "954dd57a94b30b26d21726fbfb212b5728b258c5183135199888fc6bee23fec8",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/preferences-narrow.jpg"
+      "archivePath": "preferences-narrow.jpg"
     },
     {
       "name": "welcome-desktop-short.jpg",
-      "bytes": 105244,
-      "sha256": "8391d477f8e74f73c905d0fe52cc50b9a3a058364be00caff12b54b0bb029a9a",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/welcome-desktop-short.jpg"
+      "bytes": 105246,
+      "sha256": "b9dcd4f0f03a3f2dae5b272826cbb5d6152ef0a920c451076ba0b435ac6c5f9e",
+      "archivePath": "welcome-desktop-short.jpg"
     },
     {
       "name": "welcome-desktop.jpg",
-      "bytes": 158843,
-      "sha256": "4f68f83c80ae19cdd326e213bdaed783d5333e6230a94e0530027091f3b30371",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/welcome-desktop.jpg"
+      "bytes": 158853,
+      "sha256": "cc79f168ec8e91d9bf693c01380f425fe87841956d5701ef80101bfbb1523150",
+      "archivePath": "welcome-desktop.jpg"
     },
     {
       "name": "welcome-mobile.jpg",
       "bytes": 65543,
-      "sha256": "689d4e9e2c0cbf00893aebd3326bf1d2bf424dbf20de5827731e799e3a5212f7",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/welcome-mobile.jpg"
+      "sha256": "733c3f1791c1a495fc57812f4c4137126d9fbf1284c479b3f28cf0da149c39c1",
+      "archivePath": "welcome-mobile.jpg"
     },
     {
       "name": "welcome-narrow.jpg",
-      "bytes": 50139,
-      "sha256": "d2ab9e211e90dd491565cc7d346765bc4f84390602c9dfd50bcc6328c0c8b41f",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/welcome-narrow.jpg"
+      "bytes": 50141,
+      "sha256": "6a77364412ebd97784091fc76ad73277f97b14748f801657c3613a5c73e78213",
+      "archivePath": "welcome-narrow.jpg"
     },
     {
       "name": "welcome-phone-landscape.jpg",
       "bytes": 50525,
       "sha256": "f187c187aa231a9f2bb07707bcb2aadaadb9035d34cff742b25eacf0132f2b5f",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/welcome-phone-landscape.jpg"
+      "archivePath": "welcome-phone-landscape.jpg"
     },
     {
       "name": "welcome-tablet.jpg",
-      "bytes": 113569,
-      "sha256": "fed18ef8993570ced8aef02c38ea7825d554901a52d97eb6ada16dadbd857bbe",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/welcome-tablet.jpg"
+      "bytes": 113596,
+      "sha256": "5352f0648f0d795092e44f844caa398d2a0cc5daf49b35de03e0a885937c2812",
+      "archivePath": "welcome-tablet.jpg"
     }
   ],
-  "indexAndArchive": [
-    {
-      "name": "evidence-manifest.json",
-      "bytes": 16772,
-      "sha256": "dc246dd9d90cad1d9d16620ec7a9a2fc1fc56673aba1febdf4a1a055aaede9b5",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/evidence-manifest.json"
+  "deliveries": {
+    "wp01-review-evidence.zip": {
+      "id": "1NfxUfd_GR4_JkBTQ0pl8gutaRXtYXM87",
+      "url": "https://drive.google.com/file/d/1NfxUfd_GR4_JkBTQ0pl8gutaRXtYXM87/view?usp=drivesdk",
+      "bytes": 4793877,
+      "sha256": "072f5fa1a661778f35353e84e8540b3e7d1e220bcf131ba0c57b70179f477fcc",
+      "metadataReadback": "size, MIME and owner-only permissions verified"
     },
-    {
-      "name": "wp01-review-evidence.zip",
-      "bytes": 4680318,
-      "sha256": "789ea91c22885037fd034befb5dfa5bc4e1ee3a49c20e072d9112f5cc569d092",
-      "url": "https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/wp01-review-evidence.zip"
+    "interim-browser-review.mp4": {
+      "id": "1ThfTCDW_sZWo-NL0R1UEeIIMjEW-ec_p",
+      "url": "https://drive.google.com/file/d/1ThfTCDW_sZWo-NL0R1UEeIIMjEW-ec_p/view?usp=drivesdk",
+      "bytes": 1875925,
+      "sha256": "e3577393e902e8983fe0a650fa25a049840f564e85fe715af697bd1f5da4f295",
+      "metadataReadback": "size, MIME and owner-only permissions verified"
+    },
+    "golden-hour-desktop.jpg": {
+      "id": "1XFK9VxRO_M6SguJBX6olq4Du7gn916ED",
+      "url": "https://drive.google.com/file/d/1XFK9VxRO_M6SguJBX6olq4Du7gn916ED/view?usp=drivesdk",
+      "bytes": 211780,
+      "sha256": "922ae742ba3f52b311828cc4112139cbd02beb59f388d474d65bd6758c8b8649",
+      "metadataReadback": "size, MIME and owner-only permissions verified"
+    },
+    "hero-launcher-mobile.jpg": {
+      "id": "1-O1JwZQJ53iJ2-I8gMYPSbRzaW53X0Cm",
+      "url": "https://drive.google.com/file/d/1-O1JwZQJ53iJ2-I8gMYPSbRzaW53X0Cm/view?usp=drivesdk",
+      "bytes": 66251,
+      "sha256": "40a47bee59ebbe365f5620e3eb02714c55d89fd5360e882f0069df70baea4d04",
+      "metadataReadback": "size, MIME and owner-only permissions verified"
+    },
+    "preferences-narrow.jpg": {
+      "id": "1x1wOphSn74ftJJLDUsypj-XRo1TpXUA-",
+      "url": "https://drive.google.com/file/d/1x1wOphSn74ftJJLDUsypj-XRo1TpXUA-/view?usp=drivesdk",
+      "bytes": 48734,
+      "sha256": "954dd57a94b30b26d21726fbfb212b5728b258c5183135199888fc6bee23fec8",
+      "metadataReadback": "size, MIME and owner-only permissions verified"
+    },
+    "golden-editorial-mobile.jpg": {
+      "id": "16Abp8R0lULO2NeXUtrXxhQuuWs9KAtih",
+      "url": "https://drive.google.com/file/d/16Abp8R0lULO2NeXUtrXxhQuuWs9KAtih/view?usp=drivesdk",
+      "bytes": 54893,
+      "sha256": "7fa3dbe9bf79b0e5c145bb09e227340efd28a1382b63cf165016111245706b79",
+      "metadataReadback": "size, MIME and owner-only permissions verified"
+    },
+    "golden-reduced-desktop.jpg": {
+      "id": "1pamBfD-roZquxOHLBztnzpq6_r2AuWX9",
+      "url": "https://drive.google.com/file/d/1pamBfD-roZquxOHLBztnzpq6_r2AuWX9/view?usp=drivesdk",
+      "bytes": 212091,
+      "sha256": "733e0a724ad089a4b9c5d575c9099c3ccedc218b04737d6905c8967b76688539",
+      "metadataReadback": "size, MIME and owner-only permissions verified"
+    },
+    "evidence-manifest.json": {
+      "id": "1_VtCvmTm7wUpcKRcl8WKz9xldv7BVm0R",
+      "url": "https://drive.google.com/file/d/1_VtCvmTm7wUpcKRcl8WKz9xldv7BVm0R/view?usp=drivesdk",
+      "bytes": 12787,
+      "sha256": "f24c07e36d158e1795ef5de5d3a5729d934d97e72726b6ebb76b50cc0ad7dd06",
+      "metadataReadback": "size, MIME and owner-only permissions verified"
     }
-  ]
+  },
+  "archiveReadback": {
+    "downloadedBytes": 4793877,
+    "sha256": "072f5fa1a661778f35353e84e8540b3e7d1e220bcf131ba0c57b70179f477fcc",
+    "matchesLocal": true,
+    "zipCRCValid": true
+  },
+  "supersedes": "Earlier GitHub download URLs were not published because uploads.github.com returned HTTP401."
 }

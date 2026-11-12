@@ -1,3 +1,11 @@
+# Final remediation handoff · 2026-11-12 UTC
+
+WP-01 application/tests **3c74658**, capture3d9aa77: **42/42 ×3 full headed runs**, 3 focused headless, unit84+4PG skips, types/lint/build pass, isolated smoke17/17. Claude independent re-review pending. [Current handoff](HANDOFF.md) · [actual authenticated Drive evidence](https://drive.google.com/drive/folders/16JQ68qmLUxMpvWY5WGU8yPgPt4Ixp0-S) · [finding reconciliation](reviews/WP01_REMEDIATION.md). GitHub binary upload failed401; the Drive archive was downloaded and hash-verified. No public-release claim.
+
+Final cinematic assets remain BLOCKED. WP-02 review of414b627 is REQUEST CHANGES; later4a3bd65 awaits independent re-review/owner decisions. WP-04 is prepared only. No merge, production deployment or spending. Earlier snapshots below are historical.
+
+---
+
 # Current remediation/review update · 2026-11-12
 
 WP-01 engineering source `79173ba` addresses Claude's PR #2 conditions; [current handoff](HANDOFF.md) and [finding reconciliation/final check record](reviews/WP01_REMEDIATION.md). Claude's independent re-review is pending for the revised head. **Final moving-water/wake/sunset visual acceptance remains BLOCKED**; native QA patterns and the static concept are not production assets.

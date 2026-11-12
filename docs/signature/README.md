@@ -1,4 +1,4 @@
-> **Remediation update:** source `79173ba` supersedes the engineering findings below. See [the current reconciliation and final verification addendum](../reviews/WP01_REMEDIATION.md). Existing local gallery/video links remain historical snapshots at `a05d005`/`c64ace1`, preserved unchanged. New captures use versioned external review assets. Final cinematic media is still blocked.
+> **Remediation update:** source `3c74658` supersedes the engineering findings below. See [the current reconciliation and final verification addendum](../reviews/WP01_REMEDIATION.md). Existing local gallery/video links remain historical snapshots at `a05d005`/`c64ace1`, preserved unchanged. New captures use versioned external review assets. Final cinematic media is still blocked.
 
 # Signature environment — review status
 
@@ -40,6 +40,6 @@ Use `DISPLAY=:99 PLAYWRIGHT_HEADED=1 PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium 
 
 Final check counts and remaining limitations are recorded in [VERIFICATION.md](VERIFICATION.md). The design branch remains unmerged and undeployed. Later visual phases wait for flagship approval.
 
-## Remediation evidence (79173ba)
+## Remediation evidence (3c74658)
 
-[Settled six-viewport gallery, masks and 27.68-second actual recording](https://github.com/mrodriguez20020-tech/shoremigo/releases/tag/wp01-review-79173ba06c73). Application/tests 79173ba; capture tool 9872f1e waits for welcome exit. [Exact final checks/limitations](../reviews/WP01_REMEDIATION.md). Historical gallery above stays unchanged; missing matched cinematic footage remains blocked.
+[Settled six-viewport gallery, masks and 27.72-second actual recording](https://drive.google.com/drive/folders/16JQ68qmLUxMpvWY5WGU8yPgPt4Ixp0-S). Application/tests 3c74658; capture tool 3d9aa77 waits for welcome exit. [Exact final checks/limitations](../reviews/WP01_REMEDIATION.md). Historical gallery above stays unchanged; missing matched cinematic footage remains blocked.

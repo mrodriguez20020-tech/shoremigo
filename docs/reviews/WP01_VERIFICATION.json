@@ -1,16 +1,16 @@
 {
-  "source": "79173ba06c73b0743cd19f960e326fcdfd2e5741",
-  "environment": "Managed Linux, system Chromium, virtual Xorg :99. Three full headed runs use one OS. Two focused headless tip cases also passed on the final source; the earlier 39-case headless suite applies to ea170d0 before the tip guard. Claude separately reviewed the previous c64ace1 on Windows; this revision still needs independent re-review.",
+  "source": "3c7465866b20f65b401c215ae7eaf34e1fb25436",
+  "environment": "Managed Linux, system Chromium, virtual Xorg :99. Three full headed runs and three focused headless cases on the final source; not separate operating systems. Claude separately reviewed c64ace1 on Windows; revised source needs independent re-review.",
   "note": "Complete suites, serial, no retries. Headed/headless are Linux execution modes, not separate operating systems.",
   "runs": [
     {
       "name": "headed-1",
-      "started": "2026-11-12T05:38:38.523Z",
+      "started": "2026-11-12T06:09:10.118Z",
       "exitCode": 0,
       "stats": {
-        "startTime": "2026-11-12T05:38:39.814Z",
-        "duration": 178011.293,
-        "expected": 41,
+        "startTime": "2026-11-12T06:09:11.650Z",
+        "duration": 187227.643,
+        "expected": 42,
         "skipped": 0,
         "unexpected": 0,
         "flaky": 0
@@ -18,12 +18,12 @@
     },
     {
       "name": "headed-2",
-      "started": "2026-11-12T05:41:37.847Z",
+      "started": "2026-11-12T06:12:18.925Z",
       "exitCode": 0,
       "stats": {
-        "startTime": "2026-11-12T05:41:38.737Z",
-        "duration": 180862.377,
-        "expected": 41,
+        "startTime": "2026-11-12T06:12:20.397Z",
+        "duration": 180204.42099999997,
+        "expected": 42,
         "skipped": 0,
         "unexpected": 0,
         "flaky": 0
@@ -31,12 +31,12 @@
     },
     {
       "name": "headed-3",
-      "started": "2026-11-12T05:44:39.637Z",
+      "started": "2026-11-12T06:15:20.649Z",
       "exitCode": 0,
       "stats": {
-        "startTime": "2026-11-12T05:44:40.529Z",
-        "duration": 180125.804,
-        "expected": 41,
+        "startTime": "2026-11-12T06:15:21.458Z",
+        "duration": 186210.983,
+        "expected": 42,
         "skipped": 0,
         "unexpected": 0,
         "flaky": 0
@@ -48,37 +48,37 @@
       "run": "headed-1",
       "test": "one native film pair plays silently and swaps matched phases on scene changes",
       "type": "phase-error-ms",
-      "errorMs": 24.2
+      "errorMs": 22.499999999999964
     },
     {
       "run": "headed-1",
       "test": "delayed native seeks are rechecked before the sunset dissolve",
       "type": "delayed-seek-phase-error-ms",
-      "errorMs": 36.599999999999966
+      "errorMs": 22.699999999999942
     },
     {
       "run": "headed-2",
       "test": "one native film pair plays silently and swaps matched phases on scene changes",
       "type": "phase-error-ms",
-      "errorMs": 41.1999999999999
+      "errorMs": 38.899999999999935
     },
     {
       "run": "headed-2",
       "test": "delayed native seeks are rechecked before the sunset dissolve",
       "type": "delayed-seek-phase-error-ms",
-      "errorMs": 29.40000000000009
+      "errorMs": 38.39999999999999
     },
     {
       "run": "headed-3",
       "test": "one native film pair plays silently and swaps matched phases on scene changes",
       "type": "phase-error-ms",
-      "errorMs": 2.9000000000001247
+      "errorMs": 3.6000000000000476
     },
     {
       "run": "headed-3",
       "test": "delayed native seeks are rechecked before the sunset dissolve",
       "type": "delayed-seek-phase-error-ms",
-      "errorMs": 2.098999999999851
+      "errorMs": 8.69999999999993
     }
   ],
   "unit": {
@@ -98,6 +98,12 @@
   },
   "protectedBoundaryDiff": [],
   "visualAcceptance": "BLOCKED: no approved production model or matched wide/portrait film. Native test patterns are QA only.",
+  "captureToolCommit": "3d9aa772ae4875ebaf53b92f39107e4d2565a839",
+  "supplementalHeadless": {
+    "passed": 3,
+    "scope": "Existing tips at 820/1440 and reduced-motion disclosure clearance",
+    "source": "3c7465866b20f65b401c215ae7eaf34e1fb25436"
+  },
   "smoke": {
     "passed": 17,
     "total": 17,
@@ -106,27 +112,15 @@
     "gemini": "offline",
     "liveProviderCalls": "none"
   },
-  "supplementalHeadless": {
-    "source": "79173ba06c73b0743cd19f960e326fcdfd2e5741",
-    "passed": 2,
-    "scope": "Existing proactive tip after scroll/resize"
+  "mediaCheck": {
+    "exitCode": 2,
+    "productionMediaReady": false
   },
   "missingNativeToolsProbe": {
     "explicitlySkipped": 1,
     "playbackVerified": false
   },
-  "mediaCheck": {
-    "exitCode": 2,
-    "productionMediaReady": false
-  },
-  "intermediateRuns": {
-    "source": "ea170d0ef48d7845768aa11419c277ffa80b4b2c",
-    "headed": [
-      39,
-      39,
-      39
-    ],
-    "headless": 39,
-    "note": "Before the final existing-tip guard. Not counted as final source coverage."
-  }
+  "artifactAccess": "Connected Drive, owner-only sharing preserved; GitHub binary upload returned HTTP401.",
+  "protectedReviewedHead": "3c7465866b20f65b401c215ae7eaf34e1fb25436",
+  "protectedBase": "000a837adfa8bf3ed39f05be61e09a4bc3f6df3e"
 }
