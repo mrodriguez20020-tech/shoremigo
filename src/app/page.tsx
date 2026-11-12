@@ -30,7 +30,7 @@ export default function Home() {
         <div className="hero-shade absolute inset-0" />
         <div className="relative mx-auto grid w-full max-w-[1400px] grid-cols-[minmax(0,1fr)] items-end gap-12 xl:grid-cols-[1.05fr_0.95fr]">
           <div className="min-w-0">
-            <div data-migo-tip-avoid><HeroCopy /></div>
+            <div data-migo-avoid data-migo-tip-avoid><HeroCopy /></div>
             <Reveal delay={0.3}>
               <HeroActions />
             </Reveal>
