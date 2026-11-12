@@ -77,7 +77,7 @@ async function enter(page: Page) {
     );
   });
 }
-async function useFixture(page: Page, broken = false) {
+async function routeFixture(page: Page, broken = false) {
   await page.route("**/cinematic/film/manifest.json", (route) =>
     route.fulfill({ json: film }),
   );
@@ -134,7 +134,7 @@ test("one native film pair plays silently and swaps matched phases on scene chan
   page,
 }) => {
   await enter(page);
-  await useFixture(page);
+  await routeFixture(page);
   await page.goto("/");
   const backdrop = page.locator("[data-cinematic-backdrop]");
   await expect(backdrop).toHaveAttribute("data-media-state", "playing");
@@ -199,7 +199,7 @@ test("reduced motion never requests video bytes and keeps controls usable", asyn
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await enter(page);
-  await useFixture(page);
+  await routeFixture(page);
   const requests: string[] = [];
   page.on("request", (request) => {
     if (request.url().endsWith(".mp4")) requests.push(request.url());
@@ -220,7 +220,7 @@ test("a broken film fails to the still without blocking navigation", async ({
   page,
 }) => {
   await enter(page);
-  await useFixture(page, true);
+  await routeFixture(page, true);
   await page.route(/\/cinematic\/film\/(day|sunset)\.webp$/, (route) => route.fulfill({ status: 404, body: "Missing poster" }));
   await page.goto("/");
   await expect(page.locator("[data-cinematic-backdrop]")).toHaveAttribute(
@@ -239,7 +239,7 @@ test("rapid reversals cannot leave an obsolete lighting target or an audible fil
   page,
 }) => {
   await enter(page);
-  await useFixture(page);
+  await routeFixture(page);
   await page.goto("/");
   await expect(page.locator("[data-cinematic-backdrop]")).toHaveAttribute(
     "data-media-state",
@@ -286,7 +286,7 @@ test("Save-Data avoids movie transfer entirely", async ({ page }) => {
     Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true } });
   });
   await enter(page);
-  await useFixture(page);
+  await routeFixture(page);
   const movies: string[] = [];
   page.on("request", (request) => { if (request.url().endsWith(".mp4")) movies.push(request.url()); });
   await page.goto("/");
@@ -300,7 +300,7 @@ test("autoplay refusal leaves a usable poster instead of a blocked entrance", as
     HTMLMediaElement.prototype.play = () => Promise.reject(new DOMException("Browser policy", "NotAllowedError"));
   });
   await enter(page);
-  await useFixture(page);
+  await routeFixture(page);
   await page.goto("/");
   await expect(page.locator("[data-cinematic-backdrop]")).toHaveAttribute("data-media-state", "autoplay-blocked");
   await expect(page.locator(".cinematic-poster")).toBeVisible();
@@ -327,7 +327,7 @@ test("delayed native seeks are rechecked before the sunset dissolve", async ({ p
     });
   });
   await enter(page);
-  await useFixture(page);
+  await routeFixture(page);
   await page.goto("/");
   const backdrop = page.locator("[data-cinematic-backdrop]");
   await expect(backdrop).toHaveAttribute("data-media-state", "playing");
@@ -352,7 +352,7 @@ test("delayed native seeks are rechecked before the sunset dissolve", async ({ p
 
 test("offscreen and hidden pauses retain the decoded frame", async ({ page }) => {
   await enter(page);
-  await useFixture(page);
+  await routeFixture(page);
   await page.goto("/");
   const backdrop = page.locator("[data-cinematic-backdrop]");
   const day = page.locator('video[data-light="day"]');
@@ -388,7 +388,7 @@ test("autoplay retries once in a real keyboard gesture", async ({ page }) => {
     };
   });
   await enter(page);
-  await useFixture(page);
+  await routeFixture(page);
   await page.goto("/");
   const backdrop = page.locator("[data-cinematic-backdrop]");
   await expect(backdrop).toHaveAttribute("data-media-state", "autoplay-blocked");
@@ -400,7 +400,7 @@ test("autoplay retries once in a real keyboard gesture", async ({ page }) => {
 test("portrait tablets select the purpose-framed pair", async ({ page }) => {
   await page.setViewportSize({ width: 820, height: 1180 });
   await enter(page);
-  await useFixture(page);
+  await routeFixture(page);
   await page.route("**/cinematic/film/manifest.json", route => route.fulfill({ json: {
     ...film, mobile: { ...film.desktop,
       day: { mp4: "/cinematic/film/portrait-day.mp4", poster: "/cinematic/film/portrait-day.webp" },
@@ -410,4 +410,64 @@ test("portrait tablets select the purpose-framed pair", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("[data-cinematic-backdrop]")).toHaveAttribute("data-media-state", "playing");
   await expect(page.locator('video[data-light="day"]')).toHaveAttribute("src", /portrait-day\.mp4$/);
+});
+
+/** Fault injection keeps native decoding/playback but reports a non-convergent target clock until released. */
+async function injectDecoderJitter(page:Page){
+ await page.addInitScript(()=>{
+  const clock=Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype,'currentTime')!;
+  const probe={enabled:false,blocks:0,handoffs:[] as number[]};
+  (window as unknown as {decoderProbe:typeof probe}).decoderProbe=probe;
+  Object.defineProperty(HTMLMediaElement.prototype,'currentTime',{configurable:true,set:clock.set,get(){
+    if((this as HTMLVideoElement).dataset.light==='sunset'&&probe.enabled){const day=document.querySelector<HTMLVideoElement>('video[data-light="day"]');if(day)return (clock.get!.call(day)+.4)%6;}
+    return clock.get!.call(this);
+  }});
+  const observe=()=>{
+   const backdrop=document.querySelector('[data-cinematic-backdrop]');if(!backdrop)return;
+   new MutationObserver(()=>{
+    if(backdrop.hasAttribute('data-alignment-blocks'))probe.blocks=Number(backdrop.getAttribute('data-alignment-blocks'));else if(backdrop.getAttribute('data-media-state')==='alignment-blocked')probe.blocks++;
+    if(backdrop.getAttribute('data-media-state')==='transitioning'&&backdrop.getAttribute('data-light')==='sunset'){
+     const [a,b]=Array.from(document.querySelectorAll('video'));const d=Math.abs(clock.get!.call(a)-clock.get!.call(b))%6;probe.handoffs.push(Math.min(d,6-d));
+    }
+   }).observe(backdrop,{attributes:true,attributeFilter:['data-media-state','data-alignment-blocks']});
+  };
+  new MutationObserver((_,observer)=>{if(document.querySelector('[data-cinematic-backdrop]')){observe();observer.disconnect();}}).observe(document,{childList:true,subtree:true});
+ });
+}
+const decoderProbe=(page:Page)=>page.evaluate(()=>(window as unknown as {decoderProbe:{enabled:boolean;blocks:number;handoffs:number[]}}).decoderProbe);
+async function jitterStart(page:Page){
+ await injectDecoderJitter(page);await enter(page);await routeFixture(page);await page.goto('/');
+ await expect(page.locator('[data-cinematic-backdrop]')).toHaveAttribute('data-media-state','playing');
+ await page.evaluate(()=>(window as unknown as {decoderProbe:{enabled:boolean}}).decoderProbe.enabled=true);
+ await page.locator('.golden-window').evaluate(el=>window.scrollTo({top:scrollY+el.getBoundingClientRect().top,behavior:'instant'}));
+ await expect.poll(async()=>(await decoderProbe(page)).blocks,{timeout:6000}).toBeGreaterThan(0);
+}
+test('decoder jitter automatically recovers after an alignment block without dissolving the wrong phase',async({page})=>{
+ await jitterStart(page);const backdrop=page.locator('[data-cinematic-backdrop]');
+ await expect(backdrop).toHaveAttribute('data-light','day');expect((await decoderProbe(page)).handoffs).toHaveLength(0);
+ await page.evaluate(()=>(window as unknown as {decoderProbe:{enabled:boolean}}).decoderProbe.enabled=false);
+ // No scroll, canplay dispatch or dependency change: the controller must recover on its own.
+ await expect(backdrop).toHaveAttribute('data-light','sunset',{timeout:10000});await expect(backdrop).toHaveAttribute('data-media-state','playing');
+ const probe=await decoderProbe(page);expect(probe.handoffs.length).toBeGreaterThan(0);expect(probe.handoffs.every(d=>d<=1/24)).toBe(true);
+ test.info().annotations.push({type:'alignment-block-count',description:String(probe.blocks)});
+});
+test('persistent decoder jitter has a bounded retry budget and preserves the outgoing film and truthful copy',async({page})=>{
+ await jitterStart(page);const backdrop=page.locator('[data-cinematic-backdrop]');
+ await expect(backdrop).toHaveAttribute('data-alignment-exhausted','true',{timeout:15000});
+ const before=await decoderProbe(page);expect(before.blocks).toBe(4);expect(before.handoffs).toHaveLength(0);
+ await page.waitForTimeout(1200);expect((await decoderProbe(page)).blocks).toBe(before.blocks);
+ await expect(backdrop).toHaveAttribute('data-light','day');await expect(page.locator('[data-golden-copy]')).toHaveAttribute('data-golden-copy','interim');
+ expect(await page.locator('video[data-light="sunset"]').evaluate((v:HTMLVideoElement)=>v.paused&&v.playbackRate===1)).toBe(true);
+ await expect(page.locator('.cinematic-film.is-visible')).toHaveAttribute('data-light','day');
+ test.info().annotations.push({type:'alignment-block-count',description:String(before.blocks)});
+});
+test('rapid reversal cancels a pending alignment retry and a fresh intent can recover',async({page})=>{
+ await jitterStart(page);const backdrop=page.locator('[data-cinematic-backdrop]');
+ await page.locator('.luxury-hero').evaluate(el=>window.scrollTo({top:scrollY+el.getBoundingClientRect().top,behavior:'instant'}));
+ await expect(backdrop).toHaveAttribute('data-cinematic-scene','day');await expect(backdrop).toHaveAttribute('data-media-state','playing');
+ await page.waitForTimeout(1300);await expect(backdrop).toHaveAttribute('data-light','day');expect((await decoderProbe(page)).handoffs).toHaveLength(0);
+ await page.evaluate(()=>(window as unknown as {decoderProbe:{enabled:boolean}}).decoderProbe.enabled=false);
+ await page.locator('.golden-window').evaluate(el=>window.scrollTo({top:scrollY+el.getBoundingClientRect().top,behavior:'instant'}));
+ await expect(backdrop).toHaveAttribute('data-light','sunset',{timeout:10000});await expect(backdrop).toHaveAttribute('data-media-state','playing');
+ expect(await page.locator('video').evaluateAll(els=>els.every(v=>(v as HTMLVideoElement).playbackRate===1&&(v as HTMLVideoElement).muted))).toBe(true);
 });
