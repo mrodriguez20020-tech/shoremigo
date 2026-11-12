@@ -57,7 +57,7 @@ export async function clearTripSession() {
 /** Operator access: if OPERATOR_PASSCODE is set, require header/cookie match. */
 export async function isOperator(req?: Request): Promise<boolean> {
   const code = process.env.OPERATOR_PASSCODE;
-  if (!code) return true; // demo mode — UI shows an "unprotected demo" banner
+  if (!code) return !process.env.VERCEL && process.env.NODE_ENV !== "production"; // Only local development may use unprotected demo mode.
   const header = req?.headers.get("x-operator-passcode");
   const cookie = (await cookies()).get("sm_op")?.value;
   return header === code || cookie === createHmac("sha256", secret()).update(code).digest("base64url");

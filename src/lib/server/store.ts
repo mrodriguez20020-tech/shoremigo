@@ -66,6 +66,10 @@ async function persist(db: DbShape) {
 type Sql = import("postgres").Sql;
 let pg: Promise<Sql> | null = null;
 
+// Hosted preview demos use a separate document/row lock. Production retains the historical row1.
+// No schema migration or booking/payment behavior change is needed for this environment boundary.
+const STATE_ID = process.env.VERCEL_ENV === "preview" ? 2 : 1;
+
 function postgresEnabled() {
   return Boolean(process.env.DATABASE_URL);
 }
@@ -78,7 +82,7 @@ function sqlClient(): Promise<Sql> {
     // prepare:false keeps it compatible with transaction-mode poolers (Supabase :6543).
     const sql = postgres(url, { prepare: false, max: 1, idle_timeout: 20, ssl: local ? false : "require" });
     await sql`create table if not exists shoremigo_state (id int primary key, doc jsonb not null, updated_at timestamptz not null default now())`;
-    await sql`insert into shoremigo_state (id, doc) values (1, ${sql.json(empty() as never)}) on conflict (id) do nothing`;
+    await sql`insert into shoremigo_state (id, doc) values (${STATE_ID}, ${sql.json(empty() as never)}) on conflict (id) do nothing`;
     return sql;
   })();
   pg.catch(() => (pg = null));
@@ -88,17 +92,17 @@ function sqlClient(): Promise<Sql> {
 async function pgTx<T>(fn: (db: DbShape) => T | Promise<T>): Promise<T> {
   const sql = await sqlClient();
   return sql.begin(async (t) => {
-    const [row] = await t`select doc from shoremigo_state where id = 1 for update`;
+    const [row] = await t`select doc from shoremigo_state where id = ${STATE_ID} for update`;
     const db: DbShape = { ...empty(), ...((row?.doc as Partial<DbShape>) ?? {}) };
     const out = await fn(db);
-    await t`update shoremigo_state set doc = ${t.json(db as never)}, updated_at = now() where id = 1`;
+    await t`update shoremigo_state set doc = ${t.json(db as never)}, updated_at = now() where id = ${STATE_ID}`;
     return out;
   }) as Promise<T>;
 }
 
 async function pgRead<T>(fn: (db: DbShape) => T): Promise<T> {
   const sql = await sqlClient();
-  const [row] = await sql`select doc from shoremigo_state where id = 1`;
+  const [row] = await sql`select doc from shoremigo_state where id = ${STATE_ID}`;
   return fn({ ...empty(), ...((row?.doc as Partial<DbShape>) ?? {}) });
 }
 
