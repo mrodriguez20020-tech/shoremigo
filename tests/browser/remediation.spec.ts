@@ -38,6 +38,20 @@ for (const width of [820, 1440]) {
   });
 }
 
+test("reduced motion keeps a static companion clear of the disclosure", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await returning(page);
+  await page.locator(".golden-window").evaluate(el => window.scrollTo({ top: scrollY + el.getBoundingClientRect().top, behavior: "instant" }));
+  const stage = page.locator("[data-migo-stage]");
+  await expect(stage).not.toHaveAttribute("data-expression", "walking");
+  await expect.poll(() => page.evaluate(() => {
+    const a = document.querySelector("[data-migo-stage]")!.getBoundingClientRect();
+    const b = document.querySelector(".golden-disclosure")!.getBoundingClientRect();
+    return a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom;
+  })).toBe(true);
+});
+
 for (const width of [320, 390, 820]) {
   test(`${width}px: initial placement and launcher protect hero content as it scrolls`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });

@@ -437,7 +437,7 @@ export function MigoStage() {
   }, [bubble]);
 
   // Where Migo stands for each mode.
-  let targetX = mobile ? vw - size - 10 : reducedMotion ? 16 : x;
+  let targetX = mobile ? vw - size - 10 : x;
   let bottom = mobile ? mobileBottom : 10;
   let scale = 1;
   if (state.mode === "attend") {
