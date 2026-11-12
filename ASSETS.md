@@ -1,6 +1,10 @@
 # Asset & third-party licensing
 
-The **source code** is MIT-licensed (see `LICENSE`). Non-code assets are listed here with their basis for use. Nothing in this repo is a stock photograph or a commercial music track.
+The **source code** is MIT-licensed (see `LICENSE`). The root license contains the standard MIT text for automated recognition; non-code asset exclusions and terms remain in this document. Moving the notice does not grant new rights in artwork.
+
+**Migo artwork exclusion (preserved from the former LICENSE appendix):** The Migo character artwork in `public/migo/` is owned by the ShoreMigo team, is NOT licensed under MIT, and may not be reused without permission. Other assets retain the individual terms below.
+
+ Non-code assets are listed here with their basis for use. Nothing in this repo is a stock photograph or a commercial music track.
 
 | Asset | Location | Source | License / basis | Status |
 |---|---|---|---|---|
