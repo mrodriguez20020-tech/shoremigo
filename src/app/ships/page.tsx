@@ -28,10 +28,10 @@ export default function ShipsPage() {
               fictional ship shows how ShoreMigo connects your vessel to your port days.
             </p>
           </Reveal>
-          <p className="absolute bottom-5 right-6 max-w-sm text-right text-[10px] tracking-wider text-white/70">Aurora Tide approved concept still (original, fictional vessel). The explorer below uses its provisional design-control model.</p>
+          <p data-migo-avoid className="absolute bottom-5 right-6 max-w-sm text-right text-[10px] tracking-wider text-white/70">Aurora Tide approved concept still (original, fictional vessel). The explorer below uses its provisional design-control model.</p>
         </div>
       </section>
-      <section className="px-5 pb-24 sm:px-10">
+      <section className="bg-[#081e27] px-5 pb-24 sm:px-10">
         <div className="mx-auto max-w-[1400px]">
           <div>
             <ShipExplorer />

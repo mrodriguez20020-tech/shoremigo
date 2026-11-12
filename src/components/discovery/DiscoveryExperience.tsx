@@ -241,7 +241,7 @@ export function DiscoveryExperience({ id }: { id: "reef" | "canopy" }) {
           <p data-migo-avoid className="absolute bottom-3 left-6 right-6 max-w-lg text-[10px] text-white/80 sm:left-12">{cfg.disclosure}</p>
         </div>
       </section>
-      <section className="px-5 py-16 sm:px-10">
+      <section className="bg-[#081e27] px-5 py-16 sm:px-10">
         <div className="mx-auto max-w-[1100px]">
           <h2 className="font-display text-3xl">Everything in this scene</h2>
           {cfg.note && <p className="mt-2 text-sm text-ink-soft">{cfg.note}</p>}
