@@ -94,3 +94,12 @@ test('mobile hero copy and primary actions remain clear of the companion',async(
  }).toBe(true);
  await page.getByRole('button',{name:'Explore tours',exact:true}).click();await expect(page).toHaveURL(/\/excursions/);
 });
+
+test('keyboard placement intent survives a temporary protected layout zone',async({page})=>{
+ await page.setViewportSize({width:1440,height:1000});await page.emulateMedia({reducedMotion:'reduce'});await returning(page);
+ await page.evaluate(()=>{const el=document.createElement('div');el.id='temporary-layout-zone';el.dataset.migoAvoid='';Object.assign(el.style,{position:'fixed',left:'0',top:'0',bottom:'0',width:'400px'});document.body.append(el);});
+ const stage=page.locator('[data-migo-stage]');const button=page.getByRole('button',{name:'Open Migo, your AI concierge',exact:true});await button.focus();await page.keyboard.press('Home');
+ await expect.poll(async()=>(await stage.boundingBox())!.x).toBeGreaterThanOrEqual(412);
+ await page.locator('#temporary-layout-zone').evaluate(el=>el.remove());
+ await expect.poll(async()=>(await stage.boundingBox())!.x).toBe(16);
+});

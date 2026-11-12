@@ -162,13 +162,16 @@ export function DiscoveryExperience({ id }: { id: "reef" | "canopy" }) {
   }, [open, close]);
 
   const arrived = p > 0.82;
-  const choose = (poi: DiscoveryPoi, button: HTMLButtonElement) => {
-    opener.current = button;
-    // Native focus on a sticky descendant can scroll its ancestor backwards. Complete the
-    // already-entered scene before opening details, so Escape cannot remove its controls.
+  // Focus can scroll a sticky descendant before its click is dispatched. Stabilize at
+  // focus/pointer-down time, while the entered hotspot is still an active target.
+  const completeEntry = () => {
     const el = section.current;
     if (el && !reduced) window.scrollTo({ top: el.offsetTop + el.offsetHeight - innerHeight, behavior: "instant" });
     setP(1);
+  };
+  const choose = (poi: DiscoveryPoi, button: HTMLButtonElement) => {
+    opener.current = button;
+    completeEntry();
     setOpen(poi);
     const ex = excursionsFor(poi)[0];
     if (!told.current.has(poi.id)) {
@@ -203,7 +206,7 @@ export function DiscoveryExperience({ id }: { id: "reef" | "canopy" }) {
           {cfg.pois.map((poi) => {
             const dim = filter && !poi.tags.includes(filter);
             return (
-              <button key={poi.id} onClick={(event) => choose(poi, event.currentTarget)} data-migo-avoid aria-label={`${poi.name}: ${poi.fact}`} aria-expanded={open?.id === poi.id}
+              <button key={poi.id} onFocus={completeEntry} onPointerDown={completeEntry} onClick={(event) => choose(poi, event.currentTarget)} data-migo-avoid aria-label={`${poi.name}: ${poi.fact}`} aria-expanded={open?.id === poi.id}
                 className="discovery-hotspot absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition"
                 style={{ left: `${poi.x}%`, "--discovery-poi-top": `${poi.y}%`, opacity: arrived ? (dim ? 0.25 : 1) : 0, pointerEvents: arrived ? "auto" : "none" } as CSSProperties} tabIndex={arrived ? 0 : -1}>
                 <span className="relative flex h-11 w-11 items-center justify-center">

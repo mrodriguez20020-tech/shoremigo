@@ -73,6 +73,8 @@ export function MigoStage() {
   const seen = useRef(new Set<string>());
   const dir = useRef<1 | -1>(1);
   const xRef = useRef(24);
+  // Preserve deliberate keyboard/drag intent across temporary reveal/font geometry.
+  const requestedX = useRef<number | null>(null);
   // Drag-and-release (desktop, roaming only) and the hop between lane and chat.
   const [dragging, setDragging] = useState(false);
   const [hopping, setHopping] = useState(false);
@@ -161,13 +163,14 @@ export function MigoStage() {
   useLayoutEffect(() => {
     if (!placed || mobile || state.mode !== "roam" || dragging || hopping) return;
     const place = () => {
-      const next = safeSnap(xRef.current);
+      const next = safeSnap(requestedX.current ?? xRef.current);
       if(stageRef.current)stageRef.current.dataset.avoidanceScans=String(zones.scans);
       if(next!==xRef.current){xRef.current=next;setX(next);}
     };
     place();return zones.subscribe(place);
   },[placed,mobile,state.mode,dragging,hopping,safeSnap,setX,zones]);
   const moveTo = (px: number) => {
+    requestedX.current = px;
     const nx = safeSnap(px);
     turnTo(nx < xRef.current ? -1 : 1);
     xRef.current = nx;
@@ -224,6 +227,7 @@ export function MigoStage() {
     let raf = 0;
     let previous = performance.now();
     let elapsed = 0;
+    requestedX.current = null;
     const origin = xRef.current;
     const direction = dir.current;
     const firstFoot = nextFoot.current;
@@ -348,7 +352,7 @@ export function MigoStage() {
     [prefs.proactive, state.mode, setX, zones],
   );
   useEffect(() => {
-    if (state.mode !== "roam") setBubble(null);
+    if (state.mode !== "roam") { setBubble(null); requestedX.current = null; }
   }, [state.mode]);
   // A revealed tip is invalidated by the same batched geometry source.
   useLayoutEffect(()=>{
@@ -545,6 +549,7 @@ export function MigoStage() {
             onPointerMove={(e) => {
               const d = dragRef.current;
               if (!d) return;
+              requestedX.current = null;
               const dx = e.clientX - d.startClient;
               if (!d.moved && Math.abs(dx) < 6) return;
               if (!d.moved) {
