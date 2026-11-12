@@ -85,7 +85,13 @@ These externally hosted Wikimedia Commons files supplement the interactive illus
 |---|---|---|
 | Sea turtle above reef, Abaco Islands, Bahamas | [Sea Turtle over Coral Reef in the Abacos, Bahamas.jpg](https://commons.wikimedia.org/wiki/File:Sea_Turtle_over_Coral_Reef_in_the_Abacos,_Bahamas.jpg), Elh733 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | Dunn’s River Falls, Jamaica | [Dunn's River Falls.jpg](https://commons.wikimedia.org/wiki/File:Dunn%27s_River_Falls.jpg), Thank You (23 Millions+) views | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
-| Cozumel sea footage | [K’áanab Cozumel.webm](https://commons.wikimedia.org/wiki/File:K%E2%80%99%C3%A1anab_Cozumel.webm), Jorge F. Victoria Puerto | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Roatán underwater footage | [Underwater Videos.webm](https://commons.wikimedia.org/wiki/File:Underwater_Videos.webm), Rob Bixby | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
 | Leafcutter ants, Asa Wright Nature Centre, Trinidad and Tobago | [Leafcutter ants on the move.webm](https://commons.wikimedia.org/wiki/File:Leafcutter_ants_on_the_move.webm), Ketzirah Lesser & Art Drauglis | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) |
 
 External delivery is a preview limitation; source availability and native playback must be verified in the deployed browser before release. For production, prefer optimized local derivatives with source hashes and retained licenses. The existing food photos, ship and cabin concepts, and Migo artwork remain unchanged.
+
+### Expanded editorial library
+
+- All 12 excursion IDs are mapped to source photographs in [ExcursionPhoto.tsx](src/components/excursion/ExcursionPhoto.tsx). Each visible card names the actual photographic location, author and license; tour detail pages link to the original file and license. The Belize Garifuna drummers, Costa Rica sloth, Abaco reef turtle and Negril catamaran are explicitly not depicted as the fictional tour or its destination.
+- Nine additional culinary photographs are registered in [editorial-photos.ts](src/lib/culinary/editorial-photos.ts). The preexisting three optimized local culinary sets and hashes are unchanged. New credits appear on cards, in expanded dialogs and on the Taste page. Photographs illustrate dish subjects, not fictional sample-menu servings.
+- New editorial images are remotely loaded Wikimedia originals or thumbnails, responsively cropped. Original vector artwork remains an explicitly labeled fallback. Each media license is separate from MIT. Browser availability, responsive rendering and all regression tests must be verified before release. No new AI artwork, stock redistribution or paid service.
