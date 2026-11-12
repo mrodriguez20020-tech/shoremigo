@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import fs from "node:fs";
 import { build } from "../scripts/export-vessel-data.mjs";
 import { VESSEL_DATA } from "../src/lib/domain/vessel.generated";
+import { SHIP_VENUES } from "../src/lib/domain/dining";
 import { CABIN_CATEGORIES, DECKS, DEMO_CABIN, DEMO_SHIP, SLOTS, AMENITIES, FUTURE_CONCEPTS } from "../src/lib/domain/ship";
 
 describe("generated vessel adapter (WP-02 canonical spec)", () => {
@@ -31,5 +32,12 @@ describe("generated vessel adapter (WP-02 canonical spec)", () => {
     expect(FUTURE_CONCEPTS.map((f) => f.name)).toEqual(["Tidekeeper Suite"]);
     const text = JSON.stringify({ CABIN_CATEGORIES, AMENITIES, DECKS });
     expect(text).not.toMatch(/Interior Stateroom|Theatre|splash|9214/i);
+  });
+  it("places every onboard dining venue on the deck the canonical amenity map gives it", () => {
+    for (const venue of SHIP_VENUES) {
+      const amenity = AMENITIES.find((a) => a.name.includes(venue.name.split(" ")[0]) || a.name.includes(venue.name));
+      expect(amenity, venue.name).toBeTruthy();
+      expect(venue.where, venue.name).toContain(`Deck ${amenity!.deck} `);
+    }
   });
 });

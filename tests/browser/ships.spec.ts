@@ -61,6 +61,11 @@ test("rooms show only the approved categories; Tidekeeper Suite is future-only",
   await expect(panel).not.toContainText(/Interior Stateroom|9214/);
   await tab(page, "Amenities").click();
   await expect(page.getByRole("tabpanel")).not.toContainText(/Tidewater Theatre|Kids' splash zone \(|Deck 11/);
+  await tab(page, "Dining").click();
+  await page.getByRole("button", { name: "Sea Glass Grill" }).click();
+  await expect(page.locator(".ship-explorer")).toContainText("Deck 7 aft pool terrace");
+  await page.getByRole("button", { name: "Nightwatch Patisserie" }).click();
+  await expect(page.locator(".ship-explorer")).toContainText("Deck 5 promenade");
 });
 
 test("Cabin 7214: viewpoints, zones, lighting and keyboard all drive one spatial view", async ({ page }) => {
