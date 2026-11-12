@@ -49,6 +49,7 @@ export function MigoStage() {
   const [frame, setFrame] = useState<0 | 1>(0);
   const [strolling, setStrolling] = useState(true);
   const [bubble, setBubble] = useState<Suggestion | null>(null);
+  const bubbleRef = useRef<HTMLDivElement>(null);
   const seen = useRef(new Set<string>());
   const dir = useRef<1 | -1>(1);
   const xRef = useRef(24);
@@ -365,9 +366,11 @@ export function MigoStage() {
           ...document.querySelectorAll<HTMLElement>("[data-migo-avoid], [data-migo-tip-avoid]"),
         ].map((el) => el.getBoundingClientRect());
         const blocked = (x: number) => {
+          const width = Math.min(300, w - 32);
+          const tipLeft = Math.max(16, Math.min(x, w - width - 16));
           const box = {
-            l: x,
-            r: x + Math.max(sz, Math.min(316, w - 32)),
+            l: Math.min(x, tipLeft),
+            r: Math.max(x + sz, tipLeft + width),
             t: h - sz - 190,
             b: h,
           };
@@ -399,6 +402,34 @@ export function MigoStage() {
   useEffect(() => {
     if (state.mode !== "roam") setBubble(null);
   }, [state.mode]);
+  // A safe tip can become unsafe as the visitor scrolls, resizes or reveals copy.
+  // Hide it immediately rather than letting its exit animation cover a control/subject.
+  useLayoutEffect(() => {
+    if (!bubble) return;
+    let raf = 0;
+    let until = performance.now() + 1200;
+    const check = (now = performance.now()) => {
+      const tip = bubbleRef.current;
+      if (!tip) return;
+      const box = tip.getBoundingClientRect();
+      const unsafe = Array.from(document.querySelectorAll<HTMLElement>("[data-migo-avoid], [data-migo-tip-avoid]")).some(element => {
+        const zone = element.getBoundingClientRect();
+        return zone.width > 0 && zone.height > 0 && zone.left < box.right + 12 && zone.right > box.left - 12 && zone.top < box.bottom + 12 && zone.bottom > box.top - 12;
+      });
+      if (unsafe) {
+        tip.style.visibility = "hidden";
+        tip.inert = true;
+        setBubble(null);
+        return;
+      }
+      if (now < until) raf = requestAnimationFrame(check);
+    };
+    const schedule = () => { until = performance.now() + 1200; cancelAnimationFrame(raf); raf = requestAnimationFrame(check); };
+    check();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", schedule); window.removeEventListener("resize", schedule); };
+  }, [bubble]);
   useEffect(() => {
     if (!bubble) return;
     const t = setTimeout(() => setBubble(null), 12000);
@@ -490,6 +521,8 @@ export function MigoStage() {
         <AnimatePresence>
           {bubble && state.mode === "roam" && (
             <motion.div
+              key={bubble.key}
+              ref={bubbleRef}
               role="status"
               aria-live="polite"
               initial={{ opacity: 0, y: 8, scale: 0.96 }}

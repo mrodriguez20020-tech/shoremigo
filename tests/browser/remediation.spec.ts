@@ -1,10 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
 
-async function returning(page: Page) {
-  await page.addInitScript(() => {
+async function returning(page: Page, proactive = false) {
+  await page.addInitScript((proactive) => {
     sessionStorage.setItem("sm.intro", "1");
     sessionStorage.setItem("sm_prefs", JSON.stringify({ lang: "en", country: null, remember: false, welcomed: true }));
-    localStorage.setItem("sm.migo.v1", JSON.stringify({ prefs: { proactive: false, motionPaused: false }, hidden: false }));
+    localStorage.setItem("sm.migo.v1", JSON.stringify({ prefs: { proactive, motionPaused: false }, hidden: false }));
     const sample = () => {
       const stage = document.querySelector<HTMLElement>("[data-migo-stage]");
       if (!stage || getComputedStyle(stage).visibility === "hidden") { requestAnimationFrame(sample); return; }
@@ -12,9 +12,30 @@ async function returning(page: Page) {
       (window as unknown as { firstVisibleMigo: { x: number; width: number; ready: string | undefined } }).firstVisibleMigo = { x: r.x, width: r.width, ready: stage.dataset.placementReady };
     };
     requestAnimationFrame(sample);
-  });
+  }, proactive);
   await page.goto("/");
   await expect(page.locator("[data-migo-stage]")).toHaveAttribute("data-placement-ready", "true");
+}
+
+for (const width of [820, 1440]) {
+  test(`${width}px: an existing suggestion cannot cover the golden subject or disclosure after scrolling`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await returning(page, true);
+    const bubble = page.locator('[data-migo-stage] [role="status"]');
+    await expect(bubble).toBeVisible();
+    await page.setViewportSize({ width, height: 1000 });
+    await page.locator(".golden-window").evaluate(el => window.scrollTo({ top: scrollY + el.getBoundingClientRect().top, behavior: "instant" }));
+    await expect.poll(() => page.evaluate(() => {
+      const tip = document.querySelector('[data-migo-stage] [role="status"]');
+      if (!tip) return true;
+      if (getComputedStyle(tip).visibility === "hidden") return true;
+      const a = tip.getBoundingClientRect();
+      return ["[data-cinematic-subject-safe]", ".golden-disclosure", ".golden-copy", ".golden-excursion"].every(selector => {
+        const b = document.querySelector(selector)!.getBoundingClientRect();
+        return a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom;
+      });
+    })).toBe(true);
+  });
 }
 
 for (const width of [320, 390, 820]) {
