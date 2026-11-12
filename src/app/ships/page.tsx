@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { SceneRoute } from "@/components/scene/SceneProvider";
 import { ShipExplorer } from "@/components/ship/ShipExplorer";
 import { TideLink } from "@/components/transition/TideTransition";
@@ -11,7 +12,10 @@ export default function ShipsPage() {
   return (
     <>
       <SceneRoute scene="shade" />
-      <section className="px-5 pb-24 pt-32 sm:px-10">
+      <section className="relative isolate min-h-[78svh] overflow-hidden px-5 pb-16 pt-32 sm:px-10" data-ships-hero>
+        <Image src="/cinematic/signature-still.webp" alt="" fill priority sizes="100vw" className="-z-10 object-cover object-[70%_center]" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#081e27]/90 via-[#081e27]/55 to-[#081e27]/10" />
+        <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-[#081e27]" />
         <div className="mx-auto max-w-[1400px]">
           <Reveal>
             <p className="eyebrow flex flex-wrap items-center gap-3">
@@ -24,7 +28,12 @@ export default function ShipsPage() {
               fictional ship shows how ShoreMigo connects your vessel to your port days.
             </p>
           </Reveal>
-          <div className="mt-10">
+          <p className="absolute bottom-5 right-6 max-w-sm text-right text-[10px] tracking-wider text-white/70">Aurora Tide approved concept still (original, fictional vessel). The explorer below uses its provisional design-control model.</p>
+        </div>
+      </section>
+      <section className="px-5 pb-24 sm:px-10">
+        <div className="mx-auto max-w-[1400px]">
+          <div>
             <ShipExplorer />
           </div>
           <Reveal className="mt-14">
