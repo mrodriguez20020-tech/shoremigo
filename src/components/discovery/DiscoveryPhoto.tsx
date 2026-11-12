@@ -29,13 +29,13 @@ const PHOTOS = {
 
 const FILMS = {
   reef: {
-    title: "The sea at Cozumel",
-    source: "https://commons.wikimedia.org/wiki/File:K%E2%80%99%C3%A1anab_Cozumel.webm",
-    url: "https://upload.wikimedia.org/wikipedia/commons/3/37/K%E2%80%99%C3%A1anab_Cozumel.webm",
-    author: "Jorge F. Victoria Puerto",
-    license: "CC0 1.0",
-    licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/",
-    description: "Real footage of the sea in Cozumel, Mexico. Editorial destination footage; not a tour recording."
+    title: "Beneath the surface at Roatán",
+    source: "https://commons.wikimedia.org/wiki/File:Underwater_Videos.webm",
+    url: "https://upload.wikimedia.org/wikipedia/commons/2/23/Underwater_Videos.webm",
+    author: "Rob Bixby",
+    license: "CC BY 2.0",
+    licenseUrl: "https://creativecommons.org/licenses/by/2.0/",
+    description: "Real underwater footage of red squirrelfish in Mahogany Bay, Roatán, Honduras. Editorial marine-life footage; not a recording of the fictional excursion."
   },
   canopy: {
     title: "Life on the forest floor",
