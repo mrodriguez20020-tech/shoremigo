@@ -1,7 +1,7 @@
 /** Two supplied whole-body poses: contact holds and eased recovery, not a limb rig. */
-export const STRIDE_MS = 520;
-export const ANTICIPATION_MS = 180;
-export const CONTACT_FRACTION = 0.7;
+export const STRIDE_MS = 460;
+export const ANTICIPATION_MS = 200;
+export const CONTACT_FRACTION = 0.65;
 export interface GaitSample {
   offset: number;
   frame: 0 | 1;
@@ -9,7 +9,7 @@ export interface GaitSample {
   step: number;
   phase: "anticipation" | "recovery" | "contact";
 }
-export function gaitAt(elapsed: number, size = 124): GaitSample {
+export function gaitAt(elapsed: number, size = 124, firstFoot: 0 | 1 = 0): GaitSample {
   if (elapsed < ANTICIPATION_MS)
     return {
       offset: 0,
@@ -26,14 +26,15 @@ export function gaitAt(elapsed: number, size = 124): GaitSample {
   // Small strides fit the approved art; no independent boot or facial deformation.
   return {
     offset: (step + ease) * size * 0.085,
-    frame: (step % 2) as 0 | 1,
+    frame: ((step + firstFoot) % 2) as 0 | 1,
     contact: phase >= CONTACT_FRACTION,
     step,
     phase: phase >= CONTACT_FRACTION ? "contact" : "recovery",
   };
 }
 export type FootSurface = "deck" | "cabin" | "sand" | "underwater";
-export function surfaceAt(path: string, cabin = false): FootSurface {
+export function surfaceAt(path: string, cabin = false, override?: string): FootSurface {
+  if (override === "underwater" || override === "deck" || override === "cabin" || override === "sand") return override;
   if (path === "/ships") return cabin ? "cabin" : "deck";
   if (path.startsWith("/excursions")) return "sand";
   return "deck";
