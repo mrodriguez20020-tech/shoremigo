@@ -1,90 +1,91 @@
 # WP-02 · Canonical Aurora Tide: architecture, design control and production strategy
 
 **Owner:** Claude (implementation) · **Independent reviewer:** Codex · **Appearance approval:** project owner
-**Branch:** `feat/wp02-aurora-tide` from `design/cinematic-luxury` @ `000a837adfa8bf3ed39f05be61e09a4bc3f6df3e` (fetched 2026-11-12). Not based on unmerged WP-01 (PR #2); its shared documents were read by exact ref `c64ace1` and are **not** imported here.
-**Status:** PROPOSED design control, awaiting owner decisions. **Not** a production model, **not** a photoreal render, **not** WP-02 completion.
+**Branch:** `feat/wp02-aurora-tide` from `design/cinematic-luxury` @ `000a837adfa8bf3ed39f05be61e09a4bc3f6df3e`. Not based on unmerged WP-01 (PR #2); its shared documents were read by exact ref `c64ace1` and are not imported.
+**Status:** provisionally approved direction (owner decisions 2026-11-12), **awaiting Codex independent review**, then final appearance approval. Massing/design control only: **not** a production model, **not** a photoreal render, **WP-02 not complete**.
 
-## 1. What this package delivers now
-
-| Deliverable | File | Nature |
+## 1. Owner decisions recorded (2026-11-12)
+| ID | Decision | Status |
 |---|---|---|
-| Canonical parametric geometry contract | [`vessel.json`](vessel.json) | Single source of truth: principal dimensions, deck stack (z), superstructure footprints, terraces, glazing bands, lifeboat bay, funnel, radomes, mast, accommodation rule, Cabin 9214 options, unseen/assumed list |
-| Generator | [`generate.mjs`](generate.mjs) | Zero-dependency Node script; derives **every** view, the GLB and the hashes from `vessel.json`, so views cannot disagree |
-| Port / starboard elevations | [`sheets/01-port-elevation.svg`](sheets/01-port-elevation.svg), [`02-starboard`](sheets/02-starboard-elevation.svg) | Deck datums, terraces T1–T4, glazing rhythm, lifeboat bay, funnel/radomes/mast, LOA |
-| Bow / stern views | [`03-bow`](sheets/03-bow.svg), [`04-stern`](sheets/04-stern.svg) | Transverse, beam, stepped terraces end-on (both unseen in A-02 → proposals) |
-| Plan + Deck 7 arrangement | [`05-plan`](sheets/05-plan.svg), [`06-deck7-arrangement`](sheets/06-deck7-arrangement.svg) | Stepped footprints; schematic cabins, corridor, cores, Option-A cabin highlighted |
-| Three-quarter massing | [`07-three-quarter-massing`](sheets/07-three-quarter-massing.svg) | Elevated port-aft review camera (A-02 framing family), same geometry |
-| Massing model | [`model/aurora-tide-massing.glb`](model/aurora-tide-massing.glb) | glTF 2.0, 7 materials, 3,236 triangles, 158 m × 24 m (incl. boats) × 32.1 m above waterline; geometryId embedded |
-| Identity manifest | [`manifest.json`](manifest.json) | `geometryId`, `cameraId`, per-file SHA-256, derived capacity, Cabin 7214 computed position |
+| D-W02-1 | Cabin 9214 → **Cabin 7214**, Premium Balcony Stateroom, Deck 7 port. No owner's-suite conversion, no deck re-basing; the approved luxury interior/spatial experience is preserved. | Approved |
+| D-W02-2 | 158 × 23 × 5.4 m, nine decks, four stepped aft terraces, three principal panoramic bands, pearl-white superstructure, deep navy hull, restrained sea-glass. Fictional design-control values. | Provisionally approved |
+| D-W02-3 | Replace 1,900 guests / 14 decks with **~208 guests, 104 staterooms, nine decks**; derived capacity is the design basis. | Approved |
+| D-W02-4 | Mirrored starboard, stepped stern + marina platform, Deck 8 forward bridge, proposed funnel, Deck 9 open sun deck, Deck 7 aft recreation/terrace. Present sheets + concept overlay before freezing. | Provisionally approved |
+| D-W02-5 | Zero unapproved spending; no production rendering until Codex review, defects fixed, design approved, film-framing conflict resolved, viable resource arranged. GLB is massing only. | Constraint |
 
-Regenerate: `node design/aurora-tide/generate.mjs` (Node ≥ 18). Hashes change whenever `vessel.json` changes; the **approved** canonical `geometryId` is issued only after owner approval.
+Recorded machine-readably in [`vessel.json`](vessel.json) → `decisions`.
 
-## 2. Architecture findings (from A-02, `public/cinematic/aurora-tide.webp`)
+## 2. Deliverables
+| Deliverable | File |
+|---|---|
+| Canonical parametric contract (single source of truth) | [`vessel.json`](vessel.json) |
+| Generator (zero deps; every view, GLB and hashes from the one spec) | [`generate.mjs`](generate.mjs) |
+| Port / starboard elevations | [`sheets/01`](sheets/01-port-elevation.svg), [`sheets/02`](sheets/02-starboard-elevation.svg) |
+| Bow / stern | [`sheets/03`](sheets/03-bow.svg), [`sheets/04`](sheets/04-stern.svg) |
+| Plan + Deck 7 arrangement (Cabin 7214 highlighted) | [`sheets/05`](sheets/05-plan.svg), [`sheets/06`](sheets/06-deck7-arrangement.svg) |
+| Three-quarter massing (A-02 framing family) | [`sheets/07`](sheets/07-three-quarter-massing.svg) |
+| **Cabin 7214 floor plan** | [`sheets/08`](sheets/08-cabin-7214-plan.svg) |
+| **Concept-overlay comparison (measured)** | [`review/concept-overlay.webp`](review/concept-overlay.webp), [`review/concept-overlay.json`](review/concept-overlay.json), tool [`overlay.mjs`](overlay.mjs) |
+| Massing model (glTF 2.0) | [`model/aurora-tide-massing.glb`](model/aurora-tide-massing.glb) |
+| Identity manifest (geometryId, cameraId, file hashes, capacity, cabin metrics) | [`manifest.json`](manifest.json) |
+| App/document migration inventory | [`MIGRATION.md`](MIGRATION.md) |
 
-Observed (high confidence): navy hull with sea-glass boot-top and sheer stripe; two hull window rows (sparse portholes near the waterline, rectangular windows above); a recessed **lifeboat bay** with **two orange enclosed boats** and liferaft canisters; **three continuous panoramic glazing bands** above the hull; a top glazed level beneath a radome platform; **four stepped aft terraces** (planters, loungers, the highest with umbrellas); sculpted funnel aft of midship with **four exhausts** over a louvered navy casing and sea-glass stripe; **two radomes**; a mast forward; raked bow whose navy hull rises to the forecastle.
+Regenerate: `node design/aurora-tide/generate.mjs`. Overlay: `WP02_FACES_OUT=work/faces.json node design/aurora-tide/generate.mjs && PLAYWRIGHT_CHROMIUM_PATH=<chrome> node design/aurora-tide/overlay.mjs work/faces.json` (needs the repo's Playwright dev dependency).
 
-Derived deck stack (conventional numbering, decks 1–2 below the waterline): **D3 Marina · D4 Oceanview (T1) · D5 Promenade/lifeboats (T2) · D6 Horizon (T3) · D7 Meridian (T4 umbrellas) · D8 Observation · D9 Sun deck**. Nine decks; the highest stateroom deck is **Deck 7**.
+## 3. Concept overlay: measured fit and corrections
+The overlay fits a perspective camera to the transparent A-02 silhouette and reports intersection-over-union, plus a map (red = in the concept, missing from the model; blue = model where the concept has nothing).
 
-Incompatibilities found in the existing product (read-only, not changed here):
-- `src/lib/domain/ship.ts`: "≈1,900 guests", "14 decks", Skywatch Deck 14, Spa 12, Lido 11 → impossible on this hull.
-- `ShipExplorer.tsx` side profile: generic 11-tier block with a coral funnel → not A-02.
-- "Cabin 9214, Balcony Stateroom, Deck 9" → Deck 9 is the open sun deck in the concept.
-
-Unseen in A-02 (all marked *proposed* in `vessel.json`): starboard side (mirrored), stern transom/marina platform, bow front and mooring deck, Deck 8 bridge vs observation split, funnel plan shape, pool size/location on Deck 7 aft.
-
-## 3. Proposed canonical design (owner approval required)
-
-| Item | Proposal | Basis |
+| Pass | Silhouette IoU | Corrections applied |
 |---|---|---|
-| LOA / beam / draft | **158 m / 23 m / 5.4 m**; air draft ~37.5 m | A-02 generation brief (~160 m, 5–6 tiers); L/B 6.9 boutique/expedition proportion; portholes just above the waterline |
-| Decks | **9** (D1–D2 below waterline; D3–D9 visible) | Counted from A-02 |
-| Accommodation | **104 staterooms, ~208 guests** (double occupancy), ~150 crew (assumption) | Derived by `generate.mjs` from a 4.6 m module, central corridor, three cores (D4 28, D5 18, D6 28, D7 30) |
-| Palette | pearl `#f1ece2`, navy `#132a45`, sea-glass `#7fc8bd`, glazing `#1b2a33`, teak, lifeboat orange | Sampled/approximated from A-02 |
-| Cabin 9214 | **Decision D-W02-1 below** | Conflict with concept |
+| Proposal (`0.1.0`) | **84.5 %** | none: revealed aft tiers too short, funnel too low, forward superstructure too long, radomes/mast too far forward, insufficient stem rake |
+| 1 | 89.1 % | aft tiers extended aft; forward ends shortened (open forecastle); funnel raised to 34.5 m with swept casing base; radomes/mast moved aft, main radome enlarged; stem rake increased |
+| 2 | 89.3 % | decks 5–7 forward ends −4 m; deck 8/upper terraces further aft; funnel 36.0 m, longer casing; radomes on a 2.0 m platform; mast x 108 m; waterline stem 140 m |
+| 3 (current) | **≈ 90 %** (89.9–90.2 % across re-runs; the camera fit uses random search; the radome platform added in this pass costs ~0.2 pt) | bow sheer lowered 18.7 → 16.5 m; radome platform modeled |
 
-### Decisions requiring the owner
-| ID | Decision | Options (recommendation first) |
+Residuals (each length band < 2 %): umbrellas, railings and planters (omitted by design); the funnel casing's **sculpted swept form** (massing is boxy, for the production modeler); a small excess at the lower bow (1.8 %); radome/mast detailing. Tuning stopped deliberately: A-02 is a generated image with non-physical perspective, so further fitting would chase artifacts. Capacity stayed **104 / ~208**; Cabin 7214 is now x 97.6–102.2 m (computed).
+
+## 4. Cabin 7214 (formerly 9214)
+Plan inside the approved envelope (4.6 m module, 7.2 m interior, 2.1 m balcony, 2.4 m clear ceiling), with partitions (cabin 0.10, corridor 0.12, bathroom 0.08 m):
+- Bathroom inboard beside the entry (2.50 × 2.20 m: shower, vanity, WC); full-height wardrobe opposite; entry passage 1.22 m.
+- King bed (1.93 × 2.03 m) with its headboard on the bathroom/wardrobe wall, facing the sea; side clearances 1.28 m and 0.79 m.
+- Living area at the glazing: sofa, coffee table (1.12 m from the bed foot), armchair, desk.
+- Panoramic sliding glass doors: 4 × 1.15 m panels on the ship's mullion rhythm; private balcony 9.0 m² clear, glass balustrade, privacy screens to 7212/7216.
+- **33.1 m² gross / 31.9 m² net interior**; fits the hull at its position (9.42 m needed of 9.8 m; 0.38 m for structure/risers).
+- Materials: light oak, warm ivory, champagne hardware, sea-glass accents. Lighting states: daylight, golden hour, evening.
+- Six viewpoints (V1 entry … V6 balcony-in, eye height 1.6 m) define the only allowed spatial render positions; WP-03 must build one connected space from this plan, not unrelated views.
+
+## 5. Zero-cost production route (assessment, nothing confirmed)
+**Local machine: not viable.** i3-4005U (2C/4T, 2013), Intel HD (no Cycles GPU), 7.9 GB RAM, 6.1 GB free disk, no Blender. Extrapolated from Codex's rejected proof (~49 s/frame, 1100×660, 32 samples): ~10–40 min/frame here for the M-01 contract → ~130–500 h for 768 frames; EXR masters ~12–19 GB won't fit. The limiting factor is modeling/look-dev skill, so the proof was not repeated.
+
+| Need | Zero-cost candidate | Status / caveat |
 |---|---|---|
-| **D-W02-1** | Cabin 9214 cannot be a Deck-9 balcony stateroom on this hull | **A. Rename the demo cabin 7214** (Deck 7 port, zone 2, computed x 99.0–103.6 m; keeps class and plausible numbering). B. Keep "9214" as a top-deck owner's suite (changes class). C. Re-base deck labels +2 (keeps the name; least plausible). |
-| D-W02-2 | Principal dimensions and 9-deck stack | Approve 158 × 23 × 5.4 m / 9 decks, or supply alternatives before final modeling |
-| D-W02-3 | Capacity shown in the app | Replace "≈1,900 guests / 14 decks" with derived ~208 guests / 9 decks (code change belongs to a scoped ship-module package) |
-| D-W02-4 | Unseen geometry | Approve the mirrored starboard, the stepped stern proposal (04-stern), Deck 8 forward = bridge (assumed), funnel plan |
-| D-W02-5 | Production resource | Choose a zero-cost route in §5 or authorize spending; without it, M-01/M-02 stay blocked |
+| Software | Blender 4.x (GPL): Ocean modifier / Geometry-Nodes FFT ocean, Cycles + OpenImageDenoise, AgX; FFmpeg | Free, viable; not installed here |
+| Environment/materials | Poly Haven CC0 HDRIs and textures (sky, teak, painted metal) | Free, CC0; verify each asset at use |
+| Rendering | (a) a team machine with NVIDIA RTX ≥ 8 GB or Apple Silicon (Cycles Metal): ~4–13 h for 768 frames; (b) **SheepIt Render Farm** (free community Blender farm; earn priority by rendering others' frames); (c) Google Colab / Kaggle free GPUs | **None confirmed.** (a) needs the owner to identify hardware; (b) project files are rendered on volunteer machines and per-frame limits apply, so check current terms and confidentiality; (c) quotas are unpredictable and rendering may conflict with their terms, so lowest confidence |
+| Hard-surface model + look-dev (~40–80 h) | Owner or a team member with Blender skills, using `vessel.json`, the elevations and the GLB as blockout | **Not confirmed; this is the critical blocker.** No paid freelancer authorized |
+| Loop/wake technique | Tracked ship (static in camera, ocean advected); blend ocean evaluations at *t* and *t − T* across the seam; periodic advected wake/foam fields; same frames for day/sunset | Defined; needs the artist |
 
-## 4. Reuse across WP-01, WP-02, WP-03
-- **One identity:** the production model must conform to `vessel.json` (dimensions, deck z, footprints, feature positions). Its `geometryId` (hash of the approved spec + model) and the frozen camera rig `cameraId` go into `public/cinematic/film/manifest.json` (WP-01 contract, unchanged).
-- **WP-01 film (M-01):** rendered from the same scene and cameras. Note the PR #2 review finding N5: the wide framing contract (ship x 57–94 %) collides with the golden-hour card; fix the mask before commissioning.
-- **Ships & Rooms decks:** a later scoped adapter can draw the explorer's deck profile from `vessel.json` (no hand-drawn second ship). Not done here (ship module is read-only for WP-02).
-- **WP-03 Cabin:** uses the unit module (4.6 m × 7.2 m + 2.1 m balcony), the glazing mullion rhythm (1.15 m) and the cabin's exterior position. WP-03 still needs an approved floor plan; this contract only fixes the envelope.
+**Recommended route:** Blender + Poly Haven CC0, a team member as modeler working from this contract, and rendering on identified team hardware with SheepIt as fallback after a terms check. Commission nothing until all five D-W02-5 gates pass.
 
-## 5. Production pipeline: can it be done locally? (measured, not assumed)
-**This machine cannot produce the approved quality.** Intel i3-4005U (2 cores / 4 threads, 1.7 GHz, 2013), Intel HD Graphics (no Cycles GPU backend), 7.9 GB RAM, **6.1 GB free disk**, no Blender installed. Codex's rejected Blender proof took ~49 s/frame at 1100×660, 32 samples on 3 cores. Scaling to the M-01 contract (1920×1080, ~128–256 samples, 192 frames × 2 lights × 2 cameras = **768 frames**) gives roughly **10–40 min/frame here → ~130–500 hours**, and the scene-linear EXR masters (~15–25 MB/frame, **~12–19 GB**) would not fit on disk. More importantly, the failed proof showed the limiting factor is **hard-surface modeling and look-development skill**, not samples. I did not repeat it.
+## 6. Film-framing conflict (D-W02-5 gate 4)
+The WP-01 spec places the ship at x 57–94 % of a single persistent wide shot used by both the hero and the golden-hour window; the golden-hour "Featured excursion" card occupies the same region. Because the film is one frozen camera across both windows, the coherent fix is to **move the card** (e.g. below the copy in the left 45 % column at ≥1024 px), not to reframe the ship per section. Proposed to the WP-01 owner on PR #2; not resolved until accepted there.
 
-What **is** feasible without spending:
+## 7. Rights and provenance
+`generate.mjs`/`overlay.mjs` are repository source code. `vessel.json`, the sheets, the overlay image and the GLB are design assets derived from the team-created A-02 concept: not MIT-licensed, fictional vessel, no third-party models/textures/real ship data. Recorded in `ASSETS.md`. A future production BOM must record every source and licence.
 
-| Stage | Tool / resource | Cost | Status |
-|---|---|---|---|
-| Design control (this package) | Node generator, SVG/GLB | 0 | **Done** (proposal) |
-| Hero model to the contract | Blender 4.x (free, GPL; outputs owned by the author) + a **hard-surface 3D artist** (~40–80 h incl. glazing, railings, terraces, lifeboats, funnel detail) | 0 if owner/team/volunteer; otherwise paid freelance (needs approval) | **BLOCKED: no artist assigned** |
-| Ocean, wake, light | Blender Ocean modifier or Geometry-Nodes FFT ocean; a **tracked ship** (static in camera, ocean advected) makes the loop solvable: blend two ocean evaluations at *t* and *t − T* over the seam; wake/foam as advected periodic fields + Dynamic Paint/Geometry Nodes foam; Nishita sky, sun ~25° day / 3–5° golden; AgX view transform | 0 | Pipeline defined; needs the artist + render hardware |
-| Rendering | Cycles on an **NVIDIA RTX-class GPU (≥ 8 GB)** with OpenImageDenoise: ~20–60 s/frame at 1080p → 768 frames ≈ **4–13 h** | 0 on an owner/team machine; Google Colab free GPU is a possible but unguaranteed fallback (session limits, terms to check) | **BLOCKED: no GPU machine available here** |
-| Encode/deliver | FFmpeg H.264 yuv420p faststart, frame-0 WebP posters, `media:check` | 0 | Ready (WP-01 tooling) |
+## 8. Codex independent review: handoff
+Review the actual branch head (see PR #3), base `000a837`. Please check:
+1. **Geometry vs A-02:** reproduce the overlay (command above) and confirm IoU ≈ 90 %; inspect the red/blue map; flag any structural residual you consider a defect (funnel casing form, lower bow, aft terrace extents).
+2. **Consistency:** all sheets, the GLB bounds (158 m length, ~24 m incl. boats) and `manifest.json` come from one `vessel.json` (re-run `generate.mjs`; tree must stay clean).
+3. **Capacity rule and Cabin 7214:** numbering convention, computed position, envelope arithmetic, clearances and hull fit.
+4. **Unseen geometry (D-W02-4):** starboard mirror, stern/marina, Deck 8 bridge, Deck 9 sun deck, funnel.
+5. **Migration inventory:** completeness against current `src/` (re-grep at review time).
+6. **Production assessment:** soundness of the estimates and zero-cost route.
+Return findings on PR #3 (file/line, evidence, severity). Do not merge.
 
-Rejected routes: image-to-video generation (cannot hold one geometry across matched lights and frames; violates the spec); real-time WebGL ocean as the hero (won't reach photoreal on low-end phones; D-004 prefers pre-rendered); compositing a ship cut-out over stock ocean (forbidden).
-
-## 6. Rights and provenance
-- `generate.mjs` is original source code (repository code licence).
-- `vessel.json`, the SVG sheets and the GLB are **design assets derived from A-02** (team-created AI-generated concept). Like A-02 they are **not** covered by the MIT code licence and describe a **fictional** vessel. No third-party model, texture, font outline or real ship data was used. Recorded in `ASSETS.md`.
-- A future production model/texture BOM must list every source and licence (commercial web display + derivatives) before use.
-
-## 7. Remaining blockers
-1. **Owner decisions D-W02-1…5.** Final modeling must not start before D-W02-1/2/4.
-2. **Specialist resource:** a hard-surface 3D/look-dev artist and an RTX-class GPU machine (or authorized spending). Without them no believable ship/water/wake/reflection render can be produced, and WP-01 visual acceptance stays blocked.
-3. Production spec conflict N5 (golden-hour mask) to resolve before M-01.
-
-## 8. Exact next actions
-1. Owner: decide D-W02-1…5 (comment on the WP-02 PR or in `DECISIONS.md` once PR #2's documents merge).
-2. Codex: independent review of this branch (geometry plausibility vs A-02, numbering, capacity rule, hashes).
-3. After approval: bump `vessel.json` to `1.0.0`, regenerate, freeze `geometryId`; produce an A-02 overlay sheet at the approved camera.
-4. Artist/GPU available: block out the hull/superstructure in Blender from the GLB + elevations, then the turntable and a 3–5 s joint water/wake lookdev (spec §7), reviewed against A-02 before any looping masters.
-5. Separately scoped later: Ships & Rooms adapter reading `vessel.json`; WP-03 floor plan inside the Option-A envelope.
+## 9. Next actions
+1. Codex reviews PR #3; I correct confirmed defects on this branch.
+2. Owner final appearance approval of the corrected sheets + overlay → bump `vessel.json` to `1.0.0`, freeze `geometryId`.
+3. WP-01 owner accepts/rejects the golden-hour card move (PR #2).
+4. Owner identifies a modeler and render hardware (or approves another zero-cost route).
+5. Then (only then): Blender blockout from the GLB → turntable → 3–5 s joint water/wake look-dev → matched loops.

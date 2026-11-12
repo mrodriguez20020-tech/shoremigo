@@ -1,5 +1,5 @@
 {
-  "geometryId": "sha256:cadd91c1d50e7516f544278ea355305f6381ccfd27435a3c20271890c3d557c2",
+  "geometryId": "sha256:26208856942a33202c1bafbdf1a453587e54d575564e03f954189344fad6a016",
   "cameraId": "sha256:5292e371823e8c8e370bcf231797e2f08291c17f4b3a4e8e14a3c9c3a851b454",
   "camera": {
     "name": "review-3q-port-aft",
@@ -8,36 +8,108 @@
     "projection": "orthographic",
     "note": "matches A-02 framing family; review camera only"
   },
-  "specVersion": "0.1.0-proposal",
-  "status": "proposed-awaiting-owner-approval",
+  "specVersion": "0.2.0-provisional",
+  "status": "provisionally-approved-direction; subject to Codex independent review and final appearance approval",
   "generatedFrom": "design/aurora-tide/vessel.json",
   "files": {
-    "sheets/01-port-elevation.svg": "sha256:c5ec31804f4fb8f41f5eeb21a22d12cab94a336725fffd342d755233836ecefe",
-    "sheets/02-starboard-elevation.svg": "sha256:9d5dcff92c731262f0fc8ce18cd124c2596e4b773e9ac75a99e8fddbe7eefd83",
-    "sheets/03-bow.svg": "sha256:9cd4fe9721bf621768f9901756cd91412a694a5cbb6732adf8cdcb8946a1a02e",
-    "sheets/04-stern.svg": "sha256:da7a398e24dac1f6f6cb95626203e3e035989742529da046f318f94012108f99",
-    "sheets/05-plan.svg": "sha256:64f8c6c9a66fc086dde8854e088bc4a52fecf17892480367e1c30c916b7f8bfd",
-    "sheets/06-deck7-arrangement.svg": "sha256:b77d84a4590438c7607b6b96b7f8aad2deeb8993f826662c638897f41c87e01f",
-    "sheets/07-three-quarter-massing.svg": "sha256:62f0542e4bd21b84ef975606783828e009b0e493e117787ae69f871c820f7ee7",
-    "model/aurora-tide-massing.glb": "sha256:eff2b287ab1bdb0b53569099f5ebda836bbff45d6299678e4d9a9762c9f7542c"
+    "sheets/01-port-elevation.svg": "sha256:225087db0414391b0d073f6e614d52859991b4993827bebd3a5d4152f3fac909",
+    "sheets/02-starboard-elevation.svg": "sha256:56dd5295259ff7b2d40d3cd5a4f2b2eff1fea0d83d9698f9570a2cacf6ae0c55",
+    "sheets/03-bow.svg": "sha256:b032c396417c42c70f522c0b9cb7f64874d1faf09b3da782d5b9a02eb6358108",
+    "sheets/04-stern.svg": "sha256:ffb436e7c3ba36550d99674be36db9f63a9ca15e5225de8c35c352c32d8faa14",
+    "sheets/05-plan.svg": "sha256:12e676a0bdfa18cf76965398ad3b946ee5fced41cf001bd101e298e11e92e0d3",
+    "sheets/06-deck7-arrangement.svg": "sha256:6c454ff881d2f092e47289ed39544d080624a39c0a940cd1ad0e0282df344390",
+    "sheets/07-three-quarter-massing.svg": "sha256:69fa957c9051d31f5235cdf85b16c04eddb8310d786374fc4746148d07b24cb4",
+    "sheets/08-cabin-7214-plan.svg": "sha256:1824d5e7f0416c2c9851850a272ba2e5a4e166a838ce658d3dc1b305035a71f0",
+    "model/aurora-tide-massing.glb": "sha256:3d1ee4b4bc5c1458e93fe28d1173557bf1a9c2f88adfe3b8191f6fc053c456e6"
   },
   "derivedCapacity": {
     "rule": "4.6 m modules both sides of a central corridor, 3 m aft clearance, 8 m forward clearance, three vertical cores skipped",
     "perDeck": {
       "4": 28,
-      "5": 18,
-      "6": 28,
+      "5": 16,
+      "6": 30,
       "7": 30
     },
     "staterooms": 104,
     "guestsDoubleOccupancy": 208
   },
   "cabin7214": {
-    "deck": 7,
-    "side": "port",
-    "xFrom": 99,
-    "xTo": 103.6,
-    "outboardHalfBreadth": 10.7
+    "location": {
+      "deck": 7,
+      "side": "port",
+      "xFrom": 97.6,
+      "xTo": 102.2,
+      "outboardHalfBreadth": 10.7
+    },
+    "metrics": {
+      "grossInteriorM2": 33.1,
+      "netInteriorFloorM2": 31.9,
+      "bathroomM2": 5.5,
+      "roomExcludingBathAndWardrobeM2": 24.8,
+      "balconyClearM2": 9,
+      "clearances": {
+        "passageWidth": 1.22,
+        "bedSideAft": 1.28,
+        "bedSideForwardToDesk": 0.79,
+        "bedFootToCoffeeTable": 1.12
+      },
+      "minClearance": 0.79,
+      "hullFit": {
+        "availableFromCorridorToShipSide": 9.8,
+        "required": 9.42,
+        "spareForStructureAndRisers": 0.38
+      }
+    },
+    "viewpoints": [
+      {
+        "id": "V1-entry",
+        "u": 3.2,
+        "w": 0.8,
+        "lookU": 2.3,
+        "lookW": 9.3,
+        "note": "from the door: passage, bed and the sea through the sliding doors"
+      },
+      {
+        "id": "V2-bedside",
+        "u": 3.9,
+        "w": 3.3,
+        "lookU": 1.5,
+        "lookW": 7.2,
+        "note": "living area and glazing beyond"
+      },
+      {
+        "id": "V3-living",
+        "u": 2.6,
+        "w": 6.7,
+        "lookU": 2.3,
+        "lookW": 2.4,
+        "note": "looking back to the bed and wardrobe wall"
+      },
+      {
+        "id": "V4-bathroom",
+        "u": 3,
+        "w": 1,
+        "lookU": 1,
+        "lookW": 1.2,
+        "note": "through the bathroom door"
+      },
+      {
+        "id": "V5-balcony-out",
+        "u": 2.3,
+        "w": 8.4,
+        "lookU": 2.3,
+        "lookW": 30,
+        "note": "open sea over the glass balustrade"
+      },
+      {
+        "id": "V6-balcony-in",
+        "u": 2.3,
+        "w": 9,
+        "lookU": 2.3,
+        "lookW": 2,
+        "note": "back into the cabin through the open doors"
+      }
+    ]
   },
   "deck7CabinCount": 30,
   "note": "Hashes identify this proposal revision. The approved canonical geometryId is issued only after owner approval of vessel.json."

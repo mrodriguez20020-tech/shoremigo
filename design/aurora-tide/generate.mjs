@@ -34,7 +34,7 @@ function halfBreadth(x) {
   const t = Math.min(1, (x - m1) / (P.lengthOverall - m1));
   return B2 * Math.max(0, 1 - Math.pow(t, 1.7));
 }
-const SHEER = [[0, 11.0], [30, 12.6], [100, 12.9], [130, 15.5], [P.lengthOverall, H.bowSheerTopZ]];
+const SHEER = [[0, 11.0], [30, 12.6], [100, 12.9], [130, 14.3], [P.lengthOverall, H.bowSheerTopZ]];
 function sheer(x) {
   for (let i = 1; i < SHEER.length; i++) {
     const [x0, z0] = SHEER[i - 1], [x1, z1] = SHEER[i];
@@ -113,12 +113,14 @@ function elevation(side) {
     b += `<rect x="${Math.min(X(cx), X(cx + lb.boatLength))}" y="${Z(deckZ[5] + 2.2)}" width="${lb.boatLength * k}" height="${1.6 * k}" rx="${0.8 * k}" fill="${C.lifeboat}" stroke="#b5561c"/>`;
   }
   // funnel
-  const F = S.funnel, fb = top(8);
+  const F = S.funnel, fb = top(8) + (F.casingBase ? F.casingBase.height : 0);
+  if (F.casingBase) b += poly([[X(F.casingBase.fromX), Z(top(8))], [X(F.casingBase.toX), Z(top(8))], [X(F.casingBase.toX - 3), Z(fb)], [X(F.casingBase.fromX + 6), Z(fb)]], C.superstructure, "#b9b2a4", 1) + line(X(F.casingBase.fromX + 2), Z(top(8) + 0.6), X(F.casingBase.toX - 1), Z(top(8) + 0.6), C.seaGlass, 3);
   b += poly([[X(F.x), Z(fb)], [X(F.x + F.length), Z(fb)], [X(F.x + F.length - 4), Z(F.topZ - 1.2)], [X(F.x + 2), Z(F.topZ - 1.2)]], C.funnelCasing, "#0e1826", 1);
   for (let i = 0; i < 6; i++) b += line(X(F.x + 1.5), Z(fb + 1 + i * 0.9), X(F.x + F.length - 2.5 - i * 0.4), Z(fb + 1 + i * 0.9), "#33465e", 0.8);
   for (let i = 0; i < F.exhausts; i++) b += `<rect x="${Math.min(X(F.x + 3 + i * 2.4), X(F.x + 4.2 + i * 2.4))}" y="${Z(F.topZ + 1.2)}" width="${1.2 * k}" height="${2.4 * k}" fill="${C.exhaust}"/>`;
-  // radomes + mast
-  for (const r of S.radomes) b += `<circle cx="${X(r.x)}" cy="${Z(top(9) + r.diameter / 2)}" r="${(r.diameter / 2) * k}" fill="#ffffff" stroke="#b9b2a4"/>`;
+  // radome platform + radomes + mast
+  if (S.radomePlatformHeight) { const px0 = Math.min(...S.radomes.map((r) => r.x)) - 4, px1 = Math.max(...S.radomes.map((r) => r.x)) + 4; b += poly([[X(px0), Z(top(9))], [X(px1), Z(top(9))], [X(px1 - 1), Z(top(9) + S.radomePlatformHeight)], [X(px0 + 1), Z(top(9) + S.radomePlatformHeight)]], C.superstructure, "#b9b2a4", 1); }
+  for (const r of S.radomes) b += `<circle cx="${X(r.x)}" cy="${Z(top(9) + (S.radomePlatformHeight ?? 0) + r.diameter / 2)}" r="${(r.diameter / 2) * k}" fill="#ffffff" stroke="#b9b2a4"/>`;
   b += line(X(S.mast.x), Z(top(9)), X(S.mast.x), Z(S.mast.topZ), "#d9d4c8", 4) + line(X(S.mast.x - 2.5), Z(S.mast.topZ - 2.5), X(S.mast.x + 2.5), Z(S.mast.topZ - 2.5), "#d9d4c8", 3);
   // deck datum labels
   for (const d of V.decks) {
@@ -162,7 +164,7 @@ function transverse(view) {
   // funnel, radomes, mast (behind)
   const F = S.funnel;
   b += `<rect x="${Y(-2.8)}" y="${Z(F.topZ - 1.2)}" width="${5.6 * k}" height="${(F.topZ - 1.2 - top(8)) * k}" fill="${C.funnelCasing}"/>`;
-  for (const r of S.radomes) b += `<circle cx="${Y(r.y)}" cy="${Z(top(9) + r.diameter / 2)}" r="${(r.diameter / 2) * k}" fill="#fff" stroke="#b9b2a4"/>`;
+  for (const r of S.radomes) b += `<circle cx="${Y(r.y)}" cy="${Z(top(9) + (S.radomePlatformHeight ?? 0) + r.diameter / 2)}" r="${(r.diameter / 2) * k}" fill="#fff" stroke="#b9b2a4"/>`;
   b += line(Y(0), Z(top(9)), Y(0), Z(S.mast.topZ), "#cfc9bc", 5);
   b += line(Y(-B2), Z(-1.5), Y(B2), Z(-1.5), "#0d2f43") + text(Y(-2.6), Z(-1.5) + 18, `Beam ${P.beam} m`, 13);
   b += text(30, 50, `${view.toUpperCase()} VIEW (${view === "bow" ? "looking aft" : "looking forward"}) — not visible in A-02; proposal for approval`, 16, "#0d2f43", 'font-weight="700"');
@@ -263,7 +265,7 @@ function levelPlan(L) {
 }
 const rect = (x0, x1, y0, y1) => [[x0, y0], [x1, y0], [x1, y1], [x0, y1]];
 const prisms = [];
-prisms.push({ name: "hull", mat: "hull", plan: hullPlan(), z0: P.waterlineZ, z1: 12.9 });
+prisms.push({ name: "hull", mat: "hull", plan: hullPlan(), z0: P.waterlineZ - (H.visibleBelowWaterline ?? 0), z1: 12.9 });
 const fore = hullPlan().filter(([x]) => x >= 128);
 prisms.push({ name: "forecastle", mat: "hull", plan: fore, z0: 12.9, z1: H.bowSheerTopZ });
 prisms.push({ name: "terraceT1", mat: "teak", plan: hullPlan().filter(([x]) => x <= S.aftTerraceT1.wallX + 30), z0: 12.9 - 0.25, z1: 12.9 });
@@ -282,8 +284,10 @@ for (let i = 0; i < lb.boatsPerSide; i++) for (const s of [1, -1]) {
   const x0 = lb.fromX + 1.5 + i * (lb.boatLength + 1.6), yOut = s * (B2 + 0.5), yIn = s * (B2 - 2.4);
   prisms.push({ name: `lifeboat${i}${s > 0 ? "P" : "S"}`, mat: "lifeboat", plan: rect(x0, x0 + lb.boatLength, Math.min(yOut, yIn), Math.max(yOut, yIn)), z0: deckZ[5] + 0.6, z1: deckZ[5] + 2.2 });
 }
+if (S.funnel.casingBase) { const cb = S.funnel.casingBase; prisms.push({ name: "funnelCasingBase", mat: "superstructure", plan: rect(cb.fromX, cb.toX, -cb.halfWidth, cb.halfWidth), z0: top(8), z1: top(8) + cb.height }); }
 prisms.push({ name: "funnel", mat: "funnel", plan: rect(S.funnel.x, S.funnel.x + S.funnel.length, -3, 3), z0: top(8), z1: S.funnel.topZ - 1.2 });
 for (let i = 0; i < S.funnel.exhausts; i++) prisms.push({ name: `exhaust${i}`, mat: "exhaust", plan: rect(S.funnel.x + 3 + i * 2.4, S.funnel.x + 4.2 + i * 2.4, -0.6, 0.6), z0: S.funnel.topZ - 1.2, z1: S.funnel.topZ + 1.2 });
+if (S.radomePlatformHeight) { const px0 = Math.min(...S.radomes.map((r) => r.x)) - 4, px1 = Math.max(...S.radomes.map((r) => r.x)) + 4; prisms.push({ name: "radomePlatform", mat: "superstructure", plan: rect(px0, px1, -5, 5), z0: top(9), z1: top(9) + S.radomePlatformHeight }); }
 prisms.push({ name: "mast", mat: "superstructure", plan: rect(S.mast.x - 0.4, S.mast.x + 0.4, -0.4, 0.4), z0: top(9), z1: S.mast.topZ });
 
 const MAT = { hull: C.hull, superstructure: C.superstructure, glazing: C.glazing, teak: C.deckTeak, lifeboat: C.lifeboat, funnel: C.funnelCasing, exhaust: C.exhaust };
@@ -375,6 +379,133 @@ function glb() {
   return Buffer.concat([header, jh, json, bh, bin]);
 }
 
+// ---------- Cabin 7214 floor plan (inside the approved envelope) ----------
+// Local frame: u = across the cabin (0 = aft bulkhead, 4.6 = forward bulkhead), w = from corridor (0) outboard to the sea.
+function cabinLayout() {
+  const c = V.cabin7214, E = c.envelope, Pt = c.partitions;
+  const hb = Pt.cabinDividingBulkhead / 2, cw = Pt.corridorBulkhead, bw = Pt.bathroomWall;
+  const U0 = hb, U1 = E.moduleWidth - hb, W0 = cw, WG = E.interiorDepth, WB = WG + E.balconyDepth;
+  const bath = { u0: U0, u1: 2.55, w0: W0, w1: 2.32 };
+  const wardrobe = { u0: 3.85, u1: U1, w0: W0, w1: 2.4 };
+  const bed = { u0: (E.moduleWidth - 1.93) / 2, u1: (E.moduleWidth + 1.93) / 2, w0: 2.45, w1: 2.45 + 2.03 };
+  const items = {
+    bath, wardrobe, bed,
+    sofa: { u0: U0, u1: U0 + 0.85, w0: 4.9, w1: 6.9 },
+    table: { u0: 1.3, u1: 2.2, w0: 5.6, w1: 6.2 },
+    armchair: { u0: 3.5, u1: 4.25, w0: 6.1, w1: 6.85 },
+    desk: { u0: 4.05, u1: U1, w0: 4.6, w1: 5.8 },
+    nightstandA: { u0: bed.u0 - 0.5, u1: bed.u0 - 0.05, w0: 2.45, w1: 2.9 },
+    nightstandB: { u0: bed.u1 + 0.05, u1: bed.u1 + 0.5, w0: 2.45, w1: 2.9 },
+  };
+  const area = (r) => (r.u1 - r.u0) * (r.w1 - r.w0);
+  const clear = {
+    passageWidth: +(wardrobe.u0 - (bath.u1 + bw)).toFixed(2),
+    bedSideAft: +(bed.u0 - U0).toFixed(2),
+    bedSideForwardToDesk: +(items.desk.u0 - bed.u1).toFixed(2),
+    bedFootToCoffeeTable: +(items.table.w0 - bed.w1).toFixed(2), // sofa sits beside the bed footprint (no u overlap), so the table is the real constraint
+  };
+  const metrics = {
+    grossInteriorM2: +(E.moduleWidth * E.interiorDepth).toFixed(1),
+    netInteriorFloorM2: +((U1 - U0) * (WG - W0)).toFixed(1),
+    bathroomM2: +area(bath).toFixed(1),
+    roomExcludingBathAndWardrobeM2: +((U1 - U0) * (WG - W0) - area(bath) - area(wardrobe)).toFixed(1),
+    balconyClearM2: +((U1 - U0) * (E.balconyDepth - 0.1)).toFixed(1),
+    clearances: clear,
+    minClearance: Math.min(...Object.values(clear)),
+    hullFit: (() => {
+      const loc = globalThis.cabinLocations?.[7214];
+      if (!loc) return null;
+      const available = +(loc.outboardHalfBreadth - 0.9).toFixed(2); // corridor half-width 0.9 m
+      return { availableFromCorridorToShipSide: available, required: +(cw + E.interiorDepth + E.balconyDepth).toFixed(2), spareForStructureAndRisers: +(available - (cw + E.interiorDepth + E.balconyDepth)).toFixed(2) };
+    })(),
+  };
+  const viewpoints = [
+    { id: "V1-entry", u: 3.2, w: 0.8, lookU: 2.3, lookW: 9.3, note: "from the door: passage, bed and the sea through the sliding doors" },
+    { id: "V2-bedside", u: 3.9, w: 3.3, lookU: 1.5, lookW: 7.2, note: "living area and glazing beyond" },
+    { id: "V3-living", u: 2.6, w: 6.7, lookU: 2.3, lookW: 2.4, note: "looking back to the bed and wardrobe wall" },
+    { id: "V4-bathroom", u: 3.0, w: 1.0, lookU: 1.0, lookW: 1.2, note: "through the bathroom door" },
+    { id: "V5-balcony-out", u: 2.3, w: 8.4, lookU: 2.3, lookW: 30, note: "open sea over the glass balustrade" },
+    { id: "V6-balcony-in", u: 2.3, w: 9.0, lookU: 2.3, lookW: 2.0, note: "back into the cabin through the open doors" },
+  ];
+  return { items, metrics, viewpoints, U0, U1, W0, WG, WB, E };
+}
+function cabinPlan() {
+  const L = cabinLayout(), k = 96, ox = 160, oy = 120; // 96 px per metre; corridor at top, sea at bottom
+  const X = (u) => ox + u * k, Y = (w) => oy + w * k;
+  const R = (r, fill, stroke = "#8d8473", sw = 1, extra = "") => `<rect x="${X(r.u0)}" y="${Y(r.w0)}" width="${(r.u1 - r.u0) * k}" height="${(r.w1 - r.w0) * k}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" ${extra}/>`;
+  const { items: I, E } = L;
+  let b = "";
+  b += `<rect x="${X(-0.6)}" y="${Y(-1.1)}" width="${(E.moduleWidth + 1.2) * k}" height="${1.1 * k}" fill="#d8d0c0"/>` + text(X(0.1), Y(-0.45), "CORRIDOR (inboard)", 14, "#5b5345");
+  b += `<rect x="${X(0)}" y="${Y(0)}" width="${E.moduleWidth * k}" height="${E.interiorDepth * k}" fill="#f6f1e6"/>`;
+  b += `<rect x="${X(0)}" y="${Y(E.interiorDepth)}" width="${E.moduleWidth * k}" height="${E.balconyDepth * k}" fill="#c9a77d" fill-opacity="0.45"/>`;
+  b += `<rect x="${X(0)}" y="${Y(E.interiorDepth + E.balconyDepth)}" width="${E.moduleWidth * k}" height="${0.9 * k}" fill="#d7e8ec"/>` + text(X(0.1), Y(E.interiorDepth + E.balconyDepth + 0.55), "SEA (port side, outboard)", 14, "#0d5c78");
+  // bulkheads
+  b += `<rect x="${X(-0.05)}" y="${Y(-0.12)}" width="${0.1 * k}" height="${(E.interiorDepth + E.balconyDepth + 0.12) * k}" fill="#6f6758"/>`;
+  b += `<rect x="${X(E.moduleWidth - 0.05)}" y="${Y(-0.12)}" width="${0.1 * k}" height="${(E.interiorDepth + E.balconyDepth + 0.12) * k}" fill="#6f6758"/>`;
+  b += `<rect x="${X(0)}" y="${Y(-0.12)}" width="${3.55 * k}" height="${0.12 * k}" fill="#6f6758"/><rect x="${X(4.45)}" y="${Y(-0.12)}" width="${0.15 * k}" height="${0.12 * k}" fill="#6f6758"/>`;
+  b += `<path d="M ${X(3.55)} ${Y(0)} A ${0.9 * k} ${0.9 * k} 0 0 1 ${X(4.45)} ${Y(0.9)}" fill="none" stroke="#8d8473" stroke-dasharray="4 3"/>` + text(X(3.6), Y(-0.2), "entry door 0.9", 11, "#3d3529");
+  // bathroom
+  b += R(I.bath, "#e7eef0", "#6f6758", 3) + text(X(0.3), Y(1.4), "BATHROOM", 14, "#33424a", 'font-weight="700"') + text(X(0.3), Y(1.6), `${(I.bath.u1 - I.bath.u0).toFixed(2)} × ${(I.bath.w1 - I.bath.w0).toFixed(2)} m`, 12, "#4b5d63");
+  b += `<rect x="${X(0.2)}" y="${Y(0.25)}" width="${1.0 * k}" height="${0.9 * k}" fill="#d3e3e8" stroke="#8aa7b0"/>` + text(X(0.3), Y(0.65), "shower", 11, "#4b5d63");
+  b += `<rect x="${X(1.5)}" y="${Y(0.2)}" width="${0.9 * k}" height="${0.5 * k}" fill="#fff" stroke="#8aa7b0"/>` + text(X(1.58), Y(0.5), "vanity", 11, "#4b5d63");
+  b += `<ellipse cx="${X(1.9)}" cy="${Y(1.85)}" rx="${0.2 * k}" ry="${0.3 * k}" fill="#fff" stroke="#8aa7b0"/>` + text(X(2.05), Y(1.9), "WC", 11, "#4b5d63");
+  b += `<rect x="${X(2.55)}" y="${Y(0.5)}" width="${0.08 * k}" height="${0.8 * k}" fill="#f6f1e6"/>` + text(X(2.68), Y(0.95), "door", 10, "#7c7466");
+  // wardrobe + passage
+  b += R(I.wardrobe, "#d9c4a0", "#8d8473", 1.5) + text(X(3.9), Y(1.3), "WARDROBE", 12, "#4d3b25", 'font-weight="700"') + text(X(3.9), Y(1.55), "full height", 10, "#5b4a33");
+  b += text(X(2.75), Y(1.9), `passage ${L.metrics.clearances.passageWidth} m`, 11, "#5b5345");
+  // bedroom
+  b += R(I.bed, "#ffffff", "#8d8473", 1.5) + `<rect x="${X(I.bed.u0)}" y="${Y(I.bed.w0)}" width="${(I.bed.u1 - I.bed.u0) * k}" height="${0.08 * k}" fill="#c4a273"/>`;
+  b += `<rect x="${X(I.bed.u0 + 0.1)}" y="${Y(I.bed.w0 + 0.15)}" width="${0.8 * k}" height="${0.45 * k}" rx="8" fill="#f1ece2" stroke="#d6cdbd"/><rect x="${X(I.bed.u1 - 0.9)}" y="${Y(I.bed.w0 + 0.15)}" width="${0.8 * k}" height="${0.45 * k}" rx="8" fill="#f1ece2" stroke="#d6cdbd"/>`;
+  b += text(X(I.bed.u0 + 0.45), Y(I.bed.w0 + 1.2), "KING BED", 14, "#3d3529", 'font-weight="700"') + text(X(I.bed.u0 + 0.45), Y(I.bed.w0 + 1.45), "1.93 × 2.03 m", 11, "#5b5345");
+  b += R(I.nightstandA, "#d9c4a0") + R(I.nightstandB, "#d9c4a0");
+  // living
+  b += R(I.sofa, "#e6ddd0", "#8d8473", 1.5) + text(X(0.1), Y(5.9), "sofa", 11, "#3d3529", 'transform="rotate(-90 ' + X(0.45) + " " + Y(5.95) + ')"');
+  b += R(I.table, "#d9c4a0") + text(X(1.35), Y(5.95), "table", 10, "#4d3b25");
+  b += R(I.armchair, "#e6ddd0") + text(X(3.55), Y(6.55), "armchair", 10, "#3d3529");
+  b += R(I.desk, "#d9c4a0") + text(X(4.08), Y(5.25), "desk", 10, "#4d3b25", 'transform="rotate(-90 ' + X(4.3) + " " + Y(5.2) + ')"');
+  b += text(X(1.4), Y(4.75), "LIVING AREA", 14, "#3d3529", 'font-weight="700"');
+  // glazing: 4 panels on the mullion rhythm
+  for (let i = 0; i < 4; i++) b += `<rect x="${X(i * 1.15) + 2}" y="${Y(E.interiorDepth - 0.05)}" width="${1.15 * k - 4}" height="${0.1 * k}" fill="#7fb7c8" stroke="#3a6878"/>`;
+  b += text(X(0.1), Y(E.interiorDepth + 0.35), "panoramic sliding glass doors · 4 × 1.15 m panels", 12, "#24525f");
+  // balcony
+  b += `<rect x="${X(0.02)}" y="${Y(E.interiorDepth + E.balconyDepth - 0.05)}" width="${(E.moduleWidth - 0.04) * k}" height="${0.06 * k}" fill="#9ccbd8"/>` + text(X(2.9), Y(E.interiorDepth + E.balconyDepth - 0.18), "glass balustrade", 11, "#24525f");
+  b += `<rect x="${X(0.9)}" y="${Y(7.85)}" width="${0.6 * k}" height="${0.6 * k}" rx="6" fill="#efe6d8" stroke="#8d8473"/><rect x="${X(2.6)}" y="${Y(7.85)}" width="${0.6 * k}" height="${0.6 * k}" rx="6" fill="#efe6d8" stroke="#8d8473"/><circle cx="${X(2.05)}" cy="${Y(8.15)}" r="${0.22 * k}" fill="#d9c4a0" stroke="#8d8473"/>`;
+  b += text(X(0.1), Y(E.interiorDepth + 0.95), "PRIVATE BALCONY", 14, "#4d3b25", 'font-weight="700"') + text(X(3.2), Y(E.interiorDepth + 0.6), "privacy screens →", 10, "#5b5345");
+  // viewpoints
+  for (const vp of L.viewpoints) {
+    const ang = Math.atan2(Y(vp.lookW) - Y(vp.w), X(vp.lookU) - X(vp.u));
+    const len = 0.55 * k;
+    b += `<circle cx="${X(vp.u)}" cy="${Y(vp.w)}" r="9" fill="#40c7c5" stroke="#032029"/>`;
+    b += line(X(vp.u), Y(vp.w), X(vp.u) + Math.cos(ang) * len, Y(vp.w) + Math.sin(ang) * len, "#032029", 2.5);
+    b += text(X(vp.u) + 12, Y(vp.w) + (vp.id === "V4-bathroom" ? 22 : -10), vp.id, 11, "#032029", 'font-weight="700"');
+  }
+  // dimensions + metrics panel
+  b += line(X(0), Y(-1.35), X(E.moduleWidth), Y(-1.35), "#0d2f43") + text(X(1.7), Y(-1.45), `${E.moduleWidth} m module`, 12);
+  b += line(X(-0.35), Y(0), X(-0.35), Y(E.interiorDepth), "#0d2f43") + text(X(-1.55), Y(3.6), `${E.interiorDepth} m interior`, 12);
+  b += line(X(-0.35), Y(E.interiorDepth), X(-0.35), Y(E.interiorDepth + E.balconyDepth), "#0d2f43") + text(X(-1.55), Y(8.3), `${E.balconyDepth} m balcony`, 12);
+  const m = L.metrics, px = X(E.moduleWidth) + 120;
+  const rows = [
+    ["Gross interior", `${m.grossInteriorM2} m² (≈${Math.round(m.grossInteriorM2 * 10.764)} sq ft)`],
+    ["Net interior floor (after partitions)", `${m.netInteriorFloorM2} m²`],
+    ["Bathroom (internal)", `${m.bathroomM2} m²`],
+    ["Room (excl. bath + wardrobe)", `${m.roomExcludingBathAndWardrobeM2} m²`],
+    ["Balcony (clear)", `${m.balconyClearM2} m² (≈${Math.round(m.balconyClearM2 * 10.764)} sq ft)`],
+    ["Clear ceiling", `${E.clearCeiling} m (deck height ${E.deckHeight} m)`],
+    ["Min. circulation clearance", `${m.minClearance} m`],
+    ["Partitions", `cabin 0.10 · corridor 0.12 · bathroom 0.08 m`],
+    ["Hull fit at x 99.0–103.6 m", m.hullFit ? `${m.hullFit.required} m needed of ${m.hullFit.availableFromCorridorToShipSide} m (spare ${m.hullFit.spareForStructureAndRisers} m)` : "n/a"],
+  ];
+  b += text(px, Y(-0.9), "CABIN 7214 · Premium Balcony Stateroom · Deck 7 port", 20, "#0d2f43", 'font-weight="700"');
+  b += text(px, Y(-0.55), "(formerly 9214; owner decision D-W02-1)", 13, "#4b5d63");
+  rows.forEach(([kk, vv], i) => { b += text(px, Y(0.1) + i * 34, kk, 13, "#4b5d63") + text(px + 330, Y(0.1) + i * 34, vv, 13, "#0d2f43", 'font-weight="700"'); });
+  b += text(px, Y(3.5), "Materials: light oak · warm ivory · champagne hardware · sea-glass accents", 13, "#4b5d63");
+  b += text(px, Y(3.85), "Lighting states for every viewpoint: daylight · golden hour · evening", 13, "#4b5d63");
+  b += text(px, Y(4.3), "Viewpoints (eye height 1.6 m): one connected space; renders must come from these", 13, "#0d2f43", 'font-weight="700"');
+  L.viewpoints.forEach((vp, i) => { b += text(px, Y(4.65) + i * 26, `${vp.id}: ${vp.note}`, 12, "#4b5d63"); });
+  b += text(px, Y(7.6), "Plan only. Spatial renders/walkthrough belong to WP-03 and must use this layout.", 12, "#9a5b2b");
+  return sheet({ title: "Cabin 7214 floor plan", sub: "plan, corridor top / sea bottom, aft left", w: 1700, h: 1220, body: b, scaleNote: "1 m = 96 px" });
+}
+
 // ---------- write everything + manifest ----------
 const files = {
   "sheets/01-port-elevation.svg": elevation("port"),
@@ -385,14 +516,26 @@ const files = {
   "sheets/06-deck7-arrangement.svg": plan(true),
   "sheets/07-three-quarter-massing.svg": threeQuarter(),
 };
+files["sheets/08-cabin-7214-plan.svg"] = cabinPlan(); // after plan(true) so cabin locations exist
 const manifest = { geometryId, cameraId, camera: CAMERA, specVersion: V.version, status: V.status, generatedFrom: "design/aurora-tide/vessel.json", files: {} };
 for (const [rel, content] of Object.entries(files)) { fs.writeFileSync(out(rel), content); manifest.files[rel] = sha(content); }
 const model = glb();
 fs.writeFileSync(out("model/aurora-tide-massing.glb"), model);
 manifest.files["model/aurora-tide-massing.glb"] = sha(model);
 manifest.derivedCapacity = derivedCapacity();
-manifest.cabin7214 = globalThis.cabinLocations?.[7214] ?? null;
+manifest.cabin7214 = { location: globalThis.cabinLocations?.[7214] ?? null, ...(() => { const l = cabinLayout(); return { metrics: l.metrics, viewpoints: l.viewpoints }; })() };
 manifest.deck7CabinCount = Object.keys(globalThis.cabinLocations ?? {}).length;
 manifest.note = "Hashes identify this proposal revision. The approved canonical geometryId is issued only after owner approval of vessel.json.";
 fs.writeFileSync(out("manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
 console.log(JSON.stringify({ geometryId, cameraId, prisms: prisms.length, glbBytes: model.length, files: Object.keys(manifest.files).length }));
+
+// Optional: export massing faces (plus radomes as 16-gon prisms) for the concept-overlay fit.
+if (process.env.WP02_FACES_OUT) {
+  const extra = S.radomes.map((r, i) => {
+    const pts = Array.from({ length: 16 }, (_, j) => [r.x + (r.diameter / 2) * Math.cos((j / 16) * 2 * Math.PI), r.y + (r.diameter / 2) * Math.sin((j / 16) * 2 * Math.PI)]);
+    return { name: `radome${i}`, mat: "superstructure", plan: pts, z0: top(9) + (S.radomePlatformHeight ?? 0), z1: top(9) + (S.radomePlatformHeight ?? 0) + r.diameter };
+  });
+  const faces = [...prisms, ...extra].flatMap((pr) => facesOf(pr).map((f) => ({ name: pr.name, mat: f.mat, v: f.v })));
+  fs.writeFileSync(process.env.WP02_FACES_OUT, JSON.stringify({ geometryId, faces }));
+  console.log("faces exported:", faces.length);
+}
