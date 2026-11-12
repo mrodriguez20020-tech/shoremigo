@@ -35,7 +35,7 @@ export function useAvoidanceZones(pathname: string): ZoneCache {
       if(holder.scans!==old)listeners.forEach(fn=>fn());
       if(dirty || performance.now()<settleUntil)raf=requestAnimationFrame(frame);
     };
-    function invalidate(query=false){dirty=true;needQuery||=query;settleUntil=performance.now()+900;cancelAnimationFrame(raf);raf=requestAnimationFrame(frame);}
+    function invalidate(query=false){dirty=true;needQuery||=query;settleUntil=performance.now()+1200;cancelAnimationFrame(raf);raf=requestAnimationFrame(frame);}
     const scroll=()=>invalidate();const refresh=()=>invalidate(true);
     holder.read=read;holder.subscribe=(fn)=>{listeners.add(fn);return()=>{listeners.delete(fn);};};
     read();

@@ -434,7 +434,7 @@ export function MigoStage() {
         data-gait={gaitPhase}
         data-frame={frame}
         data-hopping={hopping}
-        style={{ left: 0, x: stageX, visibility: placed && (hasSpace || state.mode !== "roam") ? "visible" : "hidden" }}
+        style={{ left: 0, x: stageX, visibility: placed ? "visible" : "hidden", display: state.mode === "roam" && !hasSpace ? "none" : undefined }}
         initial={false}
         animate={{
           bottom: hopping ? [10, 120, bottom] : bottom,
