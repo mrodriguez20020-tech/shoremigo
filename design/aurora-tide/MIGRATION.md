@@ -52,7 +52,7 @@ The PR #2 documents belong to Codex's WP-01 branch: listed for that owner, not e
 **Branch (corrected after Codex review):** `feat/ships-rooms-migration` from the **approved `design/cinematic-luxury` integration SHA**, created only after WP-02 is re-reviewed and the owner authorises its integration. This is required because the tests and the adapter depend on `design/aurora-tide/`. It does **not** start from `main`, and nothing is changed on `main`. If work must start before integration, the fallback is an explicitly dependent **draft** branch based on and targeting `feat/wp02-aurora-tide`. That branch must not merge unapproved dependencies or create a competing canonical design. It is separate from WP-01 and Codex's branches.
 **Scope:** only the files in §1, plus `docs/STATUS.md`, plus new tests. No changes to booking, excursion, concierge, PayPal or store code.
 
-1. **Generated typed adapter (no hand-copied facts).** A small script (`design/aurora-tide/export-app-data.mjs`) emits `src/lib/domain/vessel.generated.ts` from `vessel.json` + `manifest.json`: decks 3–9, offering, amenities with decks, the validated slot counts, Cabin 7214 position/neighbours/areas, and `specId`/`massingModelId`. A unit test regenerates it and fails on any diff, so the app cannot drift from the canonical spec. The app does not read the design directory at runtime.
+1. **Generated typed adapter (no hand-copied facts).** A small script (`design/aurora-tide/export-app-data.mjs`) emits `src/lib/domain/vessel.generated.ts` from `vessel.json` + `manifest.json`: decks 3–9, offering, amenities with decks, the validated slot counts, **per-cabin balcony depth and area** (standard 2.1 m / 9.0 m²; **7305/7306 forward tapered balcony 1.86 m / 7.92 m², D-W02-11**), Cabin 7214 position/neighbours/areas, and `specId`/`massingModelId`. Any app copy describing balcony size must read these per-cabin values, never a single fleet-wide figure. A unit test regenerates it and fails on any diff, so the app cannot drift from the canonical spec. The app does not read the design directory at runtime.
 2. **`ship.ts` from `vessel.ts`:**
    - `DEMO_SHIP.facts`: 208 guests, 104 staterooms, 9 decks, 158 m.
    - `DECKS`: 7 visible decks.
@@ -74,6 +74,6 @@ The PR #2 documents belong to Codex's WP-01 branch: listed for that owner, not e
 
 **Readiness:**
 - Inventory complete and re-verified on `main`.
-- Values derived and checked by `verify.mjs` (103/103, independent of the generator).
+- Values derived and checked by `verify.mjs` (106/106, independent of the generator).
 - No dependency on the photoreal asset.
-- **Waiting on:** Codex re-review of the corrected WP-02 SHA, owner decision on the 7305/7306 tapered-balcony proposal, owner geometry acceptance and integration of WP-02 into `design/cinematic-luxury`, and owner authorization to start.
+- **Waiting on:** Codex re-review of the corrected WP-02 SHA, owner geometry acceptance and integration of WP-02 into `design/cinematic-luxury`, and owner authorization to start.

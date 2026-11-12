@@ -1,9 +1,9 @@
 {
-  "specId": "sha256:ccfd777fc7a2cf775c143b9a45455d7555ac5ad0d9cf5587651e75812ae7649a",
+  "specId": "sha256:e410a0e832c1bec50b38c30f0a0a01dd09f23d4c0185d649636efed7b698d79f",
   "massingModelId": "sha256:fcdaaf8acd903bc70a3c6e76f2ace85c9a21b8ed2f1150e248abd6a62e58a1b8",
-  "generatorId": "sha256:34da250ed9f124fc7c2fb8cbef691afb83b22b5c3c050bed43c120766867fd70",
-  "passed": 103,
-  "total": 103,
+  "generatorId": "sha256:1faa38d6a8bcee99f8cdf4da1cbd9135003b3529c2450330223ba1d22b6b58ab",
+  "passed": 106,
+  "total": 106,
   "results": [
     {
       "group": "identity",
@@ -451,9 +451,27 @@
     },
     {
       "group": "capacity",
-      "name": "slots failing the standard module are exactly the ones reported, each with a correction proposal",
+      "name": "all 104 cabin envelopes fit over their full footprint (re-measured from the GLB)",
       "ok": true,
-      "detail": "7305,7306"
+      "detail": "0 failing"
+    },
+    {
+      "group": "capacity",
+      "name": "tapered balcony applied only to the cabins short with the standard balcony (7305/7306), as approved",
+      "ok": true,
+      "detail": "short with 2.1 m: 7305,7306; variant: 7305,7306"
+    },
+    {
+      "group": "capacity",
+      "name": "variant: full 7.2 m interior kept, balcony 1.2–2.1 m and within the taper, area recorded",
+      "ok": true,
+      "detail": "ok"
+    },
+    {
+      "group": "capacity",
+      "name": "Signature Cabin 7214 keeps the standard 2.1 m balcony (9.0 m²)",
+      "ok": true,
+      "detail": ""
     },
     {
       "group": "capacity",

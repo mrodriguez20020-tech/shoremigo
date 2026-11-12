@@ -18,6 +18,7 @@ This is massing and design control only: **not** a production model, **not** a p
 | D-W02-8 | Cabin 7214 programme provisional; areas and clearances are fictional targets, not certified | Provisional |
 | D-W02-9 | ~90 % overlay accepted; seeded; spec and model identity separate | Approved |
 | D-W02-10 | Golden-hour card in the left safe area; WP-01 implements | Approved direction |
+| D-W02-11 | Forward tapered balconies for **7305/7306 only**: full 7.2 m interior kept; balcony approved at 1.87 m, recorded at the verified **1.86 m (7.92 m²)** | Approved, applied |
 
 ## 2. One canonical geometry
 `generate.mjs` builds **one set of closed solids** from `vessel.json` (`SOLIDS`; 45 solids, 15,392 triangles). Every output derives from them:
@@ -50,11 +51,11 @@ Key rules:
 | Review reconciliation | [`review/CODEX-REVIEW-RECONCILIATION.md`](review/CODEX-REVIEW-RECONCILIATION.md) |
 | Migration plan / production requirements | [`MIGRATION.md`](MIGRATION.md) / [`PRODUCTION.md`](PRODUCTION.md) |
 
-Reproduce: `node design/aurora-tide/generate.mjs && node design/aurora-tide/verify.mjs`. Expect 103/103 passes and a clean tree.
+Reproduce: `node design/aurora-tide/generate.mjs && node design/aurora-tide/verify.mjs`. Expect 106/106 passes and a clean tree.
 Overlay: `WP02_FACES_OUT=work/faces.json node design/aurora-tide/generate.mjs && PLAYWRIGHT_CHROMIUM_PATH=<chrome> node design/aurora-tide/overlay.mjs work/faces.json`. The seed is `20261112`.
 
 ## 4. Verification (independent of the generator)
-`verify.mjs` shares no code with the generator. It parses the GLB, the SVGs, the manifest and the spec. Its **103 checks** cover:
+`verify.mjs` shares no code with the generator. It parses the GLB, the SVGs, the manifest and the spec. Its **106 checks** cover:
 - **Identity:** recomputes `massingModelId` from the GLB and matches it against the manifest, every sheet and the overlay.
 - **Mesh validity:** finite unit normals, positive areas, valid indices, every solid closed and consistently oriented, positive volume.
 - **Glazing attachment:** point-to-mesh distance plus inside test for every vertex.
@@ -69,7 +70,7 @@ Overlay: `WP02_FACES_OUT=work/faces.json node design/aurora-tide/generate.mjs &&
 ## 5. Identity
 | Id | Hash of | Current |
 |---|---|---|
-| `specId` | `vessel.json` | `ccfd777f…` |
+| `specId` | `vessel.json` | `e410a0e8…` |
 | `generatorId` | `generate.mjs` (LF) | `34da250e…` |
 | `massingModelId` | GLB float32 positions (mm) per solid | `fcdaaf8a…` |
 | `cameraId` | review camera: projection, transform, framing, crop (**review only**) | `d3065cd5…` |
@@ -84,10 +85,13 @@ The production model and film camera will carry their own identities, bound to t
 
 ## 6. Accommodation (D-W02-3/6)
 **104 slots / 208 guests counted.** Each slot is validated over its full footprint (0.05 m sampling): corridor 0.9 + bulkhead 0.12 + interior 7.2 + balcony 2.1 + side structure 0.10 must fit within the deck's side line (deck 4: hull − 0.3 lining).
-- **102 fit the standard module.**
-- **7305 / 7306** (deck 7, x 111.4–116, port and starboard) are **0.23 m short** in the forward taper, matching Codex's measurement.
+- **All 104 fit** (re-measured from the GLB by `verify.mjs`).
+- 102 use the standard module.
+- **7305 / 7306** (deck 7, x 111.4–116) were 0.23 m short with the standard 2.1 m balcony. Under **D-W02-11** they keep their full 7.2 m interior and only their balconies are reduced.
+  - You approved 1.87 m (≈7.97 m²) subject to final verification. The full-footprint check allows at most **1.8698 m** (9.2898 m available), so 1.87 m overshoots by 0.2 mm.
+  - The recorded value is rounded down to **1.86 m = 7.92 m² clear** (margin 0.01 m).
 
-**Proposed correction (owner decision; not applied):** keep both slots and their 7.2 m interiors, and shorten only their balconies to 1.87 m (7.97 m²). Capacity stays 104 / ~208, and the vessel's dimensions are unchanged.
+Capacity stays 104 / ~208. Vessel dimensions, exterior geometry (`massingModelId` unchanged) and Cabin 7214's 9.0 m² balcony are unchanged.
 
 ## 7. Cabin 7214 (corrected)
 Convention (`cabin7214.convention`): the corridor bulkhead is outside the 7.2 m depth, the glazing frame is centred on 7.2, the balcony runs from 7.25 to 9.25, and areas come from the floor polygons.
@@ -137,6 +141,6 @@ I did not tune for the percentage.
 
 ## 11. Next actions
 1. Codex re-reviews the corrected SHA on PR #3.
-2. Owner decides on the 7305/7306 balcony proposal and gives appearance approval → freeze at `1.0.0`.
+2. Owner appearance approval → freeze at `1.0.0` (only after Codex's independent review of the updated commit and resolution of all material defects).
 3. Ships & Rooms migration from the approved `design/cinematic-luxury` integration SHA, after authorization (`MIGRATION.md` §3).
 4. No production modeling, paid resources, merge or deployment without owner authorization.

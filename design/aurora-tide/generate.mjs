@@ -233,26 +233,24 @@ function slotsOnDeck(deck) {
   return out;
 }
 function fitSlot(s) {
-  const balcony = s.deck >= 5, required = A.corridorBulkhead + MOD.depthInterior + (balcony ? MOD.balconyDepth + A.sideStructureAllowance : 0);
+  const variant = (A.cabinVariants ?? []).find((q) => q.nums.includes(s.num));
+  const balcony = s.deck >= 5, bd = variant?.balconyDepth ?? MOD.balconyDepth;
+  const fixed = A.corridorBulkhead + MOD.depthInterior + (balcony ? A.sideStructureAllowance : 0);
+  const required = fixed + (balcony ? bd : 0), requiredStandard = fixed + (balcony ? MOD.balconyDepth : 0);
   let minSide = Infinity, atX = s.xFrom;
   for (let x = s.xFrom; x <= s.xTo + 1e-9; x += 0.05) { const w = sideLine(s.deck, x); if (w < minSide) { minSide = w; atX = x; } }
   const available = minSide - A.corridorHalfWidth;
-  return { ...s, type: balcony ? "Premium Balcony Stateroom" : "Oceanview Stateroom", required: r3(required), available: r3(available), margin: r3(available - required), worstAtX: r3(atX), fits: available - required >= -1e-9 };
+  return { ...s, type: variant ? variant.type : balcony ? "Premium Balcony Stateroom" : "Oceanview Stateroom", variant: variant?.id ?? null, interiorDepth: MOD.depthInterior, balconyDepth: balcony ? bd : 0, balconyClearM2: balcony ? r3((MOD.width - 0.1) * (bd - 0.1)) : 0, required: r3(required), available: r3(available), margin: r3(available - required), standardMargin: r3(available - requiredStandard), worstAtX: r3(atX), fits: available - required >= -1e-9 };
 }
 const SLOTS = [4, 5, 6, 7].flatMap((d) => slotsOnDeck(d).map(fitSlot));
 function capacityReport() {
-  const perDeck = {}, failing = SLOTS.filter((s) => !s.fits);
+  const perDeck = {}, failing = SLOTS.filter((s) => !s.fits), variants = SLOTS.filter((s) => s.variant);
   for (const s of SLOTS) perDeck[s.deck] = (perDeck[s.deck] ?? 0) + 1;
-  // minimally disruptive correction for slots that fail the full-footprint test: keep the slot and the
-  // 7.2 m interior, shorten only that cabin's balcony to what the local taper allows (owner decision required)
-  const proposal = failing.map((s) => {
-    const balconyAvail = r3(s.available - A.corridorBulkhead - MOD.depthInterior - A.sideStructureAllowance);
-    return { num: s.num, deck: s.deck, x: [s.xFrom, s.xTo], shortfall: r3(-s.margin), proposedBalconyDepth: balconyAvail, balconyClearM2: r3(4.5 * Math.max(0, balconyAvail - 0.1)), viable: balconyAvail >= 1.2 };
-  });
   return {
     rule: A.fitRule, slots: SLOTS.length, perDeck, guestsDoubleOccupancy: SLOTS.length * 2,
-    standardModuleFits: SLOTS.length - failing.length, failing: failing.length,
-    correctionProposal: { status: "PROPOSED — owner decision required; not applied", rule: "forward tapered variant: same slot and 7.2 m interior, balcony depth reduced to the local taper (min 1.2 m)", cabins: proposal },
+    fit: SLOTS.length - failing.length, failing: failing.length,
+    standardModuleFits: SLOTS.filter((s) => s.standardMargin >= -1e-9).length,
+    taperedVariant: { status: "APPROVED (D-W02-11) and applied", rule: "same slot and full 7.2 m interior; balcony reduced to the local forward taper; these cabins only", cabins: variants.map((s) => ({ num: s.num, deck: s.deck, x: [s.xFrom, s.xTo], standardShortfall: r3(-s.standardMargin), balconyDepth: s.balconyDepth, balconyClearM2: s.balconyClearM2, margin: s.margin })) },
   };
 }
 function deck4Layout() {
@@ -521,7 +519,7 @@ function threeQuarter() {
 // =====================================================================================================
 // ARRANGEMENT SHEETS (canonical side lines; no hard-coded sampling)
 // =====================================================================================================
-const FITCOL = (s) => (s.fits ? (s.num === 7214 ? "#40c7c5" : "#f7f3ea") : "#f2b8a2");
+const FITCOL = (s) => (!s.fits ? "#f2b8a2" : s.num === 7214 ? "#40c7c5" : s.variant ? "#f3dc9f" : "#f7f3ea");
 function deckOutline(X, Y, deck, a, f) {
   const xs = stations(a, f, 0.5), pts = xs.map((x) => [X(x), Y(sideLine(deck, x))]);
   return [...pts, ...xs.slice().reverse().map((x) => [X(x), Y(-sideLine(deck, x))])];
@@ -546,7 +544,7 @@ function deck7Sheet() {
   }
   const n7 = SLOTS.filter((q) => q.deck === 7), f7 = n7.filter((q) => !q.fits).length, cm = cabinModel();
   b += text(40, 46, `DECK 7 'MERIDIAN' ARRANGEMENT: ${n7.length} Premium Balcony slots; highlighted Signature Cabin 7214 (port, x ${cm.location.xFrom}–${cm.location.xTo} m; neighbours ${cm.neighbours.aft} aft, ${cm.neighbours.forward} forward).`, 15, "#0d2f43", 'font-weight="700"');
-  b += text(40, 70, `Cabins drawn over their full footprint to the canonical deck 7 side line. Salmon = standard module does not fit the local taper (${f7} on this deck); see sheet 10 and the correction proposal.`, 12, "#4b5d63");
+  b += text(40, 70, `Cabins drawn over their full footprint to the canonical deck 7 side line. Amber = forward tapered balcony (7305/7306, 1.87 m, D-W02-11); salmon = not fitting (${f7} on this deck). See sheet 10.`, 12, "#4b5d63");
   return sheet({ title: "deck 7 arrangement", sub: "schematic cabin layout", w: W, h: Hh, body: b, scaleNote: "1 m = 13.2 px" });
 }
 function accommodationSheet() {
@@ -558,12 +556,12 @@ function accommodationSheet() {
     const cy = 270 + row * 340, X = (x) => ox + x * k, Y = (y) => cy - y * k;
     const [a, f] = deck === 4 ? [T1.wallX, 132] : [LV[deck].aftWallX, LV[deck].foreX];
     b += poly(deckOutline(X, Y, deck, a, f), deck === 4 ? "#dfe5ea" : C.superstructure, "#a39c8e");
-    for (const s of SLOTS.filter((q) => q.deck === deck)) { b += poly(cabinPoly(X, Y, s), FITCOL(s), "#a39c8e", 0.7); if (!s.fits) b += text(X(s.xFrom) + 2, Y((s.side === "port" ? 1 : -1) * 5) + 4, `${s.margin.toFixed(2)}`, 9, "#8a2f12"); }
+    for (const s of SLOTS.filter((q) => q.deck === deck)) { b += poly(cabinPoly(X, Y, s), FITCOL(s), "#a39c8e", 0.7); if (!s.fits) b += text(X(s.xFrom) + 2, Y((s.side === "port" ? 1 : -1) * 5) + 4, `${s.margin.toFixed(2)}`, 9, "#8a2f12"); else if (s.variant) b += text(X(s.xFrom) + 2, Y((s.side === "port" ? 1 : -1) * 5) + 4, `${s.num}: ${s.balconyDepth} m`, 9, "#6b4f12"); }
     const n = SLOTS.filter((q) => q.deck === deck), bad = n.filter((q) => !q.fits);
-    b += text(40, cy - 165, `Deck ${deck}: ${n.length} slots · ${n.length - bad.length} fit the standard module · ${bad.length} short (margin m shown)`, 13, "#0d2f43", 'font-weight="700"');
+    b += text(40, cy - 165, `Deck ${deck}: ${n.length} slots · ${n.filter((q) => !q.variant && q.fits).length} standard module · ${n.filter((q) => q.variant).length} forward tapered balcony (D-W02-11) · ${bad.length} not fitting`, 13, "#0d2f43", 'font-weight="700"');
     if (deck === 4) { const lg = deck4Layout().lounge; b += poly(deckOutline(X, Y, 4, lg.xAft, lg.xFwd), "#40c7c5", "#0d5c78", 1, 'fill-opacity="0.6"') + text(X(lg.xAft) + 2, Y(0) + 4, "lounge", 10, "#032029"); }
   });
-  b += text(40, Hh - 120, `Total ${rep.slots} slots (${rep.guestsDoubleOccupancy} guests): ${rep.standardModuleFits} fit the standard module; ${rep.failing} need the proposed forward tapered variant (balcony shortened to the local taper, interior unchanged); owner decision required.`, 13, "#9a5b2b", 'font-weight="700"');
+  b += text(40, Hh - 120, `Total ${rep.slots} slots (${rep.guestsDoubleOccupancy} guests), ${rep.fit} fitting over their full footprint: ${rep.standardModuleFits} standard module + ${rep.taperedVariant.cabins.length} forward tapered balcony (${rep.taperedVariant.cabins.map((c) => c.num).join("/")}: ${rep.taperedVariant.cabins[0]?.balconyDepth} m, ${rep.taperedVariant.cabins[0]?.balconyClearM2} m², D-W02-11); ${rep.failing} not fitting.`, 13, "#0d2f43", 'font-weight="700"');
   return sheet({ title: "accommodation validation", sub: "decks 7, 6, 5, 4 (top to bottom), bow right", w: W, h: Hh, body: b, scaleNote: "1 m = 13.2 px" });
 }
 function deck4Sheet() {
@@ -731,7 +729,7 @@ const manifest = {
 manifest.files["model/aurora-tide-massing.glb"] = sha(model);
 for (const [rel, content] of Object.entries(files)) { fs.writeFileSync(out(rel), content); manifest.files[rel] = sha(content); }
 fs.writeFileSync(out("manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
-console.log(JSON.stringify({ specId: specId.slice(0, 19), massingModelId: massingModelId.slice(0, 19), solids: SOLIDS.length, tris: ALL_TRIS.length, glbBytes: model.length, slots: cap.slots, fail: cap.failing, cabin: { net: cm.metrics.netFloorM2, prim: cm.metrics.primaryRouteBottleneck, sec: cm.metrics.secondaryAccessBottleneck } }));
+console.log(JSON.stringify({ specId: specId.slice(0, 19), massingModelId: massingModelId.slice(0, 19), solids: SOLIDS.length, tris: ALL_TRIS.length, glbBytes: model.length, slots: cap.slots, fail: cap.failing, variants: cap.taperedVariant.cabins.length, cabin: { net: cm.metrics.netFloorM2, prim: cm.metrics.primaryRouteBottleneck, sec: cm.metrics.secondaryAccessBottleneck } }));
 
 if (process.env.WP02_FACES_OUT) { // overlay input: exactly the GLB triangles
   const faces = ALL_TRIS.map((T) => ({ name: T.name, mat: T.mat, v: T.t }));

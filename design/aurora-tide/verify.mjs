@@ -201,7 +201,7 @@ check("datum", "intentional omissions declared in the GLB", Array.isArray(gltf.a
 
 // ---------------------------------------------------------------- G. accommodation (every slot over its full footprint, from the GLB)
 const A = V.accommodation, MOD = A.unitModule;
-let mism = 0; const failingNow = [];
+let mism = 0; const failingNow = [], stdShort = [], badVariant = [];
 for (const s of M.slots) {
   const sg = s.side === "port" ? 1 : -1; let minSide = Infinity;
   for (let x = s.xFrom; x <= s.xTo + 1e-9; x += 0.05) {
@@ -210,7 +210,11 @@ for (const s of M.slots) {
     else { const ys = yAtZ(sliceX(byName[`deck${s.deck}`].tris, x), V.decks.find((d) => d.deck === s.deck).z + 1.0).map((y) => y * sg); side = Math.max(...ys); }
     minSide = Math.min(minSide, side);
   }
-  const req = A.corridorBulkhead + MOD.depthInterior + (s.deck >= 5 ? MOD.balconyDepth + A.sideStructureAllowance : 0);
+  const vr = (A.cabinVariants ?? []).find((q) => q.nums.includes(s.num)), bdep = vr?.balconyDepth ?? MOD.balconyDepth;
+  const fixedReq = A.corridorBulkhead + MOD.depthInterior + (s.deck >= 5 ? A.sideStructureAllowance : 0);
+  const req = fixedReq + (s.deck >= 5 ? bdep : 0), reqStd = fixedReq + (s.deck >= 5 ? MOD.balconyDepth : 0);
+  if (minSide - A.corridorHalfWidth - reqStd < -1e-6) stdShort.push(s.num);
+  if (vr && !(bdep >= 1.2 && bdep <= MOD.balconyDepth && minSide - A.corridorHalfWidth - req >= -1e-6 && Math.abs((MOD.width - 0.1) * (bdep - 0.1) - s.balconyClearM2) < 0.01)) badVariant.push(s.num);
   const margin = minSide - A.corridorHalfWidth - req;
   if (!near(margin, s.margin, 0.01) || (margin >= -1e-6) !== s.fits) mism++;
   if (margin < -1e-6) failingNow.push(s.num);
@@ -218,7 +222,14 @@ for (const s of M.slots) {
 check("capacity", "104 slots / 208 guests counted", M.slots.length === 104 && M.capacity.guestsDoubleOccupancy === 208);
 check("capacity", "per-deck counts = vessel.json breakdown", V.accommodation.breakdown.every((b) => M.slots.filter((s) => s.deck === b.deck).length === b.count));
 check("capacity", "every slot's full-footprint margin re-measured from the GLB = manifest (±0.01 m)", mism === 0, `${mism} mismatches`);
-check("capacity", "slots failing the standard module are exactly the ones reported, each with a correction proposal", JSON.stringify(failingNow.sort()) === JSON.stringify(M.capacity.correctionProposal.cabins.map((c) => c.num).sort()), failingNow.join(","));
+check("capacity", "all 104 cabin envelopes fit over their full footprint (re-measured from the GLB)", failingNow.length === 0 && M.capacity.failing === 0 && M.slots.length === 104, failingNow.join(",") || "0 failing");
+{
+  const vn = (A.cabinVariants ?? []).flatMap((q) => q.nums).sort((a, b) => a - b);
+  check("capacity", "tapered balcony applied only to the cabins short with the standard balcony (7305/7306), as approved", JSON.stringify(stdShort.sort((a, b) => a - b)) === JSON.stringify(vn) && V.decisions["D-W02-11"]?.status === "approved", `short with 2.1 m: ${stdShort.join(",")}; variant: ${vn.join(",")}`);
+  check("capacity", "variant: full 7.2 m interior kept, balcony 1.2–2.1 m and within the taper, area recorded", badVariant.length === 0 && (A.cabinVariants ?? []).every((q) => q.interiorDepth === MOD.depthInterior), badVariant.join(",") || "ok");
+  const s14 = M.slots.find((s) => s.num === 7214);
+  check("capacity", "Signature Cabin 7214 keeps the standard 2.1 m balcony (9.0 m²)", !s14.variant && s14.balconyDepth === MOD.balconyDepth && M.cabin7214.metrics.balconyClearM2 === 9);
+}
 {
   const overl = M.slots.filter((a, i) => M.slots.some((b, j) => j > i && a.deck === b.deck && a.side === b.side && a.xFrom < b.xTo - 1e-6 && b.xFrom < a.xTo - 1e-6)).length;
   const core = M.slots.filter((s) => A.cores.some(([a, f]) => s.xTo > a + 1e-6 && s.xFrom < f - 1e-6)).length;

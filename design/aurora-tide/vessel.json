@@ -357,7 +357,8 @@
       {
         "deck": 7,
         "type": "Premium Balcony Stateroom",
-        "count": 30
+        "count": 30,
+        "note": "includes 7305/7306 with the forward tapered balcony (D-W02-11)"
       }
     ],
     "unitModule": {
@@ -433,7 +434,7 @@
       "hullLining": 0.3
     },
     "sideStructureAllowance": 0.1,
-    "fitRule": "A slot is valid only if, over its complete footprint (sampled every 0.05 m), corridorHalfWidth + corridorBulkhead + interiorDepth + balconyDepth (balcony decks) + sideStructureAllowance ≤ the local side line of its level (decks 5–7: superstructure side; deck 4: hull side − hullLining).",
+    "fitRule": "A slot is valid only if, over its complete footprint (sampled every 0.05 m), corridorHalfWidth + corridorBulkhead + interiorDepth + balconyDepth (balcony decks; cabinVariants override it for the listed cabins only) + sideStructureAllowance ≤ the local side line of its level (decks 5–7: superstructure side; deck 4: hull side − hullLining).",
     "slotRanges": {
       "4": [
         20,
@@ -456,6 +457,23 @@
     "zoneBoundaries": [
       60,
       100
+    ],
+    "cabinVariants": [
+      {
+        "id": "forward-tapered-balcony",
+        "nums": [
+          7305,
+          7306
+        ],
+        "type": "Premium Balcony Stateroom (forward tapered balcony)",
+        "interiorDepth": 7.2,
+        "balconyDepth": 1.86,
+        "balconyClearM2Target": 7.92,
+        "decision": "D-W02-11",
+        "reason": "standard 2.1 m balcony is 0.23 m short in the forward taper over the full footprint (Codex review finding 6)",
+        "appData": "must be carried into the app accommodation data (per-cabin balcony depth/area)",
+        "verification": "Approved at 1.87 m subject to final geometric verification. Full-footprint check: available 9.2898 m from the corridor edge at x 116 allows at most 1.8698 m; 1.87 m overshoots by 0.2 mm, so the verified value is rounded down to 1.86 m (7.92 m² clear, 0.01 m margin)."
+      }
     ]
   },
   "unseenAndAssumed": [
@@ -508,6 +526,10 @@
     "D-W02-10": {
       "status": "approved direction; implementation with WP-01",
       "text": "Golden-hour composition: Move the featured-excursion card into the left-side safe area; vessel stays on the right. Implementation is WP-01's (Codex, PR #2). Camera, ship and environment identical across daylight and sunset."
+    },
+    "D-W02-11": {
+      "status": "approved",
+      "text": "Forward tapered balconies: cabins 7305 and 7306 (deck 7, x 111.4–116) keep their slot and full 7.2 m interior; only their balconies are reduced from 2.1 m; approved at 1.87 m (≈7.97 m²) subject to final geometric verification, which allows at most 1.8698 m, so the recorded value is 1.86 m (7.92 m² clear). Applies to these two cabins only. Capacity stays 104 staterooms / ~208 guests; vessel dimensions, exterior geometry and Signature Cabin 7214 (9.0 m² balcony) unchanged."
     }
   },
   "cabin7214": {
