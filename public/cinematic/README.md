@@ -1,5 +1,7 @@
 # Aurora Tide visual foundation
 
+**Current delivery:** the approved original concepts remain reference assets. The old moving-cutout/wake/grade implementation was rejected and removed. `signature-still.webp` is a single integrated interim concept still. `film/manifest.json` remains pending until genuine matched footage exists; see [the production specification](../../docs/signature/ASSET_PRODUCTION_SPEC.md). The historical usage described below applies to Phase 1.5.
+
 `island-ocean.webp` is an original AI-generated fictional island/ocean plate. `aurora-tide.webp` is an original AI-generated fictional boutique exploration cruiser with transparent background, rendered against that plate's light and camera reference. Both were created for ShoreMigo with OpenAI image generation on 2026-11-11, then encoded locally as WebP. No real cruise-line ship photograph, logo or third-party character is used.
 
 The vessel keeps pearl-white tiered observation decks, a deep navy hull, restrained sea-glass trim, panoramic dark glazing and contemporary architectural curves. The same transparent asset is reused in intro, welcome, hero, golden hour and the Ships & Rooms discovery card. Color grading, subtle scene transforms and the coded wake are presentation layers, not live 3D or a simulated ocean.

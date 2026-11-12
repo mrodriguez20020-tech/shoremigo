@@ -1,6 +1,10 @@
-# Cinematic Luxury · Phase 1.5
+# Cinematic Luxury · Phase 1.5 (historical)
 
-The opening now uses a fictional Aurora Tide concept vessel and island/ocean environment, reused across the intro, welcome, homepage, golden hour and Ships & Rooms discovery card. Golden hour relights that same geometry in **750 ms**. Migo keeps his original artwork and application behavior, with brief stepping bursts and optional contact-triggered sound.
+**Superseded visual implementation.** The user rejected this moving-photo/cutout/grade result. Its 750 ms change was a CSS grade, not physically relit geometry. See the [Signature audit and current status](signature/README.md); the old recording remains historical evidence, not accepted cinematic quality.
+
+The historical capture script requires the matching `000a837` source. Use `scripts/capture-signature-review.mjs` for the current package; do not overwrite the archived Phase 1.5 evidence with the new interim state.
+
+The opening now uses a fictional Aurora Tide concept vessel and island/ocean environment, reused across the intro, welcome, homepage, golden hour and Ships & Rooms discovery card. Golden hour applied a CSS grade to the same 2D layers in **750 ms**. Migo keeps his original artwork and application behavior, with brief stepping bursts and optional contact-triggered sound.
 
 **A fully articulated walk was not achieved.** The source has two flattened walking poses and no separated boots, legs, face or strap layers. The fallback uses those approved poses without fabricating a rig or distorting the character. Its remaining discrete recovery motion is visible in the recording. [Exact limitations and required assets](MIGO_ASSET_PLAN.md).
 

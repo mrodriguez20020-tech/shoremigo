@@ -9,6 +9,8 @@ import { PortCards } from "@/components/home/PortCards";
 import { AdventureMatch } from "@/components/home/AdventureMatch";
 import { RescueStory } from "@/components/home/RescueStory";
 import { HomeWelcome } from "@/components/home/HomeWelcome";
+import { HeroProof } from "@/components/home/HeroProof";
+import { GoldenCopy, GoldenDisclosure } from "@/components/home/GoldenCopy";
 import { HeroActions } from "@/components/home/HeroActions";
 import { PortDayClock } from "@/components/home/PortDayClock";
 import { Reveal } from "@/components/ui/Reveal";
@@ -33,14 +35,10 @@ export default function Home() {
               <HeroActions />
             </Reveal>
             <Reveal delay={0.45}>
-              <ul className="mt-12 flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold text-ink-soft">
-                <li>Ship-aware planning</li>
-                <li>Island experiences</li>
-                <li>Your personal companion</li>
-              </ul>
+              <HeroProof />
             </Reveal>
           </div>
-          <div className="hero-vessel-caption" aria-hidden><span className="luxury-kicker">Aurora Tide</span><p>Our fictional exploration cruiser.<br />An original concept rendering.</p></div>
+          <div className="hero-vessel-caption" aria-hidden><span className="luxury-kicker">Aurora Tide</span><p>Our fictional exploration cruiser.<br />An original concept still.</p></div>
         </div>
         <a
           href="#ports"
@@ -53,7 +51,7 @@ export default function Home() {
         </a>
       </section>
 
-      <p className="photo-caption">Aurora Tide · fictional vessel and island · AI-generated concept rendering · demo sailing</p>
+      <p className="photo-caption">Aurora Tide · fictional vessel and island · AI-generated concept still · demo sailing</p>
       <Discovery />
 
       {/* ── Ports ──────────────────────────────────────── */}
@@ -95,46 +93,34 @@ export default function Home() {
       <SceneSection
         scene="sunset"
         id="golden-hour"
-        className="golden-scene relative flex min-h-dvh items-center overflow-hidden px-6 py-28 sm:px-12 lg:px-20"
+        className="golden-scene relative overflow-hidden"
         threshold={0.4}
       >
-        <OceanScene variant="sunset" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#151522]/90 via-[#151522]/45 to-[#151522]/25" />
-        <p className="absolute bottom-6 left-6 text-[10px] tracking-wider text-white/70 sm:left-12">Fictional Aurora Tide and island · concept rendering, not Ocho Rios or the listed excursion</p>
-        <div className="relative mx-auto grid w-full max-w-[1400px] items-end gap-12 lg:grid-cols-[1.2fr_0.8fr]">
-          <Reveal>
-            <p className="eyebrow">Ocho Rios · golden hour</p>
-            <h2 className="font-display mt-4 text-[clamp(3rem,7vw,6.5rem)] leading-[0.95] tracking-[-0.02em] [text-shadow:0_4px_60px_rgba(80,20,40,0.45)]">
-              The sun goes down.
-              <br />
-              <em className="text-accent">The day doesn&apos;t end.</em>
-            </h2>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-              An evening port call means a sail into the sunset with the island
-              glowing behind you. LastBoard confirms you&apos;re back at the
-              pier 60 minutes before all-aboard, so you can just watch the
-              light.
-            </p>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <TideLink
-              href={`/excursions/${sunset.id}`}
-              data-migo-avoid
-              className="surface group block rounded-[28px] p-7 transition hover:-translate-y-1"
-            >
+        <div className="golden-window relative flex min-h-dvh items-center px-6 py-28 sm:px-12 lg:px-20">
+          <OceanScene variant="sunset" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#151522]/90 via-[#151522]/45 to-transparent" />
+          <div className="cinematic-subject-safe" data-cinematic-subject-safe data-migo-avoid aria-hidden />
+
+          <GoldenDisclosure />
+        </div>
+        <div className="golden-editorial">
+          <div className="relative mx-auto w-full max-w-[1400px]">
+            <Reveal><GoldenCopy /></Reveal>
+          <TideLink
+            href={`/excursions/${sunset.id}`}
+            data-migo-avoid
+            className="golden-excursion group mt-8 flex flex-wrap items-center justify-between gap-5 border-t border-white/25 pt-6"
+          >
+            <div>
               <p className="eyebrow">Featured excursion</p>
-              <p className="font-display mt-2 text-3xl">{sunset.title}</p>
-              <p className="mt-2 text-ink-soft">{sunset.tagline}</p>
-              <div className="mt-6 flex items-center justify-between">
-                <span className="text-lg font-semibold">
-                  {fmtUsd(sunset.priceCents)} / guest
-                </span>
-                <span className="btn btn-primary !py-2 text-sm">
-                  See timing →
-                </span>
-              </div>
-            </TideLink>
-          </Reveal>
+              <p className="font-display mt-2 text-2xl">{sunset.title}</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-6">
+              <span className="text-lg font-semibold">{fmtUsd(sunset.priceCents)} / guest</span>
+              <span className="btn btn-primary !py-2 text-sm">See timing →</span>
+            </div>
+          </TideLink>
+          </div>
         </div>
       </SceneSection>
 
