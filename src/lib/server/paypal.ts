@@ -159,3 +159,38 @@ export function verifyCapturedOrder(order: PayPalOrder, expected: { customId: st
 export function __resetPayPalTokenForTests() {
   token = null;
 }
+
+// ───────────── Webhooks (reconciliation signal only) ─────────────
+
+export function paypalWebhookConfigured() {
+  return paypalConfigured() && Boolean(process.env.PAYPAL_WEBHOOK_ID);
+}
+
+const WEBHOOK_HEADERS = ["paypal-auth-algo", "paypal-cert-url", "paypal-transmission-id", "paypal-transmission-sig", "paypal-transmission-time"] as const;
+
+/**
+ * Asks PayPal to verify a webhook delivery (POST /v1/notifications/verify-webhook-signature).
+ * Returns false for any missing header or non-SUCCESS answer. The event body is never trusted
+ * for money state even after verification; callers re-read the capture from PayPal.
+ */
+export async function verifyWebhookSignature(headers: Headers, event: unknown, fetchImpl?: typeof fetch) {
+  if (!paypalWebhookConfigured()) throw new PayPalNotConfigured();
+  const h = Object.fromEntries(WEBHOOK_HEADERS.map((k) => [k, headers.get(k)]));
+  if (WEBHOOK_HEADERS.some((k) => !h[k])) return false;
+  const res = await call<{ verification_status?: string }>(
+    "POST",
+    "/v1/notifications/verify-webhook-signature",
+    {
+      auth_algo: h["paypal-auth-algo"],
+      cert_url: h["paypal-cert-url"],
+      transmission_id: h["paypal-transmission-id"],
+      transmission_sig: h["paypal-transmission-sig"],
+      transmission_time: h["paypal-transmission-time"],
+      webhook_id: process.env.PAYPAL_WEBHOOK_ID,
+      webhook_event: event,
+    },
+    undefined,
+    fetchImpl,
+  );
+  return res.verification_status === "SUCCESS";
+}

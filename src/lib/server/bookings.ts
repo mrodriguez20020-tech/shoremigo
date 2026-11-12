@@ -24,15 +24,37 @@ export function audit(db: DbShape, e: Omit<AuditEvent, "id" | "at">) {
   db.audit.push({ id: randomUUID(), at: now(), ...e });
 }
 
+function holdStart(b: Booking) {
+  return Date.parse(b.holdRenewedAt ?? b.createdAt);
+}
+
 function holdActive(b: Booking) {
-  return b.status === "pending_payment" && Date.now() - Date.parse(b.createdAt) < POLICY.holdMinutes * 60_000;
+  return b.status === "pending_payment" && Date.now() - holdStart(b) < POLICY.holdMinutes * 60_000;
+}
+
+/** A rescue claim older than this is treated as abandoned (process died mid-refund) and no longer blocks. */
+export const RESCUE_CLAIM_MS = 2 * 60_000;
+function claimActive(p: RescueProposal) {
+  return Boolean(p.claim && Date.now() - Date.parse(p.claim.at) < RESCUE_CLAIM_MS);
 }
 
 export function seatsTaken(db: DbShape, excursionId: string, excludeBookingId?: string) {
   return db.bookings
     .filter((b) => b.id !== excludeBookingId && b.excursionId === excursionId)
     .filter((b) => b.status === "confirmed" || b.status === "rebooked" || b.status === "disrupted" || holdActive(b))
-    .reduce((n, b) => n + b.guests, 0);
+    .reduce((n, b) => n + b.guests, 0) + rescueClaimSeats(db, excursionId, excludeBookingId);
+}
+
+/** Seats reserved on a switch target while that rescue option is being executed. */
+function rescueClaimSeats(db: DbShape, excursionId: string, excludeBookingId?: string) {
+  let n = 0;
+  for (const p of db.rescues) {
+    if (p.bookingId === excludeBookingId || p.status !== "open" || !claimActive(p)) continue;
+    const opt = p.options.find((o) => o.id === p.claim!.optionId);
+    if (opt?.kind !== "switch" || opt.excursionId !== excursionId) continue;
+    n += db.bookings.find((b) => b.id === p.bookingId)?.guests ?? 0;
+  }
+  return n;
 }
 
 /** Effective capacity: operator override if set, else the catalog default. */
@@ -57,7 +79,7 @@ export function inventoryRows(db: DbShape) {
     const confirmed = live.filter((b) => b.status === "confirmed" || b.status === "rebooked" || b.status === "disrupted").reduce((n, b) => n + b.guests, 0);
     const holds = live.filter(holdActive);
     const held = holds.reduce((n, b) => n + b.guests, 0);
-    const expiries = holds.map((b) => Date.parse(b.createdAt) + POLICY.holdMinutes * 60_000).sort((a, z) => a - z);
+    const expiries = holds.map((b) => holdStart(b) + POLICY.holdMinutes * 60_000).sort((a, z) => a - z);
     return {
       excursionId: ex.id,
       catalogCapacity: ex.capacity,
@@ -290,6 +312,25 @@ export async function completeCheckout(bookingId: string, orderId: string) {
   if (b.status === "confirmed" && b.payments.some((p) => p.orderId === orderId)) return b; // idempotent replay
   if (b.status !== "pending_payment" || b.pendingOrderId !== orderId) throw new DomainError("Order does not match this booking.", "order_mismatch", 409);
 
+  // An expired hold no longer reserves seats. Before any money moves, re-check live inventory:
+  // renew the hold if the seats are still free, otherwise refuse without capturing.
+  const gate = await tx((db) => {
+    const x = db.bookings.find((y) => y.id === bookingId)!;
+    if (x.status !== "pending_payment" || holdActive(x)) return "ok" as const;
+    if (!isOnSale(db, x.excursionId) || seatsLeft(db, x.excursionId, x.id) < x.guests) {
+      x.status = "expired";
+      x.pendingOrderId = undefined;
+      x.updatedAt = now();
+      audit(db, { actor: "system", type: "booking.expired", bookingId, detail: { orderId, reason: "hold lapsed and seats were taken before capture" } });
+      return "sold_out" as const;
+    }
+    x.holdRenewedAt = now();
+    x.updatedAt = now();
+    audit(db, { actor: "system", type: "booking.hold_renewed", bookingId, detail: { orderId } });
+    return "ok" as const;
+  });
+  if (gate === "sold_out") throw new DomainError("Your seat hold expired and the excursion filled up. You have not been charged.", "sold_out", 409);
+
   let captured: Awaited<ReturnType<typeof captureVerified>>;
   try {
     captured = await captureVerified(orderId, `capture-${orderId}`, { customId: b.id, amountCents: b.totalCents });
@@ -313,20 +354,23 @@ export async function completeCheckout(bookingId: string, orderId: string) {
     throw e;
   }
   const { order, check } = captured;
+  if (!check.ok || !check.capture) {
+    await tx((db) => audit(db, { actor: "paypal", type: "paypal.capture.rejected", bookingId, detail: { orderId, status: order.status, problems: check.problems } }));
+    throw new DomainError(`Payment could not be verified: ${check.problems.join(", ")}`, "payment_unverified", 402);
+  }
+  const capture = check.capture;
   return tx((db) => {
     const x = db.bookings.find((y) => y.id === bookingId)!;
-    if (!check.ok || !check.capture) {
-      audit(db, { actor: "paypal", type: "paypal.capture.rejected", bookingId, detail: { orderId, status: order.status, problems: check.problems } });
-      throw new DomainError(`Payment could not be verified: ${check.problems.join(", ")}`, "payment_unverified", 402);
-    }
+    // A concurrent submission of the same order already recorded this capture: replay, never double-count.
+    if (x.payments.some((p) => p.orderId === orderId && p.kind === "charge")) return x;
     const rec: PaymentRecord = {
       kind: "charge",
       provider: "paypal-sandbox",
       orderId,
-      captureId: check.capture.id,
-      amountCents: paypalToCents(check.capture.amount.value),
+      captureId: capture.id,
+      amountCents: paypalToCents(capture.amount.value),
       currency: "USD",
-      status: check.capture.status,
+      status: capture.status,
       verifiedAt: now(),
       purpose: "booking",
     };
@@ -446,29 +490,49 @@ export async function reviewRescue(proposalId: string, decision: "approved" | "r
 }
 
 export async function approveRescue(bookingId: string, optionId: string, actor: "customer" | "operator") {
-  const [b, proposal] = await Promise.all([getBooking(bookingId), openRescueFor(bookingId)]);
-  if (!b || !proposal) throw new DomainError("No open rescue proposal for this booking.", "no_proposal", 404);
-  if (proposal.status !== "open") throw new DomainError("This proposal is awaiting payment.", "bad_state", 409);
-  if (proposal.operatorReview !== "approved")
-    throw new DomainError("The operator is still reviewing these options. You'll be able to choose shortly.", "awaiting_operator", 409);
-  const opt = proposal.options.find((o) => o.id === optionId);
-  if (!opt) throw new DomainError("Unknown option", "bad_option");
-
-  // Re-validate seats at approval time (inventory may have moved).
-  if (opt.kind === "switch") {
-    const left = await read((db) => seatsLeft(db, opt.excursionId!, b.id));
-    if (left < b.guests) throw new DomainError("That alternative just filled up. Please choose another option.", "sold_out", 409);
-  }
+  // Claim the proposal inside the serialized transaction before any money moves. A second approval
+  // (double click, two tabs, customer and operator at once) is refused while the claim stands, and a
+  // switch target's seats stay reserved for the claim's lifetime.
+  const claimed = await tx((db) => {
+    const b = db.bookings.find((y) => y.id === bookingId);
+    const proposal = db.rescues.filter((r) => r.bookingId === bookingId && (r.status === "open" || r.status === "awaiting_payment")).at(-1);
+    if (!b || !proposal) return { error: new DomainError("No open rescue proposal for this booking.", "no_proposal", 404) };
+    if (proposal.status !== "open") return { error: new DomainError("This proposal is awaiting payment.", "bad_state", 409) };
+    if (claimActive(proposal)) return { error: new DomainError("This choice is already being processed.", "in_progress", 409) };
+    if (proposal.operatorReview !== "approved")
+      return { error: new DomainError("The operator is still reviewing these options. You'll be able to choose shortly.", "awaiting_operator", 409) };
+    const opt = proposal.options.find((o) => o.id === optionId);
+    if (!opt) return { error: new DomainError("Unknown option", "bad_option") };
+    // Re-validate seats at approval time (inventory may have moved).
+    if (opt.kind === "switch" && seatsLeft(db, opt.excursionId!, b.id) < b.guests)
+      return { error: new DomainError("That alternative just filled up. Please choose another option.", "sold_out", 409) };
+    proposal.claim = { optionId: opt.id, at: now() };
+    return { b: structuredClone(b), proposal: structuredClone(proposal), opt: structuredClone(opt) };
+  });
+  if ("error" in claimed) throw claimed.error;
+  const { b, proposal, opt } = claimed;
+  const release = () =>
+    tx((db) => {
+      const p = db.rescues.find((r) => r.id === proposal.id);
+      if (p?.claim?.optionId === opt.id) p.claim = undefined;
+    });
 
   if (opt.deltaCents > 0) {
-    const order = await paypal.createOrder({
+    let order: paypal.PayPalOrder;
+    try {
+      order = await paypal.createOrder({
       amountCents: opt.deltaCents,
       customId: `${b.id}:rescue:${proposal.id}`,
       description: `ShoreMigo ${b.ref}: Trip Rescue top-up`,
       requestId: `rescue-create-${proposal.id}-${opt.id}`,
-    });
+      });
+    } catch (e) {
+      await release();
+      throw e;
+    }
     await tx((db) => {
       const p = db.rescues.find((r) => r.id === proposal.id)!;
+      p.claim = undefined;
       p.status = "awaiting_payment";
       p.chosenOptionId = opt.id;
       p.supplementOrderId = order.id;
@@ -477,13 +541,21 @@ export async function approveRescue(bookingId: string, optionId: string, actor: 
     return { kind: "payment_required" as const, orderId: order.id, amountCents: opt.deltaCents };
   }
 
-  const refunds = opt.deltaCents < 0 ? await refundVerified(b, -opt.deltaCents, opt.kind === "cancel_refund" ? "cancellation" : "price difference", proposal.id) : [];
+  let refunds: PaymentRecord[];
+  try {
+    refunds = opt.deltaCents < 0 ? await refundVerified(b, -opt.deltaCents, opt.kind === "cancel_refund" ? "cancellation" : "price difference", proposal.id) : [];
+  } catch (e) {
+    await release(); // nothing was recorded; the guest can choose again
+    throw e;
+  }
   const allCompleted = refunds.every((r) => r.status === "COMPLETED");
 
   return tx((db) => {
     const x = db.bookings.find((y) => y.id === bookingId)!;
     const p = db.rescues.find((r) => r.id === proposal.id)!;
+    p.claim = undefined;
     for (const r of refunds) {
+      if (r.refundId && x.payments.some((q) => q.refundId === r.refundId)) continue; // already recorded
       x.payments.push(r);
       x.paidCents -= r.amountCents;
       audit(db, { actor: "paypal", type: "paypal.refund.verified", bookingId, detail: { refundId: r.refundId, captureId: r.captureId, amountCents: r.amountCents, status: r.status } });
@@ -517,26 +589,42 @@ export async function completeRescueTopUp(bookingId: string, orderId: string) {
   if (!b || !proposal || proposal.status !== "awaiting_payment" || proposal.supplementOrderId !== orderId)
     throw new DomainError("No matching top-up for this booking.", "order_mismatch", 409);
   const opt = proposal.options.find((o) => o.id === proposal.chosenOptionId)!;
+  // The top-up moves seats: make sure they are still free before any money moves.
+  const free = await read((db) => seatsLeft(db, opt.excursionId!, b.id));
+  if (free < b.guests) {
+    await tx((db) => {
+      const p = db.rescues.find((r) => r.id === proposal.id);
+      if (p && p.status === "awaiting_payment" && p.supplementOrderId === orderId) {
+        p.status = "open";
+        p.chosenOptionId = undefined;
+        p.supplementOrderId = undefined;
+      }
+      audit(db, { actor: "system", type: "rescue.topup_seats_gone", bookingId, detail: { orderId, excursionId: opt.excursionId! } });
+    });
+    throw new DomainError("That alternative filled up before payment. You have not been charged; please choose again.", "sold_out", 409);
+  }
   const { order, check } = await captureVerified(orderId, `rescue-capture-${orderId}`, {
     customId: `${b.id}:rescue:${proposal.id}`,
     amountCents: opt.deltaCents,
   });
+  if (!check.ok || !check.capture) {
+    await tx((db) => audit(db, { actor: "paypal", type: "paypal.capture.rejected", bookingId, detail: { orderId, status: order.status, problems: check.problems } }));
+    throw new DomainError(`Top-up could not be verified: ${check.problems.join(", ")}`, "payment_unverified", 402);
+  }
+  const capture = check.capture;
   return tx((db) => {
     const x = db.bookings.find((y) => y.id === bookingId)!;
     const p = db.rescues.find((r) => r.id === proposal.id)!;
-    if (!check.ok || !check.capture) {
-      audit(db, { actor: "paypal", type: "paypal.capture.rejected", bookingId, detail: { orderId, status: order.status, problems: check.problems } });
-      throw new DomainError(`Top-up could not be verified: ${check.problems.join(", ")}`, "payment_unverified", 402);
-    }
-    const amt = paypalToCents(check.capture.amount.value);
+    if (x.payments.some((q) => q.orderId === orderId && q.kind === "charge")) return x; // concurrent replay
+    const amt = paypalToCents(capture.amount.value);
     x.payments.push({
       kind: "charge",
       provider: "paypal-sandbox",
       orderId,
-      captureId: check.capture.id,
+      captureId: capture.id,
       amountCents: amt,
       currency: "USD",
-      status: check.capture.status,
+      status: capture.status,
       verifiedAt: now(),
       purpose: "rescue top-up",
     });
@@ -549,7 +637,7 @@ export async function completeRescueTopUp(bookingId: string, orderId: string) {
     x.updatedAt = now();
     p.status = "resolved";
     p.resolution = `switched to ${ex.id} with top-up`;
-    audit(db, { actor: "paypal", type: "paypal.capture.verified", bookingId, detail: { orderId, captureId: check.capture.id, amountCents: amt } });
+    audit(db, { actor: "paypal", type: "paypal.capture.verified", bookingId, detail: { orderId, captureId: capture.id, amountCents: amt } });
     audit(db, { actor: "system", type: "rescue.resolved", bookingId, detail: { optionId: opt.id, deltaCents: opt.deltaCents } });
     return x;
   });
@@ -566,6 +654,59 @@ export async function reverifyPayments(bookingId: string) {
   }
   await tx((db) => audit(db, { actor: "operator", type: "paypal.reverified", bookingId, detail: { results } }));
   return results;
+}
+
+// ───────────────────────── PayPal webhooks → reconciliation ─────────────────────────
+
+export const WEBHOOK_EVENTS = ["PAYMENT.CAPTURE.COMPLETED", "PAYMENT.CAPTURE.PENDING", "PAYMENT.CAPTURE.DENIED", "PAYMENT.CAPTURE.REFUNDED", "PAYMENT.CAPTURE.REVERSED"] as const;
+
+interface WebhookEvent {
+  id?: string;
+  event_type?: string;
+  resource?: { id?: string; links?: { rel?: string; href?: string }[] };
+}
+
+function captureIdOf(e: WebhookEvent) {
+  if (e.event_type === "PAYMENT.CAPTURE.REFUNDED" || e.event_type === "PAYMENT.CAPTURE.REVERSED") {
+    // The resource is the refund; its "up" link points at the capture.
+    const up = e.resource?.links?.find((l) => l.rel === "up")?.href ?? "";
+    const m = /\/v2\/payments\/captures\/([A-Za-z0-9]+)/.exec(up);
+    if (m) return m[1];
+  }
+  return e.resource?.id;
+}
+
+/**
+ * A verified webhook is a reconciliation signal, never a source of money state: the capture is
+ * re-read from PayPal and compared with what this application recorded. Differences (for example a
+ * refund issued from the PayPal dashboard, a reversal or a dispute) are audited for the operator
+ * instead of silently rewriting the booking. Duplicate deliveries are ignored by event id.
+ */
+export async function reconcileWebhookEvent(e: WebhookEvent) {
+  if (!e.id || !e.event_type) throw new DomainError("Malformed event", "bad_event");
+  if (!(WEBHOOK_EVENTS as readonly string[]).includes(e.event_type)) return { handled: false as const, reason: "ignored_type" };
+  const seen = await read((db) => db.audit.some((a) => a.type.startsWith("paypal.webhook") && a.detail?.eventId === e.id));
+  if (seen) return { handled: false as const, reason: "duplicate" };
+  const captureId = captureIdOf(e);
+  const booking = captureId ? await read((db) => db.bookings.find((b) => b.payments.some((p) => p.captureId === captureId)) ?? null) : null;
+  if (!captureId || !booking) {
+    await tx((db) => audit(db, { actor: "paypal", type: "paypal.webhook.unmatched", detail: { eventId: e.id!, eventType: e.event_type!, captureId: captureId ?? null } }));
+    return { handled: true as const, matched: false };
+  }
+  const cap = await paypal.getCapture(captureId);
+  const charge = booking.payments.find((p) => p.kind === "charge" && p.captureId === captureId)!;
+  const refundedHere = booking.payments.filter((p) => p.kind === "refund" && p.captureId === captureId).reduce((n, p) => n + p.amountCents, 0);
+  const expected = refundedHere === 0 ? "COMPLETED" : refundedHere >= charge.amountCents ? "REFUNDED" : "PARTIALLY_REFUNDED";
+  const drift = cap.status !== expected || paypalToCents(cap.amount.value) !== charge.amountCents;
+  await tx((db) =>
+    audit(db, {
+      actor: "paypal",
+      type: drift ? "paypal.webhook.drift" : "paypal.webhook.reconciled",
+      bookingId: booking.id,
+      detail: { eventId: e.id!, eventType: e.event_type!, captureId, paypalStatus: cap.status, expectedStatus: expected },
+    }),
+  );
+  return { handled: true as const, matched: true, drift, paypalStatus: cap.status, expectedStatus: expected };
 }
 
 // ───────────────────────── Engagement (anonymous) ─────────────────────────

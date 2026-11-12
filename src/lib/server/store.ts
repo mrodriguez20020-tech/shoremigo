@@ -110,9 +110,11 @@ async function pgRead<T>(fn: (db: DbShape) => T): Promise<T> {
 export function tx<T>(fn: (db: DbShape) => T | Promise<T>): Promise<T> {
   if (postgresEnabled()) return pgTx(fn);
   const run = queue.then(async () => {
-    const db = await load();
+    // Work on a copy so a throwing callback leaves no partial change behind (same as the Postgres rollback).
+    const db = structuredClone(await load());
     const out = await fn(db);
     await persist(db);
+    cache = db;
     return out;
   });
   queue = run.catch(() => undefined);

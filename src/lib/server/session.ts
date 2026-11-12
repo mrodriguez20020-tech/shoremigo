@@ -60,7 +60,32 @@ export async function isOperator(req?: Request): Promise<boolean> {
   if (!code) return !process.env.VERCEL && process.env.NODE_ENV !== "production"; // Only local development may use unprotected demo mode.
   const header = req?.headers.get("x-operator-passcode");
   const cookie = (await cookies()).get("sm_op")?.value;
-  return header === code || cookie === createHmac("sha256", secret()).update(code).digest("base64url");
+  return passcodeMatches(header) || safeEqual(cookie, operatorCookieValue());
+}
+
+/** Constant-time comparison of two strings (hashing first equalizes lengths). */
+function safeEqual(a: string | null | undefined, b: string) {
+  if (!a) return false;
+  const h = (v: string) => createHmac("sha256", "cmp").update(v).digest();
+  return timingSafeEqual(h(a), h(b));
+}
+
+export function passcodeMatches(candidate: string | null | undefined) {
+  const code = process.env.OPERATOR_PASSCODE;
+  return Boolean(code) && safeEqual(candidate, code!);
+}
+
+// Per-instance login throttle: 5 failures per 10 minutes per client address.
+const failures = new Map<string, number[]>();
+const WINDOW_MS = 10 * 60_000;
+export function loginThrottled(key: string, now = Date.now()) {
+  const recent = (failures.get(key) ?? []).filter((t) => now - t < WINDOW_MS);
+  failures.set(key, recent);
+  return recent.length >= 5;
+}
+export function recordLoginFailure(key: string, now = Date.now()) {
+  failures.set(key, [...(failures.get(key) ?? []), now]);
+  if (failures.size > 10_000) failures.clear();
 }
 
 export function operatorCookieValue() {

@@ -110,6 +110,8 @@ export interface Booking {
   pendingOrderId?: string;
   /** Incremented when PayPal refuses a capture, so the next checkout gets a fresh order. */
   checkoutAttempt?: number;
+  /** Set when an expired hold is re-validated against live inventory just before capture. */
+  holdRenewedAt?: string;
   payments: PaymentRecord[];
 }
 
@@ -152,6 +154,8 @@ export interface RescueProposal {
   chosenOptionId?: string;
   supplementOrderId?: string;
   resolution?: string;
+  /** Short-lived claim while a chosen option is being executed (refund in flight). Blocks concurrent approvals. */
+  claim?: { optionId: string; at: string };
 }
 
 export interface AuditEvent {
