@@ -28,7 +28,7 @@ export default async function TastePage() {
     <SceneRoute scene="sunset" />
     <div className="taste-page">
       <header className="culinary-hero">
-        <div className="culinary-hero-copy">
+        <div data-migo-avoid className="culinary-hero-copy">
           <p className="culinary-kicker">ShoreMigo / Taste &amp; Indulge</p>
           <h1>A little island.<br /><em>A lot of flavour.</em></h1>
           <p>Follow your curiosity, from the first warm bara to a slow, sweet finish. Discover the dishes, linger over a menu, and leave room for a little adventure.</p>

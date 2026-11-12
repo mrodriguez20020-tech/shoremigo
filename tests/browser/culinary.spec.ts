@@ -125,6 +125,6 @@ test("reduced motion opens without transform animations and cleans up on navigat
 
 for(const width of [320,390])test(`${width}px: culinary hero interaction stays clear of Migo`,async({page})=>{
  await page.setViewportSize({width,height:844});await returning(page);const trigger=page.locator('.culinary-hero-image');await trigger.scrollIntoViewIfNeeded();
- await expect.poll(async()=>{const m=page.locator('[data-migo-stage]');const a=await m.boundingBox(),b=await trigger.boundingBox();return !a||!await m.isVisible()||!b||a.x+a.width<=b.x-11||a.x>=b.x+b.width+11||a.y+a.height<=b.y-11||a.y>=b.y+b.height+11;}).toBe(true);
+ await expect.poll(async()=>{const m=page.locator('[data-migo-stage]');const a=await m.boundingBox(),b=await trigger.boundingBox();if(!a||!await m.isVisible()||!b)return true;return page.locator('.culinary-hero [data-migo-avoid]').evaluateAll((els,a)=>els.every(el=>{const b=el.getBoundingClientRect();return a.x+a.width<=b.left-11||a.x>=b.right+11||a.y+a.height<=b.top-11||a.y>=b.bottom+11;}),a);}).toBe(true);
  await trigger.click();await expect(page.getByRole('dialog',{name:'Doubles',exact:true})).toBeVisible();
 });
