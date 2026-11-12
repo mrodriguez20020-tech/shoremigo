@@ -74,6 +74,10 @@ export default function TripPage() {
       <SceneRoute scene={scene} />
       <section className="px-5 pb-40 pt-28 sm:px-10">
         <div className="mx-auto max-w-6xl">
+          <div className="surface flex flex-wrap items-center justify-between gap-5 rounded-3xl p-6" data-migo-avoid>
+            <div><p className="eyebrow">Plan before you reserve</p><p className="mt-2 text-ink-soft">Build a port day with several experiences. Check transfers and LastBoard before individual checkout.</p></div>
+            <TideLink href="/trip/plan" className="btn-primary">Plan my port day →</TideLink>
+          </div>
           {!trip && <div className="surface mt-8 h-80 animate-pulse rounded-[28px]" aria-label="Loading your trip" />}
           {trip && !trip.verified && <VerifyForm onDone={load} />}
           {trip?.verified && trip.booking && <TripView trip={trip} reload={load} justConfirmed={justConfirmed} />}

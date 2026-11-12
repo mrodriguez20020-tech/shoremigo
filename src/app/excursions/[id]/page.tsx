@@ -116,6 +116,8 @@ export default async function ExcursionPage({ params, searchParams }: { params: 
                     {s.onSale ? `${s.seatsLeft} of ${s.capacity} seats open` : "Not on sale"} · demo inventory
                   </p>
                   <ReserveForm excursionId={e.id} unitCents={e.priceCents} seatsLeft={s.seatsLeft} feasible={s.feasibility.status !== "infeasible"} initialGuests={initialGuests} maxGuests={POLICY.maxGuests} />
+                  <TideLink href={`/trip/plan?add=${e.id}`} className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold underline underline-offset-4">Add to a port-day plan →</TideLink>
+                  <p className="mt-1 text-xs text-ink-soft">Check connections with other excursions before reserving.</p>
                 </div>
               </Reveal>
             </aside>
