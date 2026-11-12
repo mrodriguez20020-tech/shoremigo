@@ -111,3 +111,11 @@ test('Cabin 7214 respects saved manual pause and cancels a live camera glide',as
  await page.getByRole('button',{name:/Sound and experience settings/}).click();let pause=page.getByRole('switch',{name:/Pause animations/});await pause.focus();await page.keyboard.press('Space');await expect(pause).not.toBeChecked();await page.getByRole('button',{name:/Sound and experience settings/}).click();
  await cabin.getByRole('tab',{name:/V5 · Balcony · sea/}).click();await page.getByRole('button',{name:/Sound and experience settings/}).click();pause=page.getByRole('switch',{name:/Pause animations/});await pause.focus();await page.keyboard.press('Space');await expect(pause).toBeChecked();await page.waitForTimeout(100);before=await count();await page.waitForTimeout(350);expect(await count()).toBe(before);
 });
+
+for(const width of [320,390])test(`${width}px: cabin camera remains visible between captions and Migo protects its plan`,async({page})=>{
+ await page.setViewportSize({width,height:844});await page.emulateMedia({reducedMotion:'reduce'});await enter(page);await tab(page,'Cabin 7214').click();
+ const cabin=page.locator('[data-cabin="7214"]');await cabin.scrollIntoViewIfNeeded();
+ const view=cabin.getByRole('group',{name:/Cabin 7214 spatial view/});expect((await view.boundingBox())!.height).toBeGreaterThanOrEqual(340);
+ const badge=await view.locator('.demo-tag').boundingBox();const caption=await view.locator('[aria-live="polite"]').boundingBox();expect(caption!.y-(badge!.y+badge!.height)).toBeGreaterThan(60);
+ await expect.poll(async()=>{const m=page.locator('[data-migo-stage]');const b=await m.boundingBox();if(!b||!await m.isVisible())return true;return cabin.locator('[data-migo-avoid]').evaluateAll((els,b)=>els.every(el=>{const r=el.getBoundingClientRect();return b.x+b.width<=r.left-11||b.x>=r.right+11||b.y+b.height<=r.top-11||b.y>=r.bottom+11;}),b);}).toBe(true);
+});
