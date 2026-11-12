@@ -221,7 +221,7 @@ The fake PayPal double tests our logic only.
 
 ## Assets & licensing
 
-Code is MIT (`LICENSE`). The Migo artwork was created by the ShoreMigo team with an AI image tool and is **not** MIT-licensed. Environment art, excursion art and audio are original; fonts are SIL OFL. Full terms and the dependency audit are in [ASSETS.md](ASSETS.md).
+Source code is MIT ([LICENSE](LICENSE)); asset-specific terms and exclusions are in [ASSETS.md](ASSETS.md). The standard root license text does not relicense non-code assets. The Migo artwork was created by the ShoreMigo team with an AI image tool and is **not** MIT-licensed. Environment art, excursion art and audio are original; fonts are SIL OFL. Full terms and the dependency audit are in [ASSETS.md](ASSETS.md).
 
 ## Bryntum
 
