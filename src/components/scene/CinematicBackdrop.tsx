@@ -13,6 +13,9 @@ import {
   type FilmManifest,
 } from "@/lib/cinematic/media";
 
+const ALIGNMENT_RETRY_DELAYS = [250, 500, 1000] as const;
+const SEEK_TIMEOUT_MS = 1500;
+
 const STILL = "/cinematic/signature-still.webp";
 const STILL_LIGHT = {
   tint: "#fff4d6", rim: "#ffffff", shadow: "#053049", compass: "#ffd27a",
@@ -37,6 +40,9 @@ export function CinematicBackdrop() {
   const [failed, setFailed] = useState(false);
   const [failedPoster, setFailedPoster] = useState<string | null>(null);
   const [retry, setRetry] = useState(0);
+  const [alignmentRetries, setAlignmentRetries] = useState(0);
+  const [alignmentBlocks, setAlignmentBlocks] = useState(0);
+  const [alignmentExhausted, setAlignmentExhausted] = useState(false);
   const day = useRef<HTMLVideoElement>(null);
   const sunset = useRef<HTMLVideoElement>(null);
   const active = useRef<FilmLight>("day");
@@ -180,21 +186,26 @@ export function CinematicBackdrop() {
     if (target.readyState === 0) target.load();
     let cancelled = false;
     let activating = false;
+    let alignmentAttempts = 0;
+    let recovery: ReturnType<typeof setTimeout> | undefined;
+    setAlignmentRetries(0);
+    setAlignmentExhausted(false);
     let settle: ReturnType<typeof setTimeout> | undefined;
-    let retryTimer: ReturnType<typeof setTimeout> | undefined;
-    let retries = 0;
     let abortSeek: (() => void) | undefined;
     let abortFrame: (() => void) | undefined;
     const duration = variant.frames / variant.fps;
     const frame = 1 / variant.fps;
-    const seek = (time: number) => new Promise<void>((resolve) => {
-      const done = () => {
-        target.removeEventListener("seeked", done);
+    const seek = (time: number) => new Promise<boolean>((resolve) => {
+      const done = (decoded: boolean) => {
+        clearTimeout(timeout);
+        target.removeEventListener("seeked", onSeeked);
         abortSeek = undefined;
-        resolve();
+        resolve(decoded);
       };
-      abortSeek = done;
-      target.addEventListener("seeked", done, { once: true });
+      const onSeeked = () => done(true);
+      const timeout = setTimeout(() => done(false), SEEK_TIMEOUT_MS);
+      abortSeek = () => done(false);
+      target.addEventListener("seeked", onSeeked, { once: true });
       target.currentTime = ((time % duration) + duration) % duration;
     });
     const nextFrame = () => new Promise<void>(resolve => {
@@ -202,9 +213,25 @@ export function CinematicBackdrop() {
       abortFrame = () => { cancelAnimationFrame(id); abortFrame = undefined; resolve(); };
     });
     const show = async () => {
-      if (cancelled || activating || target.readyState < 2 || target.seeking)
+      if (cancelled || activating || recovery || alignmentAttempts > ALIGNMENT_RETRY_DELAYS.length || target.readyState < 2 || target.seeking)
         return;
       activating = true;
+      alignmentAttempts++;
+      setAlignmentRetries(alignmentAttempts - 1);
+      const blocked = () => {
+        // Preserve the decoded outgoing frame and its actual light. Retry only the invisible target.
+        target.pause();
+        target.playbackRate = 1;
+        activating = false;
+        setAlignmentBlocks(value => value + 1);
+        setState("alignment-blocked");
+        const delay = ALIGNMENT_RETRY_DELAYS[alignmentAttempts - 1];
+        if (delay === undefined) setAlignmentExhausted(true);
+        else recovery = setTimeout(() => {
+          recovery = undefined;
+          if (!cancelled) void show();
+        }, delay);
+      };
       try {
         const paired = previous && previous !== target;
         if (paired && previous.paused && previous.classList.contains("is-visible")) await previous.play();
@@ -216,7 +243,9 @@ export function CinematicBackdrop() {
             target.pause();
             // Correct with the observed phase error, which includes seek/decode/play latency.
             // Wall-clock promise timing alone overestimates browsers that advance before play resolves.
-            await seek(expected + (paired && !previous.paused ? lead : 0));
+            const decoded = await seek(expected + (paired && !previous.paused ? lead : 0));
+            if (cancelled) return;
+            if (!decoded) { blocked(); return; }
           }
           if (cancelled) return;
           await target.play();
@@ -230,7 +259,7 @@ export function CinematicBackdrop() {
         if (!aligned && paired && !cancelled) {
           // Native decoder startup can vary between seeks. Fine-sync the still-invisible
           // target against the running outgoing clock, with a bounded settling period.
-          const deadline = performance.now() + 600;
+          const deadline = performance.now() + 900;
           while (!cancelled && !previous.paused && !target.paused && performance.now() < deadline) {
             const error = ((previous.currentTime - target.currentTime + duration * 1.5) % duration) - duration / 2;
             if (Math.abs(error) <= frame * 0.75) { aligned = true; break; }
@@ -241,14 +270,8 @@ export function CinematicBackdrop() {
         }
         if (cancelled) return;
         if (!aligned) {
-          // Keep the outgoing scene; never dissolve two unaligned ocean phases. Slow decoders get a
-          // bounded number of fresh attempts (WP-01 review R1) instead of staying blocked indefinitely.
-          target.pause();
-          setState("alignment-blocked");
-          if (retries < 4) {
-            retries++;
-            retryTimer = setTimeout(() => { activating = false; void show(); }, 700 * retries);
-          }
+          // Keep the outgoing scene; never dissolve two unaligned ocean phases.
+          blocked();
           return;
         }
         active.current = desired;
@@ -274,6 +297,7 @@ export function CinematicBackdrop() {
     setState("buffering");
     target.addEventListener("loadeddata", show);
     target.addEventListener("canplay", show);
+    target.addEventListener("seeked", show);
     void show();
     return () => {
       cancelled = true;
@@ -281,9 +305,10 @@ export function CinematicBackdrop() {
       abortFrame?.();
       target.playbackRate = 1;
       if (settle) clearTimeout(settle);
-      if (retryTimer) clearTimeout(retryTimer);
+      if (recovery) clearTimeout(recovery);
       target.removeEventListener("loadeddata", show);
       target.removeEventListener("canplay", show);
+      target.removeEventListener("seeked", show);
       // A pending play promise must not win after a scene reversal.
       if (active.current !== desired) target.pause();
     };
@@ -360,6 +385,9 @@ export function CinematicBackdrop() {
       className="cinematic-backdrop"
       data-cinematic-backdrop
       data-media-state={state}
+      data-alignment-retries={alignmentRetries}
+      data-alignment-blocks={alignmentBlocks}
+      data-alignment-exhausted={alignmentExhausted}
       data-cinematic-scene={desired}
       data-light={shown}
       aria-hidden

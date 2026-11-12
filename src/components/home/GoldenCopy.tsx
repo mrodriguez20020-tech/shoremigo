@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { usePrefs } from "@/components/prefs/PrefsProvider";
 
 function subscribe(onChange: () => void) {
   const observer = new MutationObserver(onChange);
@@ -9,28 +10,29 @@ function subscribe(onChange: () => void) {
 }
 
 export function GoldenDisclosure() {
+  const { t } = usePrefs();
   const interim = useSyncExternalStore(subscribe,
     () => !document.documentElement.dataset.cinematicLighting || document.documentElement.dataset.cinematicLighting === "interim",
     () => true);
   return <p data-migo-avoid className="golden-disclosure absolute bottom-6 text-[10px] tracking-wider text-white/70">
-    Fictional Aurora Tide and island · {interim ? "concept still" : "illustrative cinematic scene"}, not Ocho Rios or the listed excursion
+    {t(interim ? "golden.disclosureStill" : "golden.disclosureFilm")}
   </p>;
 }
 
 export function GoldenCopy() {
+  const { t } = usePrefs();
   const golden = useSyncExternalStore(subscribe,
     () => document.documentElement.dataset.cinematicLighting === "sunset",
     () => false);
   return (
     <div className="golden-copy" data-golden-copy={golden ? "sunset" : "interim"}>
-      <p className="eyebrow" data-migo-avoid>Ocho Rios · evening plans</p>
+      <p className="eyebrow" data-migo-avoid>{t("golden.eyebrow")}</p>
       <h2 data-migo-avoid className="font-display mt-4 text-[clamp(2.5rem,4.3vw,4.5rem)] leading-[0.98] tracking-[-0.02em]">
-        {golden ? <>The sun goes down.<br /><em className="text-accent">The day doesn&apos;t end.</em></> :
-          <>Stay for the evening.<br /><em className="text-accent">Make more of your port call.</em></>}
+        {t(golden ? "golden.sunset1" : "golden.interim1")}<br />
+        <em className="text-accent">{t(golden ? "golden.sunset2" : "golden.interim2")}</em>
       </h2>
       <p data-migo-avoid className="mt-6 max-w-xl text-base leading-relaxed text-ink-soft">
-        An evening port call opens up a sunset sail. LastBoard checks the planned
-        return against the 60-minute all-aboard buffer, so you can plan your time ashore.
+        {t("golden.body")}
       </p>
     </div>
   );

@@ -157,3 +157,22 @@ for (const [width, height] of [[320, 700], [390, 844], [820, 1180], [1024, 768],
     await expect(page).toHaveURL(/excursions\/och-sunset-sail/);
   });
 }
+
+for(const [lang,interim,sunset,still,film]of[
+ ['en','Stay for the evening.','The sun goes down.','concept still','illustrative cinematic scene'],
+ ['es','Quédate hasta la tarde.','El sol se pone.','imagen conceptual fija','escena cinematográfica ilustrativa'],
+ ['fr','Prolongez la soirée.','Le soleil se couche.','image conceptuelle fixe','scène cinématographique illustrative'],
+ ['pt','Fique para a noite.','O sol se põe.','imagem conceitual estática','cena cinematográfica ilustrativa'],
+]as const)test(`golden-hour copy and both disclosure states follow ${lang} preferences`,async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.addInitScript(lang=>{sessionStorage.setItem('sm.intro','1');sessionStorage.setItem('sm_prefs',JSON.stringify({lang,country:null,remember:false,welcomed:true}));localStorage.setItem('sm.migo.v1',JSON.stringify({prefs:{proactive:false,motionPaused:false},hidden:false}));},lang);
+ await page.goto('/');await expect(page.locator('html')).toHaveAttribute('lang',lang);
+ await expect(page.locator('.golden-copy h2')).toContainText(interim);await expect(page.locator('.golden-copy')).toContainText('60');await expect(page.locator('.golden-copy')).toContainText('LastBoard');
+ await expect(page.locator('.golden-disclosure')).toContainText(still);await expect(page.locator('.golden-disclosure')).toContainText('Ocho Rios');
+ // Copy-only state injection; native sunset delivery is verified separately with engineering films.
+ await page.evaluate(()=>{document.documentElement.dataset.cinematicLighting='sunset';});
+ await expect(page.locator('.golden-copy h2')).toContainText(sunset);await expect(page.locator('.golden-disclosure')).toContainText(film);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ if(lang!=='en'){await expect(page.locator('.golden-copy')).not.toContainText('Stay for the evening');await expect(page.locator('.golden-disclosure')).not.toContainText('Fictional Aurora Tide');}
+});

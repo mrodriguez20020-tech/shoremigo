@@ -1,6 +1,6 @@
 /**
  * Small, honest i18n layer. Translated: navigation, the welcome portal,
- * Migo's greeting, homepage hero + discovery shortcuts, and footer notice.
+ * Migo's greeting, homepage hero + discovery shortcuts, golden-hour copy/disclosure, and footer notice.
  * Everything else falls back to English (stated in the language picker).
  */
 export type Lang = "en" | "es" | "fr" | "pt";
@@ -13,6 +13,15 @@ export const LANGS: { id: Lang; label: string }[] = [
 ];
 
 const en = {
+  "golden.eyebrow": "Ocho Rios · evening plans",
+  "golden.sunset1": "The sun goes down.",
+  "golden.sunset2": "The day doesn't end.",
+  "golden.interim1": "Stay for the evening.",
+  "golden.interim2": "Make more of your port call.",
+  "golden.body": "An evening port call opens up a sunset sail. LastBoard checks the planned return against the 60-minute all-aboard buffer, so you can plan your time ashore.",
+  "golden.disclosureStill": "Fictional Aurora Tide and island · concept still, not Ocho Rios or the listed excursion",
+  "golden.disclosureFilm": "Fictional Aurora Tide and island · illustrative cinematic scene, not Ocho Rios or the listed excursion",
+
   "welcome.escape": "Your Caribbean escape",
   "welcome.headline": "Welcome to your next adventure.",
   "welcome.meet": "Meet Migo.",
@@ -75,6 +84,15 @@ export type Key = keyof typeof en;
 type Dict = Record<Key, string>;
 
 const es: Dict = {
+  "golden.eyebrow": "Ocho Rios · planes para la tarde",
+  "golden.sunset1": "El sol se pone.",
+  "golden.sunset2": "El día continúa.",
+  "golden.interim1": "Quédate hasta la tarde.",
+  "golden.interim2": "Aprovecha tu escala al máximo.",
+  "golden.body": "Una escala por la tarde permite un paseo en velero al atardecer. LastBoard comprueba el regreso previsto con un margen de 60 minutos antes de la hora límite de embarque para que puedas planificar tu tiempo en tierra.",
+  "golden.disclosureStill": "Aurora Tide e isla ficticios · imagen conceptual fija; no representa Ocho Rios ni la excursión anunciada",
+  "golden.disclosureFilm": "Aurora Tide e isla ficticios · escena cinematográfica ilustrativa; no representa Ocho Rios ni la excursión anunciada",
+
   "welcome.escape": "Tu escapada al Caribe",
   "welcome.headline": "Bienvenido a tu próxima aventura.",
   "welcome.meet": "Conoce a Migo.",
@@ -134,6 +152,15 @@ const es: Dict = {
 };
 
 const fr: Dict = {
+  "golden.eyebrow": "Ocho Rios · projets pour la soirée",
+  "golden.sunset1": "Le soleil se couche.",
+  "golden.sunset2": "La journée continue.",
+  "golden.interim1": "Prolongez la soirée.",
+  "golden.interim2": "Profitez pleinement de votre escale.",
+  "golden.body": "Une escale en soirée permet une sortie en voilier au coucher du soleil. LastBoard vérifie le retour prévu avec une marge de 60 minutes avant l’heure limite d’embarquement pour vous aider à organiser votre temps à terre.",
+  "golden.disclosureStill": "Aurora Tide et île fictifs · image conceptuelle fixe ; ne représente ni Ocho Rios ni l’excursion proposée",
+  "golden.disclosureFilm": "Aurora Tide et île fictifs · scène cinématographique illustrative ; ne représente ni Ocho Rios ni l’excursion proposée",
+
   "welcome.escape": "Votre escapade caribéenne",
   "welcome.headline": "Bienvenue dans votre prochaine aventure.",
   "welcome.meet": "Voici Migo.",
@@ -193,6 +220,15 @@ const fr: Dict = {
 };
 
 const pt: Dict = {
+  "golden.eyebrow": "Ocho Rios · planos para a noite",
+  "golden.sunset1": "O sol se põe.",
+  "golden.sunset2": "O dia continua.",
+  "golden.interim1": "Fique para a noite.",
+  "golden.interim2": "Aproveite melhor sua escala.",
+  "golden.body": "Uma escala à noite permite um passeio de veleiro ao pôr do sol. O LastBoard verifica o retorno planejado com uma margem de 60 minutos antes do horário limite de embarque para você organizar seu tempo em terra.",
+  "golden.disclosureStill": "Aurora Tide e ilha fictícios · imagem conceitual estática; não representa Ocho Rios nem a excursão anunciada",
+  "golden.disclosureFilm": "Aurora Tide e ilha fictícios · cena cinematográfica ilustrativa; não representa Ocho Rios nem a excursão anunciada",
+
   "welcome.escape": "Sua escapada caribenha",
   "welcome.headline": "Bem-vindo à sua próxima aventura.",
   "welcome.meet": "Conheça o Migo.",
