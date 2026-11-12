@@ -10,18 +10,22 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import crypto from "node:crypto";
 import { chromium } from "playwright-core";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const facesPath = process.argv[2];
 if (!facesPath) throw new Error("usage: node overlay.mjs <faces.json>");
-const { specId, massingModelId, faces } = JSON.parse(fs.readFileSync(facesPath, "utf8"));
+const facesRaw = fs.readFileSync(facesPath);
+const { specId, massingModelId, faces } = JSON.parse(facesRaw);
+const sha = (b) => "sha256:" + crypto.createHash("sha256").update(b).digest("hex");
 // Deterministic search (D-W02-9): the random refinement uses a seeded PRNG, so the same faces + concept + seed
 // always reproduce the same camera and IoU. Override with WP02_OVERLAY_SEED.
 const seed = Number(process.env.WP02_OVERLAY_SEED ?? 20261112);
 const search = { grid: { azDeg: [-60, -10, 5], elDeg: [6, 36, 5], distM: [180, 260, 380, 600, 1200] }, refine: { iterations: 6, samplesPerIteration: 60, initialStep: { az: 3, el: 3, distFrac: 0.25, roll: 1.5 }, decay: 0.6 }, maskWidthPx: 350, alignment: "bbox left + bottom" };
 const conceptPath = path.resolve(here, "../../public/cinematic/aurora-tide.webp");
-const concept = "data:image/webp;base64," + fs.readFileSync(conceptPath).toString("base64");
+const conceptBuf = fs.readFileSync(conceptPath);
+const concept = "data:image/webp;base64," + conceptBuf.toString("base64");
 
 const browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH, headless: true });
 const page = await browser.newPage({ viewport: { width: 1400, height: 1000 } });
@@ -114,13 +118,10 @@ const result = await page.evaluate(async ({ concept, faces, seed }) => {
     else if (m && c) both++;
   }
   const hc = mk(W, H); hc.getContext("2d").putImageData(heat, 0, 0); ox.drawImage(hc, 0, 0);
-  // feature edges of key parts
-  ox.lineWidth = 1.2; ox.strokeStyle = "rgba(10,20,30,0.55)";
-  for (let i = 0; i < pf.length; i++) {
-    const name = faces[i].name;
-    if (!/^(deck|glazing|lifeboat|funnel|exhaust|forecastle|radome|mast)/.test(name)) continue;
-    ox.beginPath(); pf[i].forEach((pt, j) => { const [a, b] = T(pt); j ? ox.lineTo(a, b) : ox.moveTo(a, b); }); ox.closePath(); ox.stroke();
-  }
+  // model silhouette boundary (the overlay measures exactly the GLB triangles; no proxies)
+  const edge = ox.createImageData(W, H);
+  for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) { const i = y * W + x; const m = md[i * 4 + 3] > 128; if (!m) continue; if (md[(i - 1) * 4 + 3] <= 128 || md[(i + 1) * 4 + 3] <= 128 || md[(i - W) * 4 + 3] <= 128 || md[(i + W) * 4 + 3] <= 128) edge.data.set([10, 20, 30, 230], i * 4); }
+  const ec = mk(W, H); ec.getContext("2d").putImageData(edge, 0, 0); ox.drawImage(ec, 0, 0);
   const score = both / (both + missing + excess);
   return { png: out.toDataURL("image/png"), W, H, camera: best.p, iouSmall: best.s, iouFull: score, missingPx: missing, excessPx: excess, overlapPx: both, bands: { missing: [...cols.missing], excess: [...cols.excess] } };
 }, { concept, faces, seed });
@@ -134,7 +135,7 @@ const annotated = await page.evaluate(async ({ png, W, H, iou, cam, gid, seed })
   x.fillStyle = "#0d2f43"; x.fillRect(0, H, W, 170);
   x.fillStyle = "#f2eee5"; x.font = "bold 26px Helvetica, Arial"; x.fillText(`AURORA TIDE (fictional) · concept overlay · silhouette IoU ${(iou * 100).toFixed(1)}%`, 24, H + 44);
   x.font = "17px Helvetica, Arial"; x.fillStyle = "#c9d6d9";
-  x.fillText("Base: approved concept A-02. Red = in the concept, missing from the canonical massing. Blue = massing where the concept has nothing. Dark lines = massing feature edges.", 24, H + 80);
+  x.fillText("Base: approved concept A-02. Red = in the concept, missing from the canonical massing. Blue = massing where the concept has nothing. Dark line = massing silhouette (GLB triangles).", 24, H + 80);
   x.fillText(`Fitted perspective camera: azimuth ${cam.az.toFixed(1)}°, elevation ${cam.el.toFixed(1)}°, distance ${cam.dist.toFixed(0)} m, roll ${cam.roll.toFixed(1)}° · seed ${seed} · massing model ${gid.slice(7, 19)}`, 24, H + 110);
   x.fillText("The concept is a generated image (not a calibrated photo); the massing omits railings, umbrellas, planters and fine detail by design. Use the map to find structural deviations.", 24, H + 140);
   return c.toDataURL("image/png");
@@ -144,6 +145,6 @@ await browser.close();
 fs.mkdirSync(path.join(here, "review"), { recursive: true });
 fs.writeFileSync(path.join(here, "review/concept-overlay.png"), Buffer.from(annotated.split(",")[1], "base64"));
 const round = (o) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, +v.toFixed(4)]));
-const report = { specId, massingModelId, concept: "public/cinematic/aurora-tide.webp", seed, search, camera: { model: "perspective, target (79, 0, 14) m, up +z", ...round(result.camera) }, silhouetteIoU: +result.iouFull.toFixed(4), coarseIoU: +result.iouSmall.toFixed(4), pixels: { overlap: result.overlapPx, missingFromModel: result.missingPx, modelExcess: result.excessPx }, byLengthBand: pctBands };
+const report = { specId, massingModelId, concept: "public/cinematic/aurora-tide.webp", conceptSha256: sha(conceptBuf), facesSha256: sha(facesRaw), faceCount: faces.length, measures: "exactly the GLB triangles (WP02_FACES_OUT export); no proxy geometry", seed, search, camera: { model: "perspective, target (79, 0, 14) m, up +z", ...round(result.camera) }, silhouetteIoU: +result.iouFull.toFixed(4), coarseIoU: +result.iouSmall.toFixed(4), pixels: { overlap: result.overlapPx, missingFromModel: result.missingPx, modelExcess: result.excessPx }, byLengthBand: pctBands };
 fs.writeFileSync(path.join(here, "review/concept-overlay.json"), JSON.stringify(report, null, 2) + "\n");
 console.log(JSON.stringify({ iou: report.silhouetteIoU, camera: report.camera, missing: result.missingPx, excess: result.excessPx }));

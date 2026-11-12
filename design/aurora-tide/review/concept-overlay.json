@@ -1,7 +1,11 @@
 {
-  "specId": "sha256:562498459523bbed3cabb0e4be4d0a84b16c32c31b572ca621e5405cc4cf7442",
-  "massingModelId": "sha256:5087c4867f47be88e76de8b7943caef5e257fd08c5ac5a74d5b6e080fb77a4d8",
+  "specId": "sha256:ccfd777fc7a2cf775c143b9a45455d7555ac5ad0d9cf5587651e75812ae7649a",
+  "massingModelId": "sha256:fcdaaf8acd903bc70a3c6e76f2ace85c9a21b8ed2f1150e248abd6a62e58a1b8",
   "concept": "public/cinematic/aurora-tide.webp",
+  "conceptSha256": "sha256:57502ff3367518d64783f93134e2ca5a3e36a9f3cbc5f2f6f284c94617d3be3f",
+  "facesSha256": "sha256:409d009c84fa4c6e1b73e7c409bd67f291aa5fbfa4434cd0b37e79e5435ba3b8",
+  "faceCount": 15392,
+  "measures": "exactly the GLB triangles (WP02_FACES_OUT export); no proxy geometry",
   "seed": 20261112,
   "search": {
     "grid": {
@@ -39,68 +43,68 @@
   },
   "camera": {
     "model": "perspective, target (79, 0, 14) m, up +z",
-    "az": -37.8474,
-    "el": 5.1571,
-    "dist": 947.4818,
-    "roll": -3.1159
+    "az": -38.0943,
+    "el": 6.8925,
+    "dist": 727.541,
+    "roll": -1.2054
   },
-  "silhouetteIoU": 0.8986,
-  "coarseIoU": 0.9004,
+  "silhouetteIoU": 0.8974,
+  "coarseIoU": 0.8986,
   "pixels": {
-    "overlap": 383936,
-    "missingFromModel": 19015,
-    "modelExcess": 24299
+    "overlap": 375132,
+    "missingFromModel": 27819,
+    "modelExcess": 15047
   },
   "byLengthBand": [
     {
       "band": "0-10% (stern→bow)",
-      "missingPct": 0.1,
-      "excessPct": 0.7
+      "missingPct": 0.6,
+      "excessPct": 0.4
     },
     {
       "band": "10-20% (stern→bow)",
-      "missingPct": 1.3,
+      "missingPct": 1.4,
       "excessPct": 0.3
     },
     {
       "band": "20-30% (stern→bow)",
-      "missingPct": 0.9,
-      "excessPct": 0
+      "missingPct": 1.1,
+      "excessPct": 0.1
     },
     {
       "band": "30-40% (stern→bow)",
-      "missingPct": 0.6,
-      "excessPct": 1
+      "missingPct": 0.9,
+      "excessPct": 0.6
     },
     {
       "band": "40-50% (stern→bow)",
+      "missingPct": 0.1,
+      "excessPct": 0.4
+    },
+    {
+      "band": "50-60% (stern→bow)",
+      "missingPct": 0.3,
+      "excessPct": 0.2
+    },
+    {
+      "band": "60-70% (stern→bow)",
+      "missingPct": 0.3,
+      "excessPct": 0.9
+    },
+    {
+      "band": "70-80% (stern→bow)",
+      "missingPct": 0.7,
+      "excessPct": 0.2
+    },
+    {
+      "band": "80-90% (stern→bow)",
       "missingPct": 0.3,
       "excessPct": 0.3
     },
     {
-      "band": "50-60% (stern→bow)",
-      "missingPct": 0.2,
-      "excessPct": 0.4
-    },
-    {
-      "band": "60-70% (stern→bow)",
-      "missingPct": 0.2,
-      "excessPct": 0.7
-    },
-    {
-      "band": "70-80% (stern→bow)",
-      "missingPct": 0.9,
-      "excessPct": 0.4
-    },
-    {
-      "band": "80-90% (stern→bow)",
-      "missingPct": 0.2,
-      "excessPct": 0.4
-    },
-    {
       "band": "90-100% (stern→bow)",
-      "missingPct": 0.1,
-      "excessPct": 1.8
+      "missingPct": 1.2,
+      "excessPct": 0.3
     }
   ]
 }

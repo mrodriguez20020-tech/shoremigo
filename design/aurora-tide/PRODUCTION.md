@@ -18,9 +18,9 @@ Target deliverable: **M-01** matched signature films as defined by WP-01 (`docs/
 | Input | Use |
 |---|---|
 | `vessel.json` (`specId`) | dimensions, deck heights, superstructure stations, glazing bands, funnel/radome/mast, palette |
-| `model/aurora-tide-massing.glb` (`massingModelId`) | blockout: import, verify 158 m LOA, model hard-surface detail over it; never ship it as the final asset |
-| Sheets 01–09 | elevations/plan/arrangements for detailing; sheet 07 + overlay camera for A-02 framing |
-| `review/concept-overlay.json` | fitted camera (az −37.85°, el 5.16°, roll −3.12°) as a starting point for the WP-01 wide camera |
+| `model/aurora-tide-massing.glb` (`massingModelId`) | blockout: one closed mesh per solid (validated by `verify.mjs`); import, verify 158 m LOA, model hard-surface detail over it; never ship it as the final asset |
+| Sheets 01–10 | elevations/plan/arrangements for detailing; sheet 07 + overlay camera for A-02 framing |
+| `review/concept-overlay.json` | fitted camera (az −38.09°, el 6.89°, roll −1.21°, seed 20261112) as a starting point for the WP-01 wide camera |
 | `cameraId`, overlay seed | reproducibility of review framing |
 
 ## 2. Production source (reusable)
@@ -37,12 +37,15 @@ Target deliverable: **M-01** matched signature films as defined by WP-01 (`docs/
   No colour-grade substitute for physical golden hour.
 - **Materials:** pearl-white painted steel, deep-navy hull, sea-glass accents, teak decks, tinted glazing, orange lifeboats. Hex values come from `vessel.json` → `identity.palette`.
 - **Masters:** 16-bit half EXR multilayer (beauty plus cryptomatte/mask for UI-safe checks). Masters stay off the web.
-- **Bill of materials:** every source file with its licence, URL, retrieval date and SHA-256, plus all seeds and the camera-rig hash. The production model gets its own id, recorded against the `specId`.
+- **Bill of materials:** every source file with its licence, URL, retrieval date and SHA-256, plus all seeds and the camera-rig hash.
+- **Identity (D-W02-9, Codex finding 5):**
+  - The production model id binds the approved `specId` and `massingModelId` (the blockout it was built to), the production scene/mesh file hashes, and every BOM source hash (`manifest.identity.productionIdentityContract`).
+  - The **production film camera** identity is separate from the WP-02 review camera. It covers intrinsics (focal length, sensor, projection), extrinsics (transform per frame), output resolution/crop, and WP-01's post-`object-fit: cover` safe-area masks.
 
 ## 3. Asset requirements
 | Asset | Source (zero cost) | Requirement |
 |---|---|---|
-| Hard-surface ship model | team-built in Blender from §1 | matches sheets ±0.1 m on principal stations; overlay against A-02 must not fall below the massing's 89.86 % |
+| Hard-surface ship model | team-built in Blender from §1 | matches sheets ±0.1 m on principal stations; overlay against A-02 should stay at or above the massing's 89.74 % (design-control target, not a substitute for geometric correctness) |
 | Daylight + golden-hour skies | Poly Haven HDRIs (CC0) | verify licence page per asset at download; record in BOM |
 | Painted metal, teak, glass, rubber textures | Poly Haven / ambientCG (CC0) | same |
 | Island backdrop | modeled or CC0 terrain + HDRI | fictional, no identifiable real location |

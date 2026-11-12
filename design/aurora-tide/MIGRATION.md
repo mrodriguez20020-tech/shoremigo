@@ -19,7 +19,7 @@ Every replacement value comes from:
 | `src/lib/domain/ship.ts:36` | Deck 4 "Theatre": `"Tidewater Theatre", "Live music lounge"` | D4: oceanview staterooms + boutique entertainment lounge (live music, evening performance); **no theatre** | D-W02-7 |
 | `src/lib/domain/ship.ts:52` `CABINS.interior` | Interior Stateroom | **Remove** | D-W02-6 |
 | `src/lib/domain/ship.ts:53` `CABINS.oceanview` | "Up to 3 · Queen + sofa bed · ≈190 sq ft" | Deck 4 Oceanview, ≈356 sq ft gross module (4.6 × 7.2 m), no balcony | D-W02-3/6 |
-| `src/lib/domain/ship.ts:54` `CABINS.balcony` | "Queen + sofa bed · ≈210 sq ft + balcony" | **Premium Balcony Stateroom**: king bed, ≈343 sq ft net (31.9 m²) + ≈97 sq ft (9.0 m²) balcony, panoramic sliding glass doors; decks 5–7 | D-W02-1/6/8 |
+| `src/lib/domain/ship.ts:54` `CABINS.balcony` | "Queen + sofa bed · ≈210 sq ft + balcony" | **Premium Balcony Stateroom**: king bed, ≈343 sq ft net (31.84 m², measured) + ≈97 sq ft (9.0 m²) balcony, panoramic sliding glass doors; decks 5–7 (values from the generated adapter) | D-W02-1/6/8 |
 | `src/lib/domain/ship.ts:55` `CABINS.suite` | Tidekeeper Suite ≈400 sq ft | **Remove from offered cabins.** Optionally a separate "Future concept (not available)" note, never bookable or shown as accommodation | D-W02-6 |
 | `src/lib/domain/ship.ts:64–65` `DEMO_CABIN.number` | `"9214"` | `"7214"` | D-W02-1 |
 | `src/lib/domain/ship.ts:75–84` `AMENITIES` | Lido 11, Spa 12, Fitness 12, Tidewater Theatre 4, Observation 14, Kids' splash 11, Promenade 6, Excursions desk 5 | Pool/Grill D7 aft; Spa + fitness D8 midship; Observation D8 forward; Promenade + Nightwatch D5; Excursions concierge desk D5 atrium; Sun deck D9; **Entertainment lounge D4 aft**; theatre and splash removed | D-W02-4/7 |
@@ -49,10 +49,10 @@ Not affected:
 The PR #2 documents belong to Codex's WP-01 branch: listed for that owner, not edited by WP-02.
 
 ## 3. Scoped implementation plan (ready; starts only on owner authorization after geometry acceptance)
-**Branch:** `feat/ships-rooms-migration` from `main`. It is separate from WP-01, WP-02 and Codex's branches.
+**Branch (corrected after Codex review):** `feat/ships-rooms-migration` from the **approved `design/cinematic-luxury` integration SHA**, created only after WP-02 is re-reviewed and the owner authorises its integration. This is required because the tests and the adapter depend on `design/aurora-tide/`. It does **not** start from `main`, and nothing is changed on `main`. If work must start before integration, the fallback is an explicitly dependent **draft** branch based on and targeting `feat/wp02-aurora-tide`. That branch must not merge unapproved dependencies or create a competing canonical design. It is separate from WP-01 and Codex's branches.
 **Scope:** only the files in §1, plus `docs/STATUS.md`, plus new tests. No changes to booking, excursion, concierge, PayPal or store code.
 
-1. **Canonical data module.** Add `src/lib/domain/vessel.ts`, holding a typed, hand-checked subset of `vessel.json`: decks 3–9, offering, amenities with decks, Cabin 7214 figures. Add a unit test that compares it with `design/aurora-tide/vessel.json` and `manifest.json`, so drift fails CI. The app does not import the design directory at runtime.
+1. **Generated typed adapter (no hand-copied facts).** A small script (`design/aurora-tide/export-app-data.mjs`) emits `src/lib/domain/vessel.generated.ts` from `vessel.json` + `manifest.json`: decks 3–9, offering, amenities with decks, the validated slot counts, Cabin 7214 position/neighbours/areas, and `specId`/`massingModelId`. A unit test regenerates it and fails on any diff, so the app cannot drift from the canonical spec. The app does not read the design directory at runtime.
 2. **`ship.ts` from `vessel.ts`:**
    - `DEMO_SHIP.facts`: 208 guests, 104 staterooms, 9 decks, 158 m.
    - `DECKS`: 7 visible decks.
@@ -74,6 +74,6 @@ The PR #2 documents belong to Codex's WP-01 branch: listed for that owner, not e
 
 **Readiness:**
 - Inventory complete and re-verified on `main`.
-- Values derived and checked by `verify.mjs` (33/33).
+- Values derived and checked by `verify.mjs` (103/103, independent of the generator).
 - No dependency on the photoreal asset.
-- **Waiting on:** Codex review of PR #3, owner geometry acceptance, and owner authorization to start.
+- **Waiting on:** Codex re-review of the corrected WP-02 SHA, owner decision on the 7305/7306 tapered-balcony proposal, owner geometry acceptance and integration of WP-02 into `design/cinematic-luxury`, and owner authorization to start.

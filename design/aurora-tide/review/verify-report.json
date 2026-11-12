@@ -1,0 +1,627 @@
+{
+  "specId": "sha256:ccfd777fc7a2cf775c143b9a45455d7555ac5ad0d9cf5587651e75812ae7649a",
+  "massingModelId": "sha256:fcdaaf8acd903bc70a3c6e76f2ace85c9a21b8ed2f1150e248abd6a62e58a1b8",
+  "generatorId": "sha256:34da250ed9f124fc7c2fb8cbef691afb83b22b5c3c050bed43c120766867fd70",
+  "passed": 103,
+  "total": 103,
+  "results": [
+    {
+      "group": "identity",
+      "name": "specId = sha256(vessel.json)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "generatorId = sha256(generate.mjs, LF)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "file hash model/aurora-tide-massing.glb",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "file hash sheets/01-port-elevation.svg",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "file hash sheets/02-starboard-elevation.svg",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "file hash sheets/03-bow.svg",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "file hash sheets/04-stern.svg",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "file hash sheets/05-plan.svg",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "file hash sheets/06-deck7-arrangement.svg",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "file hash sheets/07-three-quarter-massing.svg",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "file hash sheets/08-cabin-7214-plan.svg",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "file hash sheets/09-deck4-lounge.svg",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "file hash sheets/10-accommodation-validation.svg",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "massingModelId recomputed from GLB positions = manifest",
+      "ok": true,
+      "detail": "fcdaaf8acd90"
+    },
+    {
+      "group": "identity",
+      "name": "GLB embedded ids = manifest",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "sheet 01-port-elevation.svg carries the current model id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "sheet 02-starboard-elevation.svg carries the current model id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "sheet 03-bow.svg carries the current model id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "sheet 04-stern.svg carries the current model id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "sheet 05-plan.svg carries the current model id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "sheet 06-deck7-arrangement.svg carries the current model id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "sheet 07-three-quarter-massing.svg carries the current model id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "sheet 08-cabin-7214-plan.svg carries the current model id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "sheet 09-deck4-lounge.svg carries the current model id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "sheet 10-accommodation-validation.svg carries the current model id",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "overlay measured the current model",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "overlay measured every GLB triangle (incl. radomes)",
+      "ok": true,
+      "detail": "15392 vs 15392"
+    },
+    {
+      "group": "identity",
+      "name": "overlay seeded, camera + inputs recorded",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "review camera identity covers projection, transform, framing, crop",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "identity",
+      "name": "production identity contract binds spec, model, sources, film camera",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "mesh",
+      "name": "all indices valid",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "group": "mesh",
+      "name": "positions/normals finite, normals unit length",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "group": "mesh",
+      "name": "no zero-length normals",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "group": "mesh",
+      "name": "no zero-area triangles",
+      "ok": true,
+      "detail": "0 (min area 3.75e-3 m²)"
+    },
+    {
+      "group": "mesh",
+      "name": "normals agree with triangle winding",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "group": "mesh",
+      "name": "every solid closed and consistently oriented (each edge used once per direction)",
+      "ok": true,
+      "detail": "0 bad edges"
+    },
+    {
+      "group": "mesh",
+      "name": "every solid has positive volume (outward normals)",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "group": "glazing",
+      "name": "windscreen9P rests on sunDeck9 (base on the plate, footprint inside it)",
+      "ok": true,
+      "detail": "gap 0.0000 m, outside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "windscreen9S rests on sunDeck9 (base on the plate, footprint inside it)",
+      "ok": true,
+      "detail": "gap 0.0000 m, outside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "windscreen9Aft rests on sunDeck9 (base on the plate, footprint inside it)",
+      "ok": true,
+      "detail": "gap 0.0000 m, outside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "windscreen9Fwd rests on sunDeck9 (base on the plate, footprint inside it)",
+      "ok": true,
+      "detail": "gap 0.0000 m, outside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "glazing5P attached to deck5 (every vertex within 0.067 m of the wall surface, none inside it)",
+      "ok": true,
+      "detail": "max 0.0650 m, inside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "glazing5S attached to deck5 (every vertex within 0.067 m of the wall surface, none inside it)",
+      "ok": true,
+      "detail": "max 0.0650 m, inside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "glazing6P attached to deck6 (every vertex within 0.067 m of the wall surface, none inside it)",
+      "ok": true,
+      "detail": "max 0.0650 m, inside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "glazing6S attached to deck6 (every vertex within 0.067 m of the wall surface, none inside it)",
+      "ok": true,
+      "detail": "max 0.0650 m, inside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "glazing7P attached to deck7 (every vertex within 0.067 m of the wall surface, none inside it)",
+      "ok": true,
+      "detail": "max 0.0650 m, inside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "glazing7S attached to deck7 (every vertex within 0.067 m of the wall surface, none inside it)",
+      "ok": true,
+      "detail": "max 0.0650 m, inside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "glazing8P attached to deck8 (every vertex within 0.067 m of the wall surface, none inside it)",
+      "ok": true,
+      "detail": "max 0.0650 m, inside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "glazing8S attached to deck8 (every vertex within 0.067 m of the wall surface, none inside it)",
+      "ok": true,
+      "detail": "max 0.0650 m, inside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "glazingLoungeP attached to deck4Enclosure (every vertex within 0.067 m of the wall surface, none inside it)",
+      "ok": true,
+      "detail": "max 0.0652 m, inside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "glazingLoungeS attached to deck4Enclosure (every vertex within 0.067 m of the wall surface, none inside it)",
+      "ok": true,
+      "detail": "max 0.0652 m, inside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "glazingLoungeAft attached to deck4Enclosure (every vertex within 0.067 m of the wall surface, none inside it)",
+      "ok": true,
+      "detail": "max 0.0650 m, inside 0"
+    },
+    {
+      "group": "glazing",
+      "name": "three principal panoramic bands + deck 8 band present on both sides",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "cross-output",
+      "name": "port elevation: drawn silhouette matches the GLB at every pixel column (±1.5 px)",
+      "ok": true,
+      "detail": "2085 columns, worst excess 0.00 px"
+    },
+    {
+      "group": "cross-output",
+      "name": "starboard elevation: drawn silhouette matches the GLB at every pixel column (±1.5 px)",
+      "ok": true,
+      "detail": "2086 columns, worst excess 0.00 px"
+    },
+    {
+      "group": "cross-output",
+      "name": "plan (port half-breadth): drawn silhouette matches the GLB at every pixel column (±1.5 px)",
+      "ok": true,
+      "detail": "2084 columns, worst excess 0.00 px"
+    },
+    {
+      "group": "cross-output",
+      "name": "deck 7 arrangement footprint spans exactly the deck 7 extent (no out-of-bounds samples)",
+      "ok": true,
+      "detail": "21.00–129.00"
+    },
+    {
+      "group": "cross-output",
+      "name": "deck 7 arrangement side line = GLB deck 7 wall (≤ 0.02 m)",
+      "ok": true,
+      "detail": "worst 0.0044 m"
+    },
+    {
+      "group": "datum",
+      "name": "hull modelled to DWL − visibleBelowWaterline",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "datum",
+      "name": "air draft above DWL = mast top − DWL (from the GLB)",
+      "ok": true,
+      "detail": "32.10 m"
+    },
+    {
+      "group": "datum",
+      "name": "waterline bow on the raked stem (hull ends at bowRakeWaterlineX at the DWL)",
+      "ok": true,
+      "detail": "140.00"
+    },
+    {
+      "group": "datum",
+      "name": "stem top at bowRakeTopX",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "datum",
+      "name": "transom at the DWL at sternRakeWaterlineX",
+      "ok": true,
+      "detail": "3.00"
+    },
+    {
+      "group": "datum",
+      "name": "terrace T1 deck at its spec position and height",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "datum",
+      "name": "hull top follows the sheer profile (sampled every 5 m forward of T1)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "datum",
+      "name": "deck 9 is an open sun deck (no enclosed deck 9 level; plate + windscreen present)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "datum",
+      "name": "radomes present in the GLB (and therefore in every view and the overlay)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "datum",
+      "name": "radome mast house rests on the sun deck (no floating platform)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "datum",
+      "name": "funnel casing base starts at or forward of the deck 8 aft wall",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "datum",
+      "name": "intentional omissions declared in the GLB",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "footprint",
+      "name": "superstructure levels 5–8 never wider than the hull at the same station",
+      "ok": true,
+      "detail": "max excess 0.0019 m at D5 x 24.5"
+    },
+    {
+      "group": "capacity",
+      "name": "104 slots / 208 guests counted",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "capacity",
+      "name": "per-deck counts = vessel.json breakdown",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "capacity",
+      "name": "every slot's full-footprint margin re-measured from the GLB = manifest (±0.01 m)",
+      "ok": true,
+      "detail": "0 mismatches"
+    },
+    {
+      "group": "capacity",
+      "name": "slots failing the standard module are exactly the ones reported, each with a correction proposal",
+      "ok": true,
+      "detail": "7305,7306"
+    },
+    {
+      "group": "capacity",
+      "name": "no overlapping slots, none in a core, none in the lifeboat bay",
+      "ok": true,
+      "detail": "0/0/0"
+    },
+    {
+      "group": "lounge",
+      "name": "lounge starts at the terrace T1 wall and ends before the first deck 4 slot",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "lounge",
+      "name": "lounge widths match the GLB hull at deck 4 (±0.02 m)",
+      "ok": true,
+      "detail": "20.40 / 22.32"
+    },
+    {
+      "group": "lounge",
+      "name": "deck 4 keeps all 28 oceanview slots (none displaced)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "lounge",
+      "name": "lounge listed as a located amenity",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "cabin7214",
+      "name": "primary route entry-to-balcony passable at 0.8 m width",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "cabin7214",
+      "name": "all 11 secondary destinations reachable at 0.6 m width",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "cabin7214",
+      "name": "manifest route bottlenecks agree with the independent method (±0.03 m)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "cabin7214",
+      "name": "nothing within 0.9 m inside the entry opening (Codex P1-A)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "cabin7214",
+      "name": "entry door swing envelope free of walls and furniture",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "cabin7214",
+      "name": "entry opening ≥ 0.9 m and hinge on a jamb",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "cabin7214",
+      "name": "bathroom pocket door slides inside its wall (no swing)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "cabin7214",
+      "name": "furniture footprints do not overlap each other or partitions, and stay inside the cabin/balcony",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "cabin7214",
+      "name": "areas recomputed from the floor polygons = manifest",
+      "ok": true,
+      "detail": "net 31.84, bath 5.80, balcony 9.00"
+    },
+    {
+      "group": "cabin7214",
+      "name": "gross module = moduleWidth × interiorDepth (single convention)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "cabin7214",
+      "name": "six viewpoints in free space with unobstructed sight lines",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "cabin7214",
+      "name": "position: deck 7 port, x = vessel.json cabin7214.location",
+      "ok": true,
+      "detail": "97.6–102.2"
+    },
+    {
+      "group": "cabin7214",
+      "name": "neighbours derived from the slot list and shown on sheet 08",
+      "ok": true,
+      "detail": "7212 / 7302"
+    },
+    {
+      "group": "cabin7214",
+      "name": "fits the hull over its full footprint (re-measured from the GLB)",
+      "ok": true,
+      "detail": "margin 0.28 m"
+    },
+    {
+      "group": "captions",
+      "name": "no stale 9214/7216 references in sheets (only 'formerly 9214' on sheet 08)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "captions",
+      "name": "sheets 06 and 08 state the computed 7214 position",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "captions",
+      "name": "elevations annotate air draft above DWL (not baseline)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "captions",
+      "name": "no airDraftToMastTop field left in the spec",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "decisions",
+      "name": "no Interior Stateroom offered",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "decisions",
+      "name": "Tidekeeper Suite future concept only, never offered",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "decisions",
+      "name": "theatre and kids' splash zone removed",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "decisions",
+      "name": "every advertised amenity has a deck and a location",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "group": "overlay",
+      "name": "silhouette IoU recorded (≈90 % design-control target, informational)",
+      "ok": true,
+      "detail": "89.74 %"
+    }
+  ]
+}
