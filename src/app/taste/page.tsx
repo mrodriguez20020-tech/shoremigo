@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { EXCURSIONS, getPort } from "@/lib/domain/catalog";
 import { DEMO_VENUE } from "@/lib/domain/dining";
-import { GUIDE_ITEMS, DRINK_ITEMS, DESSERT_ITEMS, PHOTO_CREDITS } from "@/lib/culinary/catalog";
+import { GUIDE_ITEMS, DRINK_ITEMS, DESSERT_ITEMS, ALL_PHOTO_CREDITS } from "@/lib/culinary/catalog";
 import { fmtDuration, fmtMin, fmtUsd, toMin } from "@/lib/domain/time";
 import { availabilitySnapshot } from "@/lib/server/bookings";
 import { SceneRoute } from "@/components/scene/SceneProvider";
@@ -10,7 +10,7 @@ import { CulinaryCollection, CulinaryTrigger } from "@/components/dining/Culinar
 import { CulinaryMedia } from "@/components/dining/CulinaryMedia";
 import { CulinaryGallery } from "@/components/dining/CulinaryGallery";
 import { AskMigoButton } from "@/components/dining/AskMigoButton";
-import { ExcursionArt } from "@/components/excursion/ExcursionArt";
+import { ExcursionPhoto, ExcursionPhotoCredit } from "@/components/excursion/ExcursionPhoto";
 import { TideLink } from "@/components/transition/TideTransition";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ArrowIcon } from "@/components/dining/ArrowIcon";
@@ -59,8 +59,8 @@ export default async function TastePage() {
         <div className="culinary-tours">{tours.map((e) => {
           const s = snap.find((x) => x.excursionId === e.id)!; const port = getPort(e.portId)!;
           return <article key={e.id} className="culinary-tour-card">
-            <div className="culinary-tour-art"><ExcursionArt art={e.art} /><span>Original illustration · demo excursion</span></div>
-            <div className="culinary-tour-copy"><p className="culinary-kicker">{port.name} · Tidewalk Tours (demo)</p><h3>{e.title}</h3><p>{e.tagline}</p><dl><div><dt>Departure</dt><dd>{fmtMin(toMin(e.start))} · {fmtDuration(e.durationMin)}</dd></div><div><dt>Availability</dt><dd>{s.onSale ? `${s.seatsLeft} of ${s.capacity} seats open` : "Not on sale"}</dd></div><div><dt>LastBoard</dt><dd>{s.feasibility.status} · {s.feasibility.reasons[0]}</dd></div></dl><div className="culinary-tour-bottom" data-migo-avoid><p>{fmtUsd(e.priceCents)} <small>/ guest</small></p><TideLink href={`/excursions/${e.id}`} className="culinary-primary">View timing &amp; reserve →</TideLink></div></div>
+            <div className="culinary-tour-art"><ExcursionPhoto excursionId={e.id} art={e.art} className="h-full min-h-[180px] w-full" /></div>
+            <div className="culinary-tour-copy"><p className="culinary-kicker">{port.name} · Tidewalk Tours (demo)</p><h3>{e.title}</h3><p>{e.tagline}</p><ExcursionPhotoCredit excursionId={e.id} /><dl><div><dt>Departure</dt><dd>{fmtMin(toMin(e.start))} · {fmtDuration(e.durationMin)}</dd></div><div><dt>Availability</dt><dd>{s.onSale ? `${s.seatsLeft} of ${s.capacity} seats open` : "Not on sale"}</dd></div><div><dt>LastBoard</dt><dd>{s.feasibility.status} · {s.feasibility.reasons[0]}</dd></div></dl><div className="culinary-tour-bottom" data-migo-avoid><p>{fmtUsd(e.priceCents)} <small>/ guest</small></p><TideLink href={`/excursions/${e.id}`} className="culinary-primary">View timing &amp; reserve →</TideLink></div></div>
           </article>;
         })}<aside className="culinary-pairing"><span aria-hidden>✧</span><h3>Leave a little<br /><em>room for the sea.</em></h3><p>Pair a tasting with a gentler afternoon. Explore existing experiences; availability and timing are checked again when you reserve.</p><TideLink href="/excursions?mood=relax" className="culinary-text-link">Explore slower adventures →</TideLink></aside></div>
       </section>
@@ -69,10 +69,10 @@ export default async function TastePage() {
         <CulinaryGallery items={DRINK_ITEMS} />
       </section>
       <section id="desserts" className="culinary-section culinary-light">
-        <div className="culinary-section-heading"><div><p className="culinary-kicker">05 / Desserts &amp; Sweets</p><h2>The best kind<br /><em>of last word.</em></h2></div><p>Something crisp, something coconut, something chocolate. A fictional sample dessert menu, with original illustrations and illustrative USD prices.</p></div>
+        <div className="culinary-section-heading"><div><p className="culinary-kicker">05 / Desserts &amp; Sweets</p><h2>The best kind<br /><em>of last word.</em></h2></div><p>Something crisp, something coconut, something chocolate. A fictional sample dessert menu, with editorial photographs where verified, illustrations elsewhere, and illustrative USD prices.</p></div>
         <CulinaryGallery items={DESSERT_ITEMS} />
       </section>
-      <section id="photo-credits" className="culinary-credits"><h2>Photography &amp; food notes</h2><p>These photographs illustrate dishes. They do not depict a tour, a partner restaurant or a sample-menu serving. Other subjects use original illustrations; ingredients and allergens must be confirmed with staff.</p><ul>{PHOTO_CREDITS.map((p) => <li key={p.id}><a href={p.source} target="_blank" rel="noreferrer">{p.title.replace("File:", "")} — {p.author}</a> · <a href={p.licenseUrl} target="_blank" rel="noreferrer">{p.license}</a>. Resized and converted to WebP. These image derivatives retain their source license.</li>)}</ul><a href="/culinary/credits.json">Source, license and image hashes</a></section>
+      <section id="photo-credits" className="culinary-credits"><h2>Photography &amp; food notes</h2><p>These photographs illustrate dishes. They do not depict a tour, a partner restaurant or a sample-menu serving. Other subjects use original illustrations; ingredients and allergens must be confirmed with staff.</p><ul>{ALL_PHOTO_CREDITS.map((p) => <li key={p.id}><a href={p.source} target="_blank" rel="noreferrer">{p.title.replace("File:", "")} — {p.author}</a> · <a href={p.licenseUrl} target="_blank" rel="noreferrer">{p.license}</a>. {"remoteUrl" in p ? "Wikimedia image, responsive crop. " : "Resized and converted to WebP. "}These images retain their source license.</li>)}</ul><a href="/culinary/credits.json">Source, license and image hashes</a></section>
     </div>
     <SiteFooter />
   </>;

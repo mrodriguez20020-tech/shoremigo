@@ -3,7 +3,7 @@ import { GUIDES, MEETING_POINTS, POLICY, getExcursion, getPort } from "@/lib/dom
 import { fmtDuration, fmtMin, fmtUsd, toMin } from "@/lib/domain/time";
 import { availabilitySnapshot } from "@/lib/server/bookings";
 import { SceneRoute } from "@/components/scene/SceneProvider";
-import { ExcursionArt } from "@/components/excursion/ExcursionArt";
+import { ExcursionPhoto, ExcursionPhotoCredit } from "@/components/excursion/ExcursionPhoto";
 import { LastBoardTimeline } from "@/components/excursion/LastBoardTimeline";
 import { ReserveForm } from "@/components/excursion/ReserveForm";
 import { ExcursionMigo } from "@/components/excursion/ExcursionMigo";
@@ -53,7 +53,8 @@ export default async function ExcursionPage({ params, searchParams }: { params: 
           <div className="mt-6 grid gap-10 lg:grid-cols-[1.25fr_0.75fr]">
             <div>
               <Reveal>
-                <ExcursionArt art={e.art} className="aspect-[16/8] rounded-[32px] shadow-[0_50px_100px_-50px_rgba(0,0,0,0.7)]" />
+                <ExcursionPhoto excursionId={e.id} art={e.art} className="aspect-[16/8] rounded-[32px] shadow-[0_50px_100px_-50px_rgba(0,0,0,0.7)]" />
+                <ExcursionPhotoCredit excursionId={e.id} />
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="eyebrow mt-10">
