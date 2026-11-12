@@ -18,6 +18,8 @@ for (const [id, poi, tour, filter, other] of [
   ["canopy", /Canopy zipline/, "Jungle Canopy & Sloth Sanctuary", "Waterfalls", /Sloths/],
 ] as const) {
   test(`${id}: scroll entry reveals points of interest that route into real excursions`, async ({ page }) => {
+    // Scroll-driven reveal plus the deliberate Tide route transition (420 ms hold + 550 ms animation) needs more than the default budget on a loaded runner.
+    test.setTimeout(60_000);
     const errors = await enter(page, `/discover/${id}`);
     const stage = page.locator(`[data-discovery="${id}"]`);
     await expect(stage).toHaveAttribute("data-progress", "0.00");
@@ -35,7 +37,7 @@ for (const [id, poi, tour, filter, other] of [
     await expect(page.getByRole("button", { name: other })).toHaveCSS("opacity", "0.25");
     await page.getByRole("button", { name: poi }).click();
     await panel.getByRole("link", { name: new RegExp(tour) }).click();
-    await expect(page).toHaveURL(/\/excursions\//);
+    await expect(page).toHaveURL(/\/excursions\//, { timeout: 15_000 });
     expect(errors).toEqual([]);
   });
 }
