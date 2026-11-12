@@ -11,7 +11,7 @@ import "./culinary.css";
 const GalleryContext = createContext<((id: string, button: HTMLButtonElement) => void) | null>(null);
 export function CulinaryTrigger({ item, children, className = "" }: { item: CulinaryItem; children: ReactNode; className?: string }) {
   const open = useContext(GalleryContext);
-  return <button type="button" className={`culinary-trigger ${className}`} aria-label={`Explore ${item.name}`} aria-haspopup="dialog" onClick={(e) => open?.(item.id, e.currentTarget)}>{children}</button>;
+  return <button type="button" data-migo-avoid className={`culinary-trigger ${className}`} aria-label={`Explore ${item.name}`} aria-haspopup="dialog" onClick={(e) => open?.(item.id, e.currentTarget)}>{children}</button>;
 }
 
 export function CulinaryCollection({ items, children }: { items: CulinaryItem[]; children: ReactNode }) {

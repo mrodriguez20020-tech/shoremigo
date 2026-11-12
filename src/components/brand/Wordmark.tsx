@@ -25,7 +25,7 @@ export function CompassMark({ size = 28 }: { size?: number }) {
 export function Wordmark({ className = "", animate = false }: { className?: string; animate?: boolean }) {
   const letters = "ShoreMigo".split("");
   return (
-    <span className={`font-display font-medium tracking-[-0.02em] ${className}`} aria-label="ShoreMigo">
+    <span className={`font-display font-medium tracking-[-0.02em] ${className}`} role="img" aria-label="ShoreMigo">
       {letters.map((l, i) =>
         animate ? (
           <motion.span

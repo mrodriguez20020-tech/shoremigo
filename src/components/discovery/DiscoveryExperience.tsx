@@ -213,7 +213,7 @@ export function DiscoveryExperience({ id }: { id: "reef" | "canopy" }) {
                   {!reduced && <span className="absolute inset-0 animate-ping rounded-full bg-accent/40" />}
                   <span className="relative h-4 w-4 rounded-full border-2 border-[#081e27] bg-accent" />
                 </span>
-                <span className={`pointer-events-none absolute top-full mt-1 max-w-[11rem] rounded-full bg-[#081e27]/80 px-2.5 py-1 text-center text-[11px] font-semibold text-white ${poi.x < 25 ? "left-0" : poi.x > 75 ? "right-0" : "left-1/2 -translate-x-1/2"}`}>{poi.name}</span>
+                <span className={`pointer-events-none absolute top-full mt-1 w-max max-w-[11rem] rounded-full bg-[#081e27]/80 px-2.5 py-1 text-center text-[11px] font-semibold text-white ${poi.x < 25 ? "left-0" : poi.x > 75 ? "right-0" : "left-1/2 -translate-x-1/2"}`}>{poi.name}</span>
               </button>
             );
           })}

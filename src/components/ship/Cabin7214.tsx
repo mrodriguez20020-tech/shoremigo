@@ -230,7 +230,7 @@ export function Cabin7214Experience() {
   return (
     <div className="cabin-experience grid gap-5 lg:grid-cols-[1fr_340px] lg:items-start" data-cabin="7214">
       <div className="surface overflow-hidden rounded-[28px]">
-        <div className="relative aspect-[16/9] w-full bg-[#081e27]" tabIndex={0} onKeyDown={onKey} aria-label={`Cabin 7214 spatial view: ${VIEW_NAMES[view]}. Use the left and right arrow keys to change viewpoint.`} role="group">
+        <div data-migo-avoid className="relative aspect-[16/9] min-h-[340px] w-full bg-[#081e27] sm:min-h-0" tabIndex={0} onKeyDown={onKey} aria-label={`Cabin 7214 spatial view: ${VIEW_NAMES[view]}. Use the left and right arrow keys to change viewpoint.`} role="group">
           <canvas ref={canvas} className="h-full w-full" aria-hidden data-view={view} data-light={light} />
           <span className="demo-tag absolute left-4 top-4">Interactive schematic · from the provisional plan</span>
           <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-end justify-between gap-3">
@@ -247,7 +247,7 @@ export function Cabin7214Experience() {
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap gap-2 p-4" role="tablist" aria-label="Cabin 7214 viewpoints">
+        <div data-migo-avoid className="flex flex-wrap gap-2 p-4" role="tablist" aria-label="Cabin 7214 viewpoints">
           {views.map((v) => (
             <button key={v.id} role="tab" aria-selected={view === v.id} onClick={() => pick(v.id)} className={`btn !py-1.5 text-xs ${view === v.id ? "btn-primary" : "btn-ghost"}`}>
               {v.id.split("-")[0]} · {VIEW_NAMES[v.id]}
@@ -256,7 +256,7 @@ export function Cabin7214Experience() {
         </div>
       </div>
 
-      <aside className="surface rounded-[28px] p-5">
+      <aside data-migo-avoid className="surface rounded-[28px] p-5">
         <p className="eyebrow">Cabin {CABIN_7214.number} · Deck {CABIN_7214.location.deck} port</p>
         <h3 className="font-display mt-1 text-2xl">{CABIN_7214.class}</h3>
         <svg viewBox={`0 0 ${X(E.moduleWidth) + 22} ${Y(E.interiorDepth + E.balconyDepth) + 22}`} className="mt-4 w-full" role="group" aria-label="Cabin 7214 floor plan: choose a zone">

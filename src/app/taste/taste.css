@@ -33,7 +33,7 @@
 .culinary-card-copy { padding:22px 0; }
 .culinary-card-title { display:flex; gap:12px; justify-content:space-between; align-items:baseline; margin:8px 0 12px; }
 .culinary-card-title h3 { font-size:30px; line-height:1.15; }
-.culinary-card-title>span { font-size:10px; opacity:.45; }
+.culinary-card-title>span { font-size:10px; opacity:.8; }
 .culinary-card-copy>p:not(.culinary-kicker) { font-size:13px; line-height:1.85; color:var(--ink-soft); }
 .culinary-card-copy .culinary-card-price { color:var(--accent)!important; font-weight:700; margin-top:12px; }
 .culinary-card-price span { font-size:10px; font-weight:400; }
