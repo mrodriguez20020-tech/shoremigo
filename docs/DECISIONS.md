@@ -30,3 +30,7 @@ Append decisions with date, source, scope and status. An engineering choice is n
 | O-007 | Claude review dispatch/identity and future package implementation ownership | Independent review and concurrency coordination; owner. No unsupported GitHub handles are assigned |
 
 These open items identify absent references; they are not a new competing design exercise. [WORK_PACKAGES.md](WORK_PACKAGES.md) defines entry/exit conditions and [ASSET_REGISTRY.md](ASSET_REGISTRY.md) gives exact production dependencies.
+
+## Published review state · 2026-11-12 UTC
+
+[Draft WP-01 PR #2](https://github.com/mrodriguez20020-tech/shoremigo/pull/2) targets cinematic integration. [Historical integration PR #1](https://github.com/mrodriguez20020-tech/shoremigo/pull/1) was returned to draft and its description corrected to pending WP-01/visual approval. No merge occurred and neither integration nor main was pushed. Claude review remains pending owner dispatch; opening a PR is not review approval.

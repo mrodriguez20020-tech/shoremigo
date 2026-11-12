@@ -8,7 +8,7 @@ Package states: **PARTIAL** (some implementation), **BLOCKED** (named dependency
 
 | Package | Implementation owner | Independent reviewer | Dependencies | Current state | Branch / PR |
 |---|---|---|---|---|---|
-| WP-01 Signature environment/welcome | Codex | Claude — pending owner dispatch | Canonical visual source from WP-02; matched film; original Migo fallback (full rig later WP-07) | PARTIAL engineering; BLOCKED final film/visual acceptance | `feat/wp01-cinematic-environment` → `design/cinematic-luxury`; package PR pending creation |
+| WP-01 Signature environment/welcome | Codex | Claude — pending owner dispatch | Canonical visual source from WP-02; matched film; original Migo fallback (full rig later WP-07) | PARTIAL engineering; BLOCKED final film/visual acceptance | [`feat/wp01-cinematic-environment`](https://github.com/mrodriguez20020-tech/shoremigo/tree/feat/wp01-cinematic-environment) → `design/cinematic-luxury`; [draft PR #2](https://github.com/mrodriguez20020-tech/shoremigo/pull/2) |
 | WP-02 Definitive Aurora Tide | Unassigned | Other agent after assignment; owner approves appearance | Original vessel concept; unseen-view/deck approval; qualified source-asset production | BLOCKED source model/approved detailed architecture; brief prepared | Planned `feat/wp02-aurora-tide`; no branch/PR yet |
 | WP-03 Spatial Cabin 9214 | Unassigned | Other agent after assignment | WP-02 geometry + approved cabin floor plan/material/control reference | NOT STARTED; existing four illustrated views are a functional demo | Planned `feat/wp03-cabin-explorer`; no branch/PR |
 | WP-04 Culinary experience | Unassigned | Other agent after assignment | Detailed approved interaction reference; verified/licensed subject images | NOT STARTED cinematic upgrade; guide/sample menus already work | Planned `feat/wp04-culinary-experience`; no branch/PR |
@@ -19,7 +19,7 @@ Package states: **PARTIAL** (some implementation), **BLOCKED** (named dependency
 | WP-09 Multiple departures/inventory | Unassigned | Other agent after assignment | Explicit backend authorization, slot/data/payment/rescue/migration design | DEFERRED; present single-departure inventory remains protected | Planned `feat/wp09-departures`; no branch/PR |
 | WP-10 Integration/release verification | Codex for current WP-01 checks; release ownership unassigned | Claude for WP-01; full release reviewer to be assigned | Accepted package PRs, real assets, approved credential/device coverage | PARTIAL WP-01 regressions; release not authorized | Current checks in WP-01 PR; future `chore/wp10-integration-verification` not created |
 
-Integration-to-main [PR #1](https://github.com/mrodriguez20020-tech/shoremigo/pull/1) is the historical Phase 1/1.5 proposal. It must not be used as evidence that the new package is integrated or visually approved. The current package is a separate review against integration, not a direct commit/merge there.
+Integration-to-main [draft PR #1](https://github.com/mrodriguez20020-tech/shoremigo/pull/1) is the historical Phase 1/1.5 proposal. It must not be used as evidence that the new package is integrated or visually approved. The current package is a separate review against integration, not a direct commit/merge there.
 
 ## WP-01 — signature cinematic environment and welcome
 

@@ -246,6 +246,6 @@ The shared fictional Aurora Tide environment, contact-driven Migo motion/audio, 
 
 ### Cinematic execution and independent review
 
-The current WP-01 signature package is proposed on `feat/wp01-cinematic-environment`, targeting `design/cinematic-luxury`. **Final moving-water/wake/sunset visual acceptance is blocked by missing production footage.** The public manifest remains pending and the interim experience uses a disclosed static concept. No merge or production deployment is included.
+The current WP-01 signature package is proposed in [draft PR #2](https://github.com/mrodriguez20020-tech/shoremigo/pull/2) on `feat/wp01-cinematic-environment`, targeting `design/cinematic-luxury`. **Final moving-water/wake/sunset visual acceptance is blocked by missing production footage.** The public manifest remains pending and the interim experience uses a disclosed static concept. No merge or production deployment is included.
 
 Start with [AGENTS.md](AGENTS.md) / [CLAUDE.md](CLAUDE.md), the [handoff](docs/HANDOFF.md), [work ownership](docs/WORK_PACKAGES.md), [design bible](docs/DESIGN_BIBLE.md), [acceptance gates](docs/ACCEPTANCE.md), [asset registry](docs/ASSET_REGISTRY.md) and [decision log](docs/DECISIONS.md). [Current code/evidence and limitations](docs/signature/README.md) supersede the historical cinematic presentation claims above. Existing functional/provider verification remains in [docs/VERIFICATION.md](docs/VERIFICATION.md), and asset rights remain in [ASSETS.md](ASSETS.md).

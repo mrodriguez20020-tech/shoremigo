@@ -9,8 +9,8 @@
 | Integration base | `design/cinematic-luxury` = `000a837adfa8bf3ed39f05be61e09a4bc3f6df3e` |
 | Package branch | `feat/wp01-cinematic-environment`, created directly from that base with all unfinished local signature work preserved |
 | Working implementation/evidence commit | `a05d0053d1567e0275ced00d8ff3ed40624e1944` — source and actual captures; subsequent shared-instruction/handoff commits do not change application code |
-| Package PR | Pending creation; will target `design/cinematic-luxury` as a draft |
-| Historical integration-to-main proposal | [PR #1](https://github.com/mrodriguez20020-tech/shoremigo/pull/1); not current WP-01 integration/visual approval |
+| Package PR | [Draft PR #2](https://github.com/mrodriguez20020-tech/shoremigo/pull/2), targeting `design/cinematic-luxury` |
+| Historical integration-to-main proposal | [Draft PR #1](https://github.com/mrodriguez20020-tech/shoremigo/pull/1); status corrected to pending WP-01/visual approval, no branch changes |
 | Implementation owner / reviewer | Codex / Claude, independent review **pending owner dispatch** |
 
 The initial working tree was dirty on integration at `000a837`; it contained the unpushed signature player, fallback concept, tests and partial asset handoff. Those changes were inspected and moved intact to the package branch, then stabilized and committed. No competing hero implementation was started. Remote refs were fetched, not inferred from the old reports. The old status log's deployment/main descriptions are historical snapshots; this table records the observed refs.
