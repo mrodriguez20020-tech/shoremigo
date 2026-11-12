@@ -1,5 +1,6 @@
 import { DEMO_VENUE, LOCAL_FLAVOURS, type Dish, type MenuItem } from "@/lib/domain/dining";
 import credits from "../../../public/culinary/credits.json";
+import { EDITORIAL_PHOTOS } from "./editorial-photos";
 
 export interface CulinaryItem extends Dish {
   priceCents?: number;
@@ -8,8 +9,9 @@ export interface CulinaryItem extends Dish {
   venueName?: string;
 }
 export const PHOTO_CREDITS = credits;
+export const ALL_PHOTO_CREDITS = [...PHOTO_CREDITS, ...EDITORIAL_PHOTOS];
 export function photoFor(id: string) {
-  return PHOTO_CREDITS.find((p) => p.id === id);
+  return ALL_PHOTO_CREDITS.find((p) => p.id === id) ?? (id === "sample-desserts-marquesita" ? EDITORIAL_PHOTOS.find((p) => p.id === "marquesita") : undefined);
 }
 export function menuItemForGallery(item: MenuItem, section: string, venueName = DEMO_VENUE.name): CulinaryItem {
   const guide = LOCAL_FLAVOURS.find((d) => d.id === item.dishId);
