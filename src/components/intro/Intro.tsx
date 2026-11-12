@@ -30,6 +30,7 @@ export function Intro() {
       reportDone();
       return;
     }
+    document.documentElement.dataset.intro = "playing";
     setShow(true);
   }, []);
   useEffect(() => {
@@ -46,7 +47,7 @@ export function Intro() {
     <AnimatePresence onExitComplete={reportDone}>
       {show && (
         <motion.div
-          className="fixed inset-0 z-[100] bg-[#071d25]"
+          className="fixed inset-0 z-[100] bg-transparent"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: reducedMotion ? 0 : 0.35 }}

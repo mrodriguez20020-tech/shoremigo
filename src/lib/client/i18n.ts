@@ -1,6 +1,6 @@
 /**
  * Small, honest i18n layer. Translated: navigation, the welcome portal,
- * Migo's greeting, homepage hero + discovery shortcuts, and footer notice.
+ * Migo's greeting, homepage hero + discovery shortcuts, golden-hour copy/disclosure, and footer notice.
  * Everything else falls back to English (stated in the language picker).
  */
 export type Lang = "en" | "es" | "fr" | "pt";
@@ -13,6 +13,15 @@ export const LANGS: { id: Lang; label: string }[] = [
 ];
 
 const en = {
+  "golden.eyebrow": "Ocho Rios · evening plans",
+  "golden.sunset1": "The sun goes down.",
+  "golden.sunset2": "The day doesn't end.",
+  "golden.interim1": "Stay for the evening.",
+  "golden.interim2": "Make more of your port call.",
+  "golden.body": "An evening port call opens up a sunset sail. LastBoard checks the planned return against the 60-minute all-aboard buffer, so you can plan your time ashore.",
+  "golden.disclosureStill": "Fictional Aurora Tide and island · concept still, not Ocho Rios or the listed excursion",
+  "golden.disclosureFilm": "Fictional Aurora Tide and island · illustrative cinematic scene, not Ocho Rios or the listed excursion",
+
   "welcome.escape": "Your Caribbean escape",
   "welcome.headline": "Welcome to your next adventure.",
   "welcome.meet": "Meet Migo.",
@@ -42,7 +51,7 @@ const en = {
   "welcome.partial": "Navigation, this welcome and Migo's greeting are translated; other pages are in English for now.",
   "welcome.remember": "Remember my choices on this device",
   "welcome.rememberHint": "Stored only in your browser. Leave unticked and they're forgotten when you close the tab.",
-  "welcome.continue": "Continue",
+  "welcome.continue": "Begin exploring",
   "welcome.skip": "Skip",
   "migo.greeting": "Hey, explorer! I'm Migo. I'll help you make the most of every moment ashore.",
   "migo.greetingFrom": "Hey, explorer! I'm Migo. Joining us from {country}? Ready to see what the islands have waiting for you?",
@@ -54,6 +63,10 @@ const en = {
   "hero.port": "Port",
   "hero.explore": "Explore tours",
   "hero.talk": "Talk to Migo",
+  "hero.proofLabel": "Why ShoreMigo",
+  "hero.proofTiming": "LastBoard · cruise-aware timing",
+  "hero.proofPayment": "PayPal Sandbox · demo bookings",
+  "hero.proofAI": "AI concierge · verified app tools",
   "disc.eyebrow": "Discover",
   "disc.title": "Four ways into your week at sea.",
   "disc.adventure": "Explore & Adventure",
@@ -71,6 +84,15 @@ export type Key = keyof typeof en;
 type Dict = Record<Key, string>;
 
 const es: Dict = {
+  "golden.eyebrow": "Ocho Rios · planes para la tarde",
+  "golden.sunset1": "El sol se pone.",
+  "golden.sunset2": "El día continúa.",
+  "golden.interim1": "Quédate hasta la tarde.",
+  "golden.interim2": "Aprovecha tu escala al máximo.",
+  "golden.body": "Una escala por la tarde permite un paseo en velero al atardecer. LastBoard comprueba el regreso previsto con un margen de 60 minutos antes de la hora límite de embarque para que puedas planificar tu tiempo en tierra.",
+  "golden.disclosureStill": "Aurora Tide e isla ficticios · imagen conceptual fija; no representa Ocho Rios ni la excursión anunciada",
+  "golden.disclosureFilm": "Aurora Tide e isla ficticios · escena cinematográfica ilustrativa; no representa Ocho Rios ni la excursión anunciada",
+
   "welcome.escape": "Tu escapada al Caribe",
   "welcome.headline": "Bienvenido a tu próxima aventura.",
   "welcome.meet": "Conoce a Migo.",
@@ -100,9 +122,9 @@ const es: Dict = {
   "welcome.partial": "La navegación, esta bienvenida y el saludo de Migo están traducidos; las demás páginas están en inglés por ahora.",
   "welcome.remember": "Recordar mis preferencias en este dispositivo",
   "welcome.rememberHint": "Se guardan solo en tu navegador. Si no marcas la casilla, se olvidan al cerrar la pestaña.",
-  "welcome.continue": "Continuar",
+  "welcome.continue": "Empezar a explorar",
   "welcome.skip": "Omitir",
-  "migo.greeting": "¡Hola, explorador! Soy Migo. ¿Listo para ver lo que te esperan las islas?",
+  "migo.greeting": "¡Hola, explorador! Soy Migo. Te ayudaré a aprovechar al máximo cada momento en tierra.",
   "migo.greetingFrom": "¡Hola, explorador! Soy Migo. ¿Nos acompañas desde {country}? ¿Listo para ver lo que te esperan las islas?",
   "migo.cta": "Muéstrame",
   "hero.eyebrow": "Tu aventura no se detiene cuando cambian los planes",
@@ -112,6 +134,10 @@ const es: Dict = {
   "hero.port": "Puerto",
   "hero.explore": "Ver excursiones",
   "hero.talk": "Hablar con Migo",
+  "hero.proofLabel": "Por qué ShoreMigo",
+  "hero.proofTiming": "LastBoard · horarios según tu crucero",
+  "hero.proofPayment": "PayPal Sandbox · reservas de demostración",
+  "hero.proofAI": "Concierge de IA · herramientas verificadas",
   "disc.eyebrow": "Descubre",
   "disc.title": "Cuatro formas de vivir tu semana en el mar.",
   "disc.adventure": "Explora y aventura",
@@ -126,6 +152,15 @@ const es: Dict = {
 };
 
 const fr: Dict = {
+  "golden.eyebrow": "Ocho Rios · projets pour la soirée",
+  "golden.sunset1": "Le soleil se couche.",
+  "golden.sunset2": "La journée continue.",
+  "golden.interim1": "Prolongez la soirée.",
+  "golden.interim2": "Profitez pleinement de votre escale.",
+  "golden.body": "Une escale en soirée permet une sortie en voilier au coucher du soleil. LastBoard vérifie le retour prévu avec une marge de 60 minutes avant l’heure limite d’embarquement pour vous aider à organiser votre temps à terre.",
+  "golden.disclosureStill": "Aurora Tide et île fictifs · image conceptuelle fixe ; ne représente ni Ocho Rios ni l’excursion proposée",
+  "golden.disclosureFilm": "Aurora Tide et île fictifs · scène cinématographique illustrative ; ne représente ni Ocho Rios ni l’excursion proposée",
+
   "welcome.escape": "Votre escapade caribéenne",
   "welcome.headline": "Bienvenue dans votre prochaine aventure.",
   "welcome.meet": "Voici Migo.",
@@ -155,9 +190,9 @@ const fr: Dict = {
   "welcome.partial": "La navigation, cet accueil et le message de Migo sont traduits ; les autres pages sont en anglais pour l'instant.",
   "welcome.remember": "Mémoriser mes choix sur cet appareil",
   "welcome.rememberHint": "Enregistrés uniquement dans votre navigateur. Sans cette case, ils sont oubliés à la fermeture de l'onglet.",
-  "welcome.continue": "Continuer",
+  "welcome.continue": "Commencer l’exploration",
   "welcome.skip": "Passer",
-  "migo.greeting": "Salut, explorateur ! Je suis Migo. Prêt à découvrir ce que les îles vous réservent ?",
+  "migo.greeting": "Salut, explorateur ! Je suis Migo. Je vous aiderai à profiter pleinement de chaque instant à terre.",
   "migo.greetingFrom": "Salut, explorateur ! Je suis Migo. Vous nous rejoignez depuis {country} ? Prêt à découvrir ce que les îles vous réservent ?",
   "migo.cta": "Montre-moi",
   "hero.eyebrow": "Votre aventure ne s'arrête pas quand les plans changent",
@@ -167,6 +202,10 @@ const fr: Dict = {
   "hero.port": "Port",
   "hero.explore": "Voir les excursions",
   "hero.talk": "Parler à Migo",
+  "hero.proofLabel": "Pourquoi ShoreMigo",
+  "hero.proofTiming": "LastBoard · horaires adaptés à la croisière",
+  "hero.proofPayment": "PayPal Sandbox · réservations démo",
+  "hero.proofAI": "Concierge IA · outils applicatifs vérifiés",
   "disc.eyebrow": "Découvrir",
   "disc.title": "Quatre façons de vivre votre semaine en mer.",
   "disc.adventure": "Explorer et aventure",
@@ -181,6 +220,15 @@ const fr: Dict = {
 };
 
 const pt: Dict = {
+  "golden.eyebrow": "Ocho Rios · planos para a noite",
+  "golden.sunset1": "O sol se põe.",
+  "golden.sunset2": "O dia continua.",
+  "golden.interim1": "Fique para a noite.",
+  "golden.interim2": "Aproveite melhor sua escala.",
+  "golden.body": "Uma escala à noite permite um passeio de veleiro ao pôr do sol. O LastBoard verifica o retorno planejado com uma margem de 60 minutos antes do horário limite de embarque para você organizar seu tempo em terra.",
+  "golden.disclosureStill": "Aurora Tide e ilha fictícios · imagem conceitual estática; não representa Ocho Rios nem a excursão anunciada",
+  "golden.disclosureFilm": "Aurora Tide e ilha fictícios · cena cinematográfica ilustrativa; não representa Ocho Rios nem a excursão anunciada",
+
   "welcome.escape": "Sua escapada caribenha",
   "welcome.headline": "Bem-vindo à sua próxima aventura.",
   "welcome.meet": "Conheça o Migo.",
@@ -210,9 +258,9 @@ const pt: Dict = {
   "welcome.partial": "A navegação, esta boas-vindas e a saudação do Migo estão traduzidas; as outras páginas estão em inglês por enquanto.",
   "welcome.remember": "Lembrar minhas escolhas neste dispositivo",
   "welcome.rememberHint": "Salvas apenas no seu navegador. Sem marcar, elas são esquecidas ao fechar a aba.",
-  "welcome.continue": "Continuar",
+  "welcome.continue": "Começar a explorar",
   "welcome.skip": "Pular",
-  "migo.greeting": "Olá, explorador! Eu sou o Migo. Pronto para ver o que as ilhas reservam para você?",
+  "migo.greeting": "Olá, explorador! Eu sou o Migo. Vou ajudar você a aproveitar ao máximo cada momento em terra.",
   "migo.greetingFrom": "Olá, explorador! Eu sou o Migo. Está nos acompanhando de {country}? Pronto para ver o que as ilhas reservam para você?",
   "migo.cta": "Mostre-me",
   "hero.eyebrow": "Sua aventura não para quando os planos mudam",
@@ -222,6 +270,10 @@ const pt: Dict = {
   "hero.port": "Porto",
   "hero.explore": "Ver passeios",
   "hero.talk": "Falar com o Migo",
+  "hero.proofLabel": "Por que ShoreMigo",
+  "hero.proofTiming": "LastBoard · horários alinhados ao cruzeiro",
+  "hero.proofPayment": "PayPal Sandbox · reservas de demonstração",
+  "hero.proofAI": "Concierge de IA · ferramentas verificadas",
   "disc.eyebrow": "Descubra",
   "disc.title": "Quatro jeitos de viver sua semana no mar.",
   "disc.adventure": "Explorar e aventura",

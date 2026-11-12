@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   ANTICIPATION_MS,
   STRIDE_MS,
+  CONTACT_FRACTION,
   gaitAt,
   surfaceAt,
 } from "@/components/migo/gait";
@@ -18,9 +19,9 @@ describe("Migo's two-pose stepping", () => {
     expect(gaitAt(ANTICIPATION_MS + STRIDE_MS + 400).frame).toBe(1);
   });
   it("holds travel stationary through each contact window", () => {
-    const contact = gaitAt(ANTICIPATION_MS + 400);
+    const contact = gaitAt(ANTICIPATION_MS + STRIDE_MS * (CONTACT_FRACTION + 0.05));
     expect(contact.contact).toBe(true);
-    expect(gaitAt(ANTICIPATION_MS + 510).offset).toBe(contact.offset);
+    expect(gaitAt(ANTICIPATION_MS + STRIDE_MS - 1).offset).toBe(contact.offset);
   });
   it("eases travel in and out, never jumps at a stride boundary", () => {
     const before = gaitAt(ANTICIPATION_MS + STRIDE_MS - 1).offset;
@@ -31,6 +32,8 @@ describe("Migo's two-pose stepping", () => {
     expect(surfaceAt("/ships", true)).toBe("cabin");
     expect(surfaceAt("/ships")).toBe("deck");
     expect(surfaceAt("/excursions/coz-beach")).toBe("sand");
+    expect(surfaceAt("/excursions/coz-palancar-snorkel", false, "underwater")).toBe("underwater");
+    expect(surfaceAt("/ships", false, "unrecognized")).toBe("deck");
   });
 });
 

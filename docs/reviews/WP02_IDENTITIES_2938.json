@@ -1,0 +1,65 @@
+[
+  {
+    "case": "prose",
+    "changed": [
+      "specId"
+    ],
+    "ids": {
+      "specId": "sha256:5864048840605a35cfa34fa16750bcdcfd43a14351429f32344161fb9584feda",
+      "generatorId": "sha256:1faa38d6a8bcee99f8cdf4da1cbd9135003b3529c2450330223ba1d22b6b58ab",
+      "massingModelId": "sha256:fcdaaf8acd903bc70a3c6e76f2ace85c9a21b8ed2f1150e248abd6a62e58a1b8",
+      "cameraId": "sha256:d3065cd505224c9a4a25744e29b9f9c8bcf01707849a4c53ab0e281dd0c859d5"
+    }
+  },
+  {
+    "case": "generator-comment",
+    "changed": [
+      "generatorId"
+    ],
+    "ids": {
+      "specId": "sha256:e410a0e832c1bec50b38c30f0a0a01dd09f23d4c0185d649636efed7b698d79f",
+      "generatorId": "sha256:c920bcfed0de6eedbdda4ab381bd0c0ead0d2551fca947ceaaf999688bdadc3c",
+      "massingModelId": "sha256:fcdaaf8acd903bc70a3c6e76f2ace85c9a21b8ed2f1150e248abd6a62e58a1b8",
+      "cameraId": "sha256:d3065cd505224c9a4a25744e29b9f9c8bcf01707849a4c53ab0e281dd0c859d5"
+    }
+  },
+  {
+    "case": "deck-height",
+    "changed": [
+      "specId",
+      "massingModelId"
+    ],
+    "ids": {
+      "specId": "sha256:bed4ca384aadaf24c7f1a2b9e52cf757c763f7c2d6a086c81d038ffbf705e097",
+      "generatorId": "sha256:1faa38d6a8bcee99f8cdf4da1cbd9135003b3529c2450330223ba1d22b6b58ab",
+      "massingModelId": "sha256:e2e99fba028467a678ac7b67efd3a4b6b45b24ef5575d35dd7da94d1bb543809",
+      "cameraId": "sha256:d3065cd505224c9a4a25744e29b9f9c8bcf01707849a4c53ab0e281dd0c859d5"
+    }
+  },
+  {
+    "case": "generator-geometry",
+    "changed": [
+      "generatorId",
+      "massingModelId"
+    ],
+    "ids": {
+      "specId": "sha256:e410a0e832c1bec50b38c30f0a0a01dd09f23d4c0185d649636efed7b698d79f",
+      "generatorId": "sha256:9e13ff04ff3cae1e936e0430397a9351b2616bdfdba8c57869532c749ac233b2",
+      "massingModelId": "sha256:e2e99fba028467a678ac7b67efd3a4b6b45b24ef5575d35dd7da94d1bb543809",
+      "cameraId": "sha256:d3065cd505224c9a4a25744e29b9f9c8bcf01707849a4c53ab0e281dd0c859d5"
+    }
+  },
+  {
+    "case": "camera",
+    "changed": [
+      "generatorId",
+      "cameraId"
+    ],
+    "ids": {
+      "specId": "sha256:e410a0e832c1bec50b38c30f0a0a01dd09f23d4c0185d649636efed7b698d79f",
+      "generatorId": "sha256:5b0e166a17cc3a77798c5a804d6291327b7a41d0ffb17974bc1df5d221132d9f",
+      "massingModelId": "sha256:fcdaaf8acd903bc70a3c6e76f2ace85c9a21b8ed2f1150e248abd6a62e58a1b8",
+      "cameraId": "sha256:f14881b3d636c675aa718b76121d2ea98c70d21b55b428809ecc91aebc4b9cce"
+    }
+  }
+]

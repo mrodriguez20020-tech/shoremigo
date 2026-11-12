@@ -1,0 +1,52 @@
+{
+  "identity": "Original ShoreMigo Migo \u2014 eight supplied whole-body poses",
+  "canvas": [
+    440,
+    440
+  ],
+  "rights": "Separately licensed team artwork; ASSETS.md",
+  "referenceCommit": "000a837adfa8bf3ed39f05be61e09a4bc3f6df3e",
+  "rigAvailable": false,
+  "files": [
+    {
+      "pose": "wave",
+      "path": "public/migo/wave.webp",
+      "sha256": "66c0fa62aece2ba72d9e4562f3308929118566190179791368266d4c180cf51c"
+    },
+    {
+      "pose": "jump",
+      "path": "public/migo/jump.webp",
+      "sha256": "7f02fa44f393ee77a3acb51dc343fb1e7a2a8df372a1ff71b326db0fbb129122"
+    },
+    {
+      "pose": "walk-a",
+      "path": "public/migo/walk-a.webp",
+      "sha256": "7c710dd4441ff13b0a4bd520abd2055397627c2bb123e48ab8ed5d4a0593b2db"
+    },
+    {
+      "pose": "walk-b",
+      "path": "public/migo/walk-b.webp",
+      "sha256": "c0298a2b0f08a99c36744fcf3fda7b6c7da3b79cf300a2f32ce788c2d25280b5"
+    },
+    {
+      "pose": "think",
+      "path": "public/migo/think.webp",
+      "sha256": "dff04830a682ec480227919b24c39ef3253455790a5c6c224458f038a0a35af1"
+    },
+    {
+      "pose": "concern",
+      "path": "public/migo/concern.webp",
+      "sha256": "5b60cae082b4831bfb64bbd6164ffc5328395816efdd547d4db72335c531e52c"
+    },
+    {
+      "pose": "point",
+      "path": "public/migo/point.webp",
+      "sha256": "0458d3d08ecee879c587937888118fc14c0c4f2555b556c6166532e04a6398c2"
+    },
+    {
+      "pose": "celebrate",
+      "path": "public/migo/celebrate.webp",
+      "sha256": "563ee6b79219173e0a02f768c9a5ab18503d310a2ca1debda6483de441f7ae83"
+    }
+  ]
+}

@@ -233,7 +233,7 @@ function ScheduleView({ data, port, setPort }: { data: Overview; port: string; s
         </p>
       </div>
 
-      <div className="mt-5 overflow-x-auto">
+      <div tabIndex={0} role="region" aria-label={`${p.name} operator schedule`} className="mt-5 overflow-x-auto">
         <div className="min-w-[900px]">
           {/* axis */}
           <div className="relative ml-40 h-6 text-[10px] text-ink-soft">
@@ -423,7 +423,7 @@ function InventoryView({ data, reload }: { data: Overview; reload: () => void })
   return (
     <div className="space-y-6">
       {PORTS.map((p) => (
-        <div key={p.id} className="surface overflow-x-auto rounded-[28px] p-4 sm:p-6">
+        <div key={p.id} tabIndex={0} role="region" aria-label={`${p.name} inventory table`} className="surface overflow-x-auto rounded-[28px] p-4 sm:p-6">
           <p className="eyebrow mb-3">
             {p.name} · in port {p.arrive}–{p.allAboard}
           </p>
@@ -515,7 +515,7 @@ function BookingsView({ data }: { data: Overview }) {
   const [verify, setVerify] = useState<Record<string, string>>({});
   if (!data.bookings.length) return <p className="surface rounded-[28px] p-8 text-ink-soft">No bookings yet.</p>;
   return (
-    <div className="surface overflow-x-auto rounded-[28px] p-4 sm:p-6">
+    <div tabIndex={0} role="region" aria-label="Booking records" className="surface overflow-x-auto rounded-[28px] p-4 sm:p-6">
       <table className="w-full min-w-[900px] text-left text-sm">
         <thead className="text-xs text-ink-soft">
           <tr>

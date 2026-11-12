@@ -1,0 +1,93 @@
+{
+  "status": "Interim still only. Moving-water and sunset-film acceptance BLOCKED.",
+  "environment": "Headed system Chromium on virtual Xorg software display in managed Linux, three CPU cores, no GPU. Viewport emulation, not physical mobile. Short 2.5-second RAF samples without recording overhead; not sustained GPU/frame-decode benchmarks.",
+  "method": "RAF/long-task samples last 2.5 seconds. cls is the raw sum of observed non-recent-input shifts from navigation through the sample, not a full-session Core Web Vitals score. Poster loading is localhost/cached transport, not a mobile-network benchmark. No production video decode was measured.",
+  "audio": "Muted recording; app audio was not enabled.",
+  "measurements": [
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "frames": 149,
+      "meanIntervalMs": 16.778523489932887,
+      "p95IntervalMs": 16.700000000000728,
+      "longTasks": 0,
+      "maxLongTaskMs": 0,
+      "cls": 0.00015176500979029102,
+      "overflow": false,
+      "mediaState": "poster-only",
+      "filmRequests": 0,
+      "posterResources": [
+        {
+          "durationMs": 203.10000000149012,
+          "transferBytes": 148670,
+          "decodedBytes": 148370
+        }
+      ]
+    },
+    {
+      "viewport": "tablet",
+      "width": 820,
+      "height": 1180,
+      "frames": 149,
+      "meanIntervalMs": 16.777852348993292,
+      "p95IntervalMs": 16.799999999999272,
+      "longTasks": 0,
+      "maxLongTaskMs": 0,
+      "cls": 0.00047911627493880856,
+      "overflow": false,
+      "mediaState": "poster-only",
+      "filmRequests": 0,
+      "posterResources": [
+        {
+          "durationMs": 241.30000000074506,
+          "transferBytes": 42428,
+          "decodedBytes": 42128
+        }
+      ]
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "frames": 147,
+      "meanIntervalMs": 17.00612244897959,
+      "p95IntervalMs": 16.799999999999272,
+      "longTasks": 0,
+      "maxLongTaskMs": 0,
+      "cls": 0.032300072041754974,
+      "overflow": false,
+      "mediaState": "poster-only",
+      "filmRequests": 0,
+      "posterResources": [
+        {
+          "durationMs": 109.90000000223517,
+          "transferBytes": 148670,
+          "decodedBytes": 148370
+        }
+      ]
+    },
+    {
+      "viewport": "narrow",
+      "width": 320,
+      "height": 700,
+      "frames": 150,
+      "meanIntervalMs": 16.66666666666666,
+      "p95IntervalMs": 16.700000000000728,
+      "longTasks": 0,
+      "maxLongTaskMs": 0,
+      "cls": 0.0045480281163873225,
+      "overflow": false,
+      "mediaState": "poster-only",
+      "filmRequests": 0,
+      "posterResources": [
+        {
+          "durationMs": 83.89999999850988,
+          "transferBytes": 148670,
+          "decodedBytes": 148370
+        }
+      ]
+    }
+  ],
+  "browserErrors": []
+}

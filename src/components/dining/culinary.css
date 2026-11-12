@@ -1,0 +1,36 @@
+.culinary-media { position:relative; width:100%; height:100%; background:#183e37; overflow:hidden; }
+.culinary-media>img { width:100%; height:100%; object-fit:cover; }
+.culinary-media-label { position:absolute; bottom:10px; left:10px; max-width:calc(100% - 20px); padding:5px 8px; background:#09251fe3; color:#fff7e7; font-size:9px; letter-spacing:.035em; line-height:1.4; border-radius:2px; }
+.culinary-hero-image .culinary-media-label { top:48px; bottom:auto; left:64px; }
+@media(max-width:639px) { .culinary-hero-image .culinary-media-label { top:24px; left:28px; } }
+.culinary-trigger { cursor:pointer; color:inherit; }
+.culinary-trigger:focus-visible,.culinary-dialog button:focus-visible,.culinary-menu button:focus-visible { outline:3px solid var(--accent,#a7daca); outline-offset:5px; }
+.culinary-dialog { width:min(1120px,calc(100vw - 48px)); max-width:none; max-height:calc(100dvh - 48px); padding:0; border:1px solid #dbcab0; border-radius:8px; margin:auto; background:#f4efe4; color:#193a32; overflow:auto; --accent:#1f6655; --ink-soft:#4b6259; box-shadow:0 28px 100px #0007; }
+.culinary-dialog::backdrop { background:#031d24cf; backdrop-filter:blur(10px); }
+.culinary-dialog-content { display:grid; grid-template-columns:1.05fr .95fr; position:relative; }
+.culinary-expanded-media { min-height:560px; overflow:hidden; background:#142d29; }
+.culinary-expanded-media .culinary-media img { object-fit:contain; }
+.culinary-detail-copy { min-width:0; padding:58px 36px 28px; }
+.culinary-detail-copy h2 { font-family:var(--font-display),Georgia,serif; font-size:44px; line-height:1.1; letter-spacing:-.025em; margin:14px 0 20px; }
+.culinary-detail-copy>p:not(.culinary-kicker) { font-size:14px; line-height:1.8; margin:14px 0; }
+.culinary-detail-copy .culinary-detail-price { font-size:13px!important; font-weight:700; color:#1f6655; }
+.culinary-detail-copy .culinary-disclosure { font-size:11px!important; color:#4b6259; }
+.culinary-detail-copy .culinary-credit { font-size:10px!important; color:#526359; border-top:1px solid #183e3728; padding-top:14px; }
+.culinary-credit a { text-decoration:underline; text-underline-offset:3px; }
+.culinary-close { position:absolute; z-index:3; top:12px; right:12px; width:44px; height:44px; border:1px solid #183e3733; border-radius:50%; background:#f4efe4; color:#193a32; font-size:26px; }
+.culinary-ask { display:flex; justify-content:space-between; gap:20px; width:100%; padding:15px 0; margin-top:18px; border-block:1px solid #183e3733; font-size:12px; font-weight:700; color:#1f6655; text-align:left; }
+.culinary-gallery-controls { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:18px; }
+.culinary-gallery-controls button { width:44px; height:44px; border:1px solid #183e3733; border-radius:50%; flex-shrink:0; }
+.culinary-gallery-controls p { font-size:10px; text-align:center; }
+.culinary-gallery-controls button:disabled { opacity:.35; }
+.culinary-menu-tabs { display:flex; flex-wrap:wrap; gap:7px; margin-top:24px; padding-bottom:16px; border-bottom:1px solid var(--surface-line,#ffffff30); }
+.culinary-menu-tabs button { min-height:44px; border:1px solid #ffffff33; border-radius:3px; font-size:11px; font-weight:600; padding:10px 13px; color:var(--ink); }
+.culinary-menu-tabs button[aria-selected=true] { color:var(--accent-ink); background:var(--accent); border-color:var(--accent); }
+.culinary-menu-panel { min-height:360px; margin-top:20px; }
+.culinary-menu-panel[hidden] { display:none; }
+.culinary-menu-image { width:56px; height:56px; flex-shrink:0; overflow:hidden; border-radius:4px; }
+@media(max-width:767px) { .culinary-dialog { width:calc(100vw - 24px); max-height:calc(100dvh - 24px); } .culinary-dialog-content { display:block; } .culinary-expanded-media { min-height:0; height:auto; aspect-ratio:4/3; } .culinary-detail-copy { padding:26px 24px; } .culinary-detail-copy h2 { font-size:34px; } .culinary-close { top:10px; right:10px; } }
+@media(max-width:359px) { .culinary-detail-copy { padding:22px 18px; } .culinary-menu-image { width:44px; height:44px; } }
+.culinary-dialog .culinary-kicker { font-size:10px; text-transform:uppercase; letter-spacing:.18em; font-weight:700; line-height:1.8; color:#1f6655; }
+/* Clip the entrance transform inside the modal so a thumbnail origin cannot create a horizontal scrollbar. */
+.culinary-dialog-content { overflow:hidden; }

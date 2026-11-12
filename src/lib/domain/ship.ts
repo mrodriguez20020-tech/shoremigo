@@ -1,84 +1,51 @@
 /**
- * Demo vessel for Ships & Rooms. Aurora Tide is FICTIONAL: no real cruise line,
- * deck plan or cabin inventory. Nothing here is bookable; the structure is
- * ready for real ships once a cruise-line data source is authorized.
+ * Ships & Rooms domain facade. Every architectural fact comes from the generated adapter
+ * (vessel.generated.ts), which is exported from the WP-02 canonical design-control spec, manifest and GLB.
+ * Aurora Tide is FICTIONAL: no real cruise line, deck plan or cabin inventory, and nothing here is bookable.
+ * The geometry is provisional (under independent review) and schematic, not a production model or render.
  */
+import { VESSEL_DATA } from "./vessel.generated";
 
-export interface Deck {
-  number: number;
-  name: string;
-  zone: "rooms" | "dining" | "entertainment" | "pool" | "wellness" | "service";
-  highlights: string[];
-}
+export const VESSEL = VESSEL_DATA.vessel;
+export const VESSEL_SOURCE = VESSEL_DATA.source;
+export const PROFILE = VESSEL_DATA.profile;
+export const OUTLINES = VESSEL_DATA.outlines;
+export const CORES = VESSEL_DATA.cores;
+export const CORRIDOR_HALF_WIDTH = VESSEL_DATA.corridorHalfWidth;
+export const LOUNGE = VESSEL_DATA.lounge;
+export const CABIN_7214 = VESSEL_DATA.cabin7214;
+
+export type DeckInfo = (typeof VESSEL_DATA.decks)[number];
+export type Slot = (typeof VESSEL_DATA.slots)[number];
+export type Amenity = (typeof VESSEL_DATA.amenities)[number];
+export type CabinCategory = (typeof VESSEL_DATA.categories)[number];
+
+/** Decks above the waterline, top deck first (decks 1–2 are machinery and crew levels below the waterline). */
+export const DECKS: readonly DeckInfo[] = [...VESSEL_DATA.decks].filter((d) => d.visible).sort((a, b) => b.deck - a.deck);
+export const ALL_DECKS = VESSEL_DATA.decks;
+export const AMENITIES: readonly Amenity[] = VESSEL_DATA.amenities;
+export const REMOVED_AMENITIES = VESSEL_DATA.removedAmenities;
+export const CABIN_CATEGORIES: readonly CabinCategory[] = VESSEL_DATA.categories;
+export const FUTURE_CONCEPTS = VESSEL_DATA.futureConcepts;
+export const SLOTS: readonly Slot[] = VESSEL_DATA.slots;
 
 export const DEMO_SHIP = {
-  name: "Aurora Tide",
-  status: "DEMO VESSEL · fictional",
-  intro: "A mid-size ship designed for slow Caribbean weeks: wide promenades, an open-air aft deck for sunset, and cabins that put the sea in view.",
+  name: VESSEL.name,
+  status: `Fictional vessel · provisional design ${VESSEL_SOURCE.specVersion.replace("-provisional", "")}`,
+  intro: `A boutique exploration cruiser for slow Caribbean weeks: ${VESSEL.staterooms} staterooms, each with a sea view, stepped aft terraces and a forward observation lounge.`,
   facts: [
-    ["Guests", "≈1,900 (illustrative)"],
-    ["Decks", "14 (11 shown)"],
-    ["Cabin types", "4"],
+    ["Length", `${VESSEL.lengthM} m · beam ${VESSEL.beamM} m`],
+    ["Decks", `${VESSEL.decks} (${DECKS.length} above the waterline)`],
+    ["Staterooms", `${VESSEL.staterooms} · ≈${VESSEL.guests} guests`],
+    ["Air draft", `${VESSEL.airDraftAboveDWL} m above the waterline`],
     ["Itinerary", "Western Caribbean · 7 nights (demo sailing)"],
   ] as [string, string][],
 };
 
-export const DECKS: Deck[] = [
-  { number: 14, name: "Skywatch", zone: "entertainment", highlights: ["Observation lounge", "Stargazing terrace"] },
-  { number: 12, name: "Spa & Fitness", zone: "wellness", highlights: ["Thermal suite", "Fitness studio", "Treatment rooms"] },
-  { number: 11, name: "Lido", zone: "pool", highlights: ["Main pool", "Sea Glass Grill", "Kids' splash zone"] },
-  { number: 10, name: "Suites", zone: "rooms", highlights: ["Suites", "Suite lounge"] },
-  { number: 9, name: "Balcony Staterooms", zone: "rooms", highlights: ["Balcony staterooms (demo cabin 9214)"] },
-  { number: 8, name: "Oceanview", zone: "rooms", highlights: ["Oceanview staterooms", "Balcony staterooms"] },
-  { number: 7, name: "Interior", zone: "rooms", highlights: ["Interior staterooms", "Self-service laundry"] },
-  { number: 6, name: "Promenade", zone: "entertainment", highlights: ["Nightwatch Patisserie", "Shops", "Wraparound promenade"] },
-  { number: 5, name: "Atrium", zone: "dining", highlights: ["Compass Rose Dining Room", "Guest services", "Shore Excursions desk"] },
-  { number: 4, name: "Theatre", zone: "entertainment", highlights: ["Tidewater Theatre", "Live music lounge"] },
-  { number: 3, name: "Gangway", zone: "service", highlights: ["Gangway & tender embarkation", "Medical center"] },
-];
+export const DEMO_CABIN = { number: CABIN_7214.number, deck: CABIN_7214.location.deck, category: CABIN_7214.class };
 
-export interface CabinType {
-  id: "interior" | "oceanview" | "balcony" | "suite";
-  name: string;
-  occupancy: string;
-  beds: string;
-  size: string;
-  balcony: boolean;
-  features: string[];
-  walkthrough: boolean;
-}
-
-export const CABINS: CabinType[] = [
-  { id: "interior", name: "Interior Stateroom", occupancy: "Up to 2", beds: "Two twins convert to a queen", size: "≈170 sq ft (illustrative)", balcony: false, features: ["En-suite shower", "Climate control", "TV", "Wardrobe"], walkthrough: false },
-  { id: "oceanview", name: "Oceanview Stateroom", occupancy: "Up to 3", beds: "Queen + sofa bed", size: "≈190 sq ft (illustrative)", balcony: false, features: ["Picture window", "En-suite shower", "Climate control", "Mini-fridge"], walkthrough: false },
-  { id: "balcony", name: "Balcony Stateroom", occupancy: "Up to 3", beds: "Queen + sofa bed", size: "≈210 sq ft + balcony (illustrative)", balcony: true, features: ["Private balcony", "Floor-to-ceiling glass door", "En-suite shower", "Climate control", "TV", "Mini-fridge", "Vanity & storage"], walkthrough: true },
-  { id: "suite", name: "Tidekeeper Suite", occupancy: "Up to 4", beds: "King + sofa bed", size: "≈400 sq ft + large balcony (illustrative)", balcony: true, features: ["Separate living area", "Bathtub & shower", "Large balcony", "Suite lounge access"], walkthrough: false },
-];
-
-export interface CabinView {
-  id: "bedroom" | "balcony" | "bathroom" | "evening";
-  title: string;
-  caption: string;
-}
-
-export const DEMO_CABIN = {
-  number: "9214",
-  type: "balcony" as const,
-  views: [
-    { id: "bedroom", title: "Bedroom", caption: "Queen bed facing the glass door, so the first thing you see each morning is the sea." },
-    { id: "balcony", title: "Balcony", caption: "Two loungers and a small table: room for coffee at sunrise or a quiet sail-away." },
-    { id: "bathroom", title: "Bathroom", caption: "Compact en-suite with a glass-walled shower, vanity and plenty of shelf space." },
-    { id: "evening", title: "Evening", caption: "Lights low, curtains open: the wake glowing behind the ship after dinner." },
-  ] as CabinView[],
-};
-
-export const AMENITIES: { name: string; deck: number; blurb: string }[] = [
-  { name: "Lido pool", deck: 11, blurb: "Main pool with loungers and shade sails." },
-  { name: "Thermal suite & spa", deck: 12, blurb: "Heated loungers, steam room and treatment rooms." },
-  { name: "Fitness studio", deck: 12, blurb: "Cardio with sea views and a class studio." },
-  { name: "Tidewater Theatre", deck: 4, blurb: "Evening shows and destination talks." },
-  { name: "Observation lounge", deck: 14, blurb: "Forward-facing windows for scenic arrivals." },
-  { name: "Kids' splash zone", deck: 11, blurb: "Shallow play area for families." },
-  { name: "Promenade", deck: 6, blurb: "A wraparound walking deck, about three laps to a mile." },
-  { name: "Shore Excursions desk", deck: 5, blurb: "Where ShoreMigo bookings would sync with the ship (concept)." },
-];
+export const deckInfo = (deck: number) => VESSEL_DATA.decks.find((d) => d.deck === deck)!;
+export const amenitiesOnDeck = (deck: number) => AMENITIES.filter((a) => a.deck === deck);
+export const slotsOnDeck = (deck: number) => SLOTS.filter((s) => s.deck === deck);
+export const outlineFor = (deck: number) => (OUTLINES as Record<string, readonly (readonly [number, number])[]>)[String(deck)] ?? [];
+export const categoryOf = (slot: Slot): CabinCategory["id"] => (slot.num === Number(CABIN_7214.number) ? "signature-7214" : slot.deck === 4 ? "oceanview" : "premium-balcony");

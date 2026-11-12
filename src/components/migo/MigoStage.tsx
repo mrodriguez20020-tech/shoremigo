@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useMotionValue, animate } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { migo, type MigoEvent } from "./bus";
 import { useCompanion } from "./CompanionProvider";
 import { poseFor, POSES } from "./poses";
@@ -10,10 +10,15 @@ import { usePathname } from "next/navigation";
 import { ANTICIPATION_MS, STRIDE_MS, gaitAt, surfaceAt } from "./gait";
 import { useTide } from "@/components/transition/TideTransition";
 import { track } from "@/lib/client/track";
+import { useAvoidanceZones } from "./useAvoidanceZones";
+import { footprint, overlaps, safeCompactSpot, safeLaneX } from "./avoidance";
+import { MIGO_RENDERER_CONTRACT } from "./rendererContract";
+import { guidanceForRoute } from "./guidance";
 
 type Suggestion = Extract<MigoEvent, { type: "suggest" }>;
 
 const PANEL_W = 420;
+const compactViewport = (width: number, height: number) => width < 720 || (width < 1024 && height < 500);
 
 export function MigoStage() {
   const {
@@ -27,14 +32,18 @@ export function MigoStage() {
     closeConcierge,
   } = useCompanion();
   const pathname = usePathname();
+  const zones = useAvoidanceZones(pathname);
   const { go } = useTide();
   const stageX = useMotionValue(24);
+  const [placed, setPlaced] = useState(false);
   const stageRef = useRef<HTMLDivElement>(null);
   const [contact, setContact] = useState(1);
   const [gaitPhase, setGaitPhase] = useState("still");
   const [vw, setVw] = useState(1280);
   const [vh, setVh] = useState(800);
   const [mobileBottom, setMobileBottom] = useState(10);
+  const [compactX, setCompactX] = useState(24);
+  const [hasSpace, setHasSpace] = useState(true);
   const [x, setXState] = useState(24);
   const setX = useCallback(
     (value: number) => {
@@ -45,11 +54,27 @@ export function MigoStage() {
   );
   const [facing, setFacing] = useState<1 | -1>(1);
   const [frame, setFrame] = useState<0 | 1>(0);
+  const nextFoot = useRef<0 | 1>(0);
+  const faceRef = useRef<1 | -1>(1);
+  const pendingFace = useRef<1 | -1 | null>(null);
+  const turnTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const [turning, setTurning] = useState(false);
+  const turnTo = useCallback((next: 1 | -1) => {
+    if (pendingFace.current === next || (pendingFace.current === null && faceRef.current === next)) return;
+    turnTimers.current.forEach(clearTimeout);
+    if (reducedMotion) { faceRef.current=next;pendingFace.current=null;setFacing(next);setTurning(false);return; }
+    pendingFace.current=next;setTurning(true);
+    turnTimers.current=[setTimeout(()=>{faceRef.current=next;setFacing(next);},90),setTimeout(()=>{pendingFace.current=null;setTurning(false);},180)];
+  },[reducedMotion]);
+  useEffect(()=>()=>turnTimers.current.forEach(clearTimeout),[]);
   const [strolling, setStrolling] = useState(true);
   const [bubble, setBubble] = useState<Suggestion | null>(null);
+  const bubbleRef = useRef<HTMLDivElement>(null);
   const seen = useRef(new Set<string>());
   const dir = useRef<1 | -1>(1);
   const xRef = useRef(24);
+  // Preserve deliberate keyboard/drag intent across temporary reveal/font geometry.
+  const requestedX = useRef<number | null>(null);
   // Drag-and-release (desktop, roaming only) and the hop between lane and chat.
   const [dragging, setDragging] = useState(false);
   const [hopping, setHopping] = useState(false);
@@ -61,8 +86,21 @@ export function MigoStage() {
   const suppressClick = useRef(false);
   const prevMode = useRef(state.mode);
 
-  const mobile = vw < 720;
+  const mobile = compactViewport(vw, vh);
   const size = mobile ? 84 : 124;
+
+  useLayoutEffect(() => {
+    const width = window.innerWidth;
+    const compact = compactViewport(width, window.innerHeight);
+    const start = Math.max(16, width - (compact ? 84 : 124) - (compact ? 10 : 32));
+    setVw(width);
+    setVh(window.innerHeight);
+    xRef.current = start;
+    dir.current = -1;
+    stageX.set(start);
+    setXState(start);
+    setPlaced(true);
+  }, [stageX]);
 
   useEffect(() => {
     const onR = () => {
@@ -75,66 +113,21 @@ export function MigoStage() {
       const img = new Image();
       img.src = p.src;
     });
-    // Start over the open sea on the right, away from primary page actions.
-    xRef.current = Math.max(
-      16,
-      window.innerWidth - (window.innerWidth < 720 ? 84 : 124) - 32,
-    );
-    dir.current = -1;
-    setX(xRef.current);
     window.addEventListener("resize", onR);
     return () => window.removeEventListener("resize", onR);
-    // Motion value is stable; initial placement runs once.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // The compact phone launcher also avoids marked controls vertically. A fixed
-  // corner alone can overlap a full-width form when it reaches the viewport edge.
-  useEffect(() => {
+  // The compact launcher protects marked copy/controls on both sides, including short landscape.
+  useLayoutEffect(() => {
     if (!mobile || state.mode !== "roam") return;
-    let raf = 0;
-    let settleUntil = performance.now() + 1200;
-    const place = (now = performance.now()) => {
-      const h = window.innerHeight;
-      const left = window.innerWidth - size - 10;
-      const zones = Array.from(
-        document.querySelectorAll<HTMLElement>("[data-migo-avoid]"),
-        (el) => el.getBoundingClientRect(),
-      );
-      let next = 10;
-      for (let i = 0; i <= zones.length; i++) {
-        const hit = zones.find(
-          (z) =>
-            z.left < left + size &&
-            z.right > left &&
-            z.top < h - next &&
-            z.bottom > h - next - size,
-        );
-        if (!hit) break;
-        next = h - hit.top + 12;
-      }
-      setMobileBottom(Math.max(10, Math.min(h - size - 90, next)));
-      if (now < settleUntil) raf = requestAnimationFrame(place);
+    const place = () => {
+      const spot = safeCompactSpot(size,{width:innerWidth,height:innerHeight},zones.read());
+      setHasSpace(Boolean(spot));
+      if(spot){setCompactX(spot.x);stageX.set(spot.x);setMobileBottom(spot.bottom);}
+      if(stageRef.current)stageRef.current.dataset.avoidanceScans=String(zones.scans);
     };
-    const schedule = () => {
-      // ResizeObserver does not observe transforms. Follow short reveals after
-      // scrolling/resizing, then stop sampling once the composition settles.
-      settleUntil = performance.now() + 1200;
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(place);
-    };
-    place();
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-    const observer = new ResizeObserver(schedule);
-    observer.observe(document.body);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-      observer.disconnect();
-    };
-  }, [mobile, size, state.mode]);
+    place(); return zones.subscribe(place);
+  },[mobile,size,state.mode,zones,stageX]);
 
   // A short, purposeful hop when moving between his lane and the chat panel.
   useEffect(() => {
@@ -145,10 +138,13 @@ export function MigoStage() {
     const back = was === "attend" && state.mode === "roam";
     if (!toChat && !back) return;
     setHopping(true);
+    window.dispatchEvent(new CustomEvent("sm:migo-motion",{detail:{phase:"hop-start",direction:toChat?"to-chat":"to-lane",surface:surfaceAt(pathname)}}));
     const t = setTimeout(() => {
       setHopping(false);
-      if (!document.hidden)
+      if (!document.hidden) {
+        window.dispatchEvent(new CustomEvent("sm:migo-motion",{detail:{phase:"landed",direction:toChat?"to-chat":"to-lane",surface:surfaceAt(pathname)}}));
         migo.emit({ type: "motion:landed", surface: surfaceAt(pathname) });
+      }
     }, 700);
     return () => {
       clearTimeout(t);
@@ -157,33 +153,26 @@ export function MigoStage() {
   }, [state.mode, reducedMotion, mobile, pathname]);
 
   /** Nearest lane position whose footprint doesn't cover a marked control (data-migo-avoid). */
-  const safeSnap = (want: number) => {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    const max = Math.max(16, w - size - 16);
-    const zones = [
-      ...document.querySelectorAll<HTMLElement>("[data-migo-avoid]"),
-    ].map((el) => el.getBoundingClientRect());
-    const blocked = (px: number) =>
-      zones.some(
-        (z) =>
-          z.left < px + size &&
-          z.right > px &&
-          z.top < h &&
-          z.bottom > h - size - 20,
-      );
-    const clamp = (px: number) => Math.max(16, Math.min(max, px));
-    const start = clamp(want);
-    if (!blocked(start)) return start;
-    for (let d = 24; d < w; d += 24) {
-      for (const px of [start - d, start + d])
-        if (px >= 16 && px <= max && !blocked(px)) return px;
-    }
-    return start;
-  };
+  const safeSnap = useCallback((want: number) => {
+    const nx=safeLaneX(want,size,{width:innerWidth,height:innerHeight},zones.read());
+    setHasSpace(nx!==null);
+    return nx ?? xRef.current;
+  },[size,zones]);
+
+  // A standing companion reacts to geometry invalidation; no parallel rect-scanning loop.
+  useLayoutEffect(() => {
+    if (!placed || mobile || state.mode !== "roam" || dragging || hopping) return;
+    const place = () => {
+      const next = safeSnap(requestedX.current ?? xRef.current);
+      if(stageRef.current)stageRef.current.dataset.avoidanceScans=String(zones.scans);
+      if(next!==xRef.current){xRef.current=next;setX(next);}
+    };
+    place();return zones.subscribe(place);
+  },[placed,mobile,state.mode,dragging,hopping,safeSnap,setX,zones]);
   const moveTo = (px: number) => {
+    requestedX.current = px;
     const nx = safeSnap(px);
-    setFacing(nx < xRef.current ? -1 : 1);
+    turnTo(nx < xRef.current ? -1 : 1);
     xRef.current = nx;
     setX(nx);
     setStrolling(false);
@@ -192,14 +181,14 @@ export function MigoStage() {
 
   // On phones Migo is a compact corner launcher rather than a walker, so he never covers page controls.
   const roaming =
-    state.mode === "roam" && !reducedMotion && !mobile && !dragging;
+    state.mode === "roam" && !reducedMotion && !mobile && !dragging && !hopping && hasSpace;
   const expression =
     state.expression === "walking" && (!strolling || !roaming)
       ? "idle"
       : state.expression;
   const walking = expression === "walking";
 
-  // Each burst finishes two actual strides. Recovery starts after completion,
+  // Each burst finishes three actual strides with alternating lead feet. Recovery starts after completion,
   // rather than a competing timer cutting a contact short on a slower device.
   useEffect(() => {
     if (!roaming || strolling) return;
@@ -216,7 +205,7 @@ export function MigoStage() {
       raf = requestAnimationFrame(() => {
         const centre = xRef.current + size / 2;
         if (Math.abs(e.clientX - centre) > 40)
-          setFacing(e.clientX < centre ? -1 : 1);
+          turnTo(e.clientX < centre ? -1 : 1);
       });
     };
     window.addEventListener("pointermove", onMove, { passive: true });
@@ -224,7 +213,7 @@ export function MigoStage() {
       window.removeEventListener("pointermove", onMove);
       cancelAnimationFrame(raf);
     };
-  }, [state.mode, walking, mobile, reducedMotion, size]);
+  }, [state.mode, walking, mobile, reducedMotion, size, turnTo]);
 
   // One clock owns travel, pose, contact shadow and sound. The supplied poses
   // support short discrete steps, not a full articulated gait. Pause travel at
@@ -238,8 +227,10 @@ export function MigoStage() {
     let raf = 0;
     let previous = performance.now();
     let elapsed = 0;
+    requestedX.current = null;
     const origin = xRef.current;
     const direction = dir.current;
+    const firstFoot = nextFoot.current;
     let previousContact = -1;
     const step = (now: number) => {
       if (document.hidden) {
@@ -248,26 +239,17 @@ export function MigoStage() {
       }
       elapsed += Math.min(48, now - previous);
       previous = now;
-      if (elapsed >= ANTICIPATION_MS + STRIDE_MS * 2) {
+      if (elapsed >= ANTICIPATION_MS + STRIDE_MS * 3) {
         setStrolling(false);
         return;
       }
-      const sample = gaitAt(elapsed, size);
+      const sample = gaitAt(elapsed, size, firstFoot);
       const max = Math.max(16, vw - size - 16);
       const want = origin + direction * sample.offset;
       const nx = Math.max(16, Math.min(max, want));
-      // Check the actual footprint continuously: never cross a marked form/CTA.
-      const h = window.innerHeight;
-      const blocked = Array.from(
-        document.querySelectorAll<HTMLElement>("[data-migo-avoid]"),
-        (el) => el.getBoundingClientRect(),
-      ).some(
-        (z) =>
-          z.left < nx + size &&
-          z.right > nx &&
-          z.top < h &&
-          z.bottom > h - size - 20,
-      );
+      // Read cached bounds; real layout reads are batched by useAvoidanceZones.
+      const blocked=zones.modalOpen || zones.read().some(z=>!z.tipOnly && overlaps(footprint(nx,10,size,{width:innerWidth,height:innerHeight}),z));
+      if(stageRef.current)stageRef.current.dataset.avoidanceScans=String(zones.scans);
       if (blocked || want !== nx) {
         dir.current = direction === 1 ? -1 : 1;
         setStrolling(false);
@@ -282,9 +264,11 @@ export function MigoStage() {
         stageRef.current.dataset.travel = String(Math.round(nx * 100) / 100);
       if (sample.contact && sample.step !== previousContact) {
         previousContact = sample.step;
+        nextFoot.current = sample.frame ? 0 : 1;
         const surface = surfaceAt(
           pathname,
           document.documentElement.dataset.migoSurface === "cabin",
+          document.documentElement.dataset.migoSurface,
         );
         window.dispatchEvent(
           new CustomEvent("sm:migo-contact", {
@@ -306,7 +290,7 @@ export function MigoStage() {
       }
       raf = requestAnimationFrame(step);
     };
-    setFacing(direction);
+    turnTo(direction);
     const onVisibility = () => {
       if (document.hidden) {
         cancelAnimationFrame(raf);
@@ -320,7 +304,7 @@ export function MigoStage() {
       document.removeEventListener("visibilitychange", onVisibility);
       setXState(xRef.current);
     };
-  }, [walking, reducedMotion, state.mode, vw, size, pathname, stageX]);
+  }, [walking, reducedMotion, state.mode, vw, size, pathname, stageX, zones, turnTo]);
 
   // Suggestions + welcome. Before speaking, Migo moves somewhere his bubble won't cover
   // an important control (elements marked data-migo-avoid). No free spot → stay quiet.
@@ -328,21 +312,21 @@ export function MigoStage() {
     () =>
       migo.on((e) => {
         if (e.type !== "suggest") return;
-        if (!prefs.proactive || seen.current.has(e.key)) return;
+        if (!prefs.proactive || state.mode !== "roam" || zones.modalOpen || seen.current.has(e.key)) return;
         const w = window.innerWidth;
         const h = window.innerHeight;
-        const sz = w < 720 ? 84 : 124;
-        const zones = [
-          ...document.querySelectorAll<HTMLElement>("[data-migo-avoid], [data-migo-tip-avoid]"),
-        ].map((el) => el.getBoundingClientRect());
+        const sz = compactViewport(w, h) ? 84 : 124;
+        const protectedZones = zones.read();
         const blocked = (x: number) => {
+          const width = Math.min(300, w - 32);
+          const tipLeft = Math.max(16, Math.min(x, w - width - 16));
           const box = {
-            l: x,
-            r: x + Math.max(sz, Math.min(316, w - 32)),
+            l: Math.min(x, tipLeft),
+            r: Math.max(x + sz, tipLeft + width),
             t: h - sz - 190,
             b: h,
           };
-          return zones.some(
+          return protectedZones.some(
             (z) =>
               z.left < box.r &&
               z.right > box.l &&
@@ -365,19 +349,35 @@ export function MigoStage() {
         setStrolling(false);
         setBubble(e);
       }),
-    [prefs.proactive, setX],
+    [prefs.proactive, state.mode, setX, zones],
   );
   useEffect(() => {
-    if (state.mode !== "roam") setBubble(null);
+    if (state.mode !== "roam") { setBubble(null); requestedX.current = null; }
   }, [state.mode]);
+  // A revealed tip is invalidated by the same batched geometry source.
+  useLayoutEffect(()=>{
+    if(!bubble)return;
+    const check=()=>{
+      const tip=bubbleRef.current;if(!tip)return;
+      if(zones.read().some(z=>overlaps(tip.getBoundingClientRect(),z))){tip.style.visibility="hidden";tip.inert=true;setBubble(null);}
+    };
+    check();return zones.subscribe(check);
+  },[bubble,zones]);
   useEffect(() => {
     if (!bubble) return;
     const t = setTimeout(() => setBubble(null), 12000);
     return () => clearTimeout(t);
   }, [bubble]);
 
+  useEffect(()=>{
+    const suggestion=guidanceForRoute(pathname);
+    if(!suggestion || seen.current.has(suggestion.key) || !prefs.proactive || state.mode!=="roam" || bubble || !hasSpace || zones.modalOpen)return;
+    const timer=setTimeout(()=>{if(!document.hidden && !zones.modalOpen)migo.emit(suggestion);},2200);
+    return()=>clearTimeout(timer);
+  },[pathname,prefs.proactive,state.mode,bubble,hasSpace,zones]);
+
   // Where Migo stands for each mode.
-  let targetX = mobile ? vw - size - 10 : reducedMotion ? 16 : x;
+  let targetX = mobile ? compactX : x;
   let bottom = mobile ? mobileBottom : 10;
   let scale = 1;
   if (state.mode === "attend") {
@@ -396,13 +396,13 @@ export function MigoStage() {
   const pose = dragging || hopping ? "jump" : poseFor(expression, frame);
 
   useEffect(() => {
-    if (walking || dragging) return;
+    if (!placed || walking || dragging) return;
     const controls = animate(stageX, targetX, {
-      duration: reducedMotion ? 0 : hopping ? 0.7 : 0.35,
+      duration: reducedMotion || mobile ? 0 : hopping ? 0.7 : 0.35,
       ease: [0.25, 0.7, 0.3, 1],
     });
     return () => controls.stop();
-  }, [targetX, walking, dragging, reducedMotion, hopping, stageX]);
+  }, [targetX, walking, dragging, reducedMotion, hopping, stageX, placed, mobile]);
 
   if (state.mode === "hidden") {
     return (
@@ -429,12 +429,16 @@ export function MigoStage() {
         className="fixed z-40"
         ref={stageRef}
         data-migo-stage
+        data-placement-ready={placed}
+        data-renderer={MIGO_RENDERER_CONTRACT.renderer}
+        data-turning={turning}
+        data-space={hasSpace ? "clear" : "unavailable"}
         data-mode={state.mode}
         data-expression={expression}
         data-gait={gaitPhase}
         data-frame={frame}
         data-hopping={hopping}
-        style={{ left: 0, x: stageX }}
+        style={{ left: 0, x: stageX, visibility: placed ? "visible" : "hidden", display: state.mode === "roam" && !hasSpace ? "none" : undefined }}
         initial={false}
         animate={{
           bottom: hopping ? [10, 120, bottom] : bottom,
@@ -460,6 +464,8 @@ export function MigoStage() {
         <AnimatePresence>
           {bubble && state.mode === "roam" && (
             <motion.div
+              key={bubble.key}
+              ref={bubbleRef}
               role="status"
               aria-live="polite"
               initial={{ opacity: 0, y: 8, scale: 0.96 }}
@@ -519,6 +525,7 @@ export function MigoStage() {
         <div className="group relative">
           <button
             type="button"
+            disabled={!placed}
             onClick={() => {
               if (suppressClick.current) {
                 suppressClick.current = false;
@@ -542,6 +549,7 @@ export function MigoStage() {
             onPointerMove={(e) => {
               const d = dragRef.current;
               if (!d) return;
+              requestedX.current = null;
               const dx = e.clientX - d.startClient;
               if (!d.moved && Math.abs(dx) < 6) return;
               if (!d.moved) {
@@ -553,7 +561,7 @@ export function MigoStage() {
                 16,
                 Math.min(window.innerWidth - size - 16, d.startX + dx),
               );
-              setFacing(dx < 0 ? -1 : 1);
+              turnTo(dx < 0 ? -1 : 1);
               xRef.current = nx;
               setX(nx);
             }}
@@ -571,20 +579,17 @@ export function MigoStage() {
               setDragging(false);
             }}
             onKeyDown={(e) => {
-              if (!canDrag || (e.key !== "ArrowLeft" && e.key !== "ArrowRight"))
+              if (state.mode !== "roam" || mobile || !["ArrowLeft","ArrowRight","Home","End"].includes(e.key))
                 return;
               e.preventDefault();
-              moveTo(
-                xRef.current +
-                  (e.key === "ArrowLeft" ? -1 : 1) * (e.shiftKey ? 160 : 48),
-              );
+              moveTo(e.key === "Home" ? 16 : e.key === "End" ? innerWidth-size-16 : xRef.current + (e.key === "ArrowLeft" ? -1 : 1) * (e.shiftKey ? 160 : 48));
             }}
             title={
               canDrag
                 ? "Click to chat · drag (or use arrow keys) to move Migo"
                 : undefined
             }
-            aria-keyshortcuts={canDrag ? "ArrowLeft ArrowRight" : undefined}
+            aria-keyshortcuts={state.mode === "roam" && !mobile ? "ArrowLeft ArrowRight Home End" : undefined}
             aria-label={
               state.panelOpen
                 ? "Close Migo's concierge panel"
@@ -595,10 +600,10 @@ export function MigoStage() {
             className={`block rounded-full focus-visible:outline-offset-[-6px] ${canDrag ? (dragging ? "cursor-grabbing touch-none" : "cursor-grab") : "cursor-pointer"}`}
           >
             <motion.div
-              key={expression}
-              initial={false}
-              animate={{ scale: 1, y: 0 }}
-              transition={{ type: "spring", stiffness: 380, damping: 18 }}
+              key={walking ? "walking" : pose}
+              initial={reducedMotion ? false : { opacity:.65 }}
+              animate={{ opacity:turning ? .72 : 1 }}
+              transition={{ duration:reducedMotion ? 0 : .12 }}
             >
               <div className="origin-bottom">
                 <div

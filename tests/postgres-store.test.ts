@@ -60,4 +60,18 @@ describe.skipIf(!url)("Postgres store adapter", () => {
     await svc.updateInventory({ excursionId: "coz-cacao", open: false });
     await expect(svc.createBooking({ excursionId: "coz-cacao", guests: 1, ...guest })).rejects.toMatchObject({ code: "closed" });
   });
+  it("isolates preview documents and row locks from the existing production state", async () => {
+    const before = await store.read(db=>JSON.stringify(db));
+    vi.stubEnv("VERCEL_ENV", "preview");
+    vi.resetModules();
+    const previewStore = await import("@/lib/server/store");
+    expect(await previewStore.read(db=>db.bookings.length)).toBe(0);
+    await Promise.all(Array.from({length:8},(_,i)=>previewStore.tx(db=>{
+      db.engagement.push({at:new Date().toISOString(),type:"preview-isolation-test",props:{sequence:i}});
+    })));
+    expect(await previewStore.read(db=>db.engagement.length)).toBe(8);
+    expect(await store.read(db=>JSON.stringify(db))).toBe(before);
+    vi.unstubAllEnvs();
+  });
+
 });

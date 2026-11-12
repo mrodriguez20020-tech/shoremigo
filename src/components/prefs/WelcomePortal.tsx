@@ -93,10 +93,6 @@ export function WelcomePortal() {
       lang: l,
       country_set: Boolean(c),
     });
-    if (!reducedMotion) {
-      document.documentElement.dataset.approach = "true";
-      window.setTimeout(() => { delete document.documentElement.dataset.approach; }, 900);
-    }
     closePortal();
     if (greetingTimer.current) clearTimeout(greetingTimer.current);
     greetingTimer.current = setTimeout(
@@ -181,7 +177,9 @@ export function WelcomePortal() {
                   {T("welcome.headline")}
                 </h1>
                 <div className="welcome-companion mt-10 flex items-center gap-4">
-                  <div aria-hidden className="welcome-migo shrink-0"><GreetingMigo /></div>
+                  <div aria-hidden className="welcome-migo shrink-0">
+                    <div className="welcome-migo-art"><GreetingMigo /></div>
+                  </div>
                   <div className="max-w-[250px] border-l border-white/30 pl-5">
                     <p className="font-display text-2xl">{T("welcome.meet")}</p>
                     <p className="mt-2 text-sm leading-relaxed text-white/80">

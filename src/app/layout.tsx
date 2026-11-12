@@ -7,6 +7,7 @@ import { Intro } from "@/components/intro/Intro";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { CompanionProvider } from "@/components/migo/CompanionProvider";
 import { MigoStage } from "@/components/migo/MigoStage";
+import { CinematicBackdrop } from "@/components/scene/CinematicBackdrop";
 import { SceneBackdrop } from "@/components/scene/SceneBackdrop";
 import { SceneProvider } from "@/components/scene/SceneProvider";
 import { TideProvider } from "@/components/transition/TideTransition";
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <CompanionProvider>
               <TideProvider>
                 <SceneBackdrop />
+                <CinematicBackdrop />
                 <SiteHeader />
                 <main id="main" className="relative z-10">
                   {children}
