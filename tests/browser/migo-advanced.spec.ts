@@ -84,3 +84,13 @@ test('opt-in synthesized footsteps correspond to rendered contacts and stop on m
  await expect(page.locator('[data-migo-stage]')).toHaveAttribute('data-gait','still');
  const before=(await evidence(page)).contacts.length;await page.waitForTimeout(1200);expect((await evidence(page)).contacts.length).toBe(before);
 });
+
+test('mobile hero copy and primary actions remain clear of the companion',async({page})=>{
+ await page.setViewportSize({width:390,height:844});await returning(page);
+ const stage=page.locator('[data-migo-stage]');
+ await expect.poll(async()=>{
+  const a=await stage.boundingBox();if(!a||!await stage.isVisible())return true;
+  return page.locator('.luxury-hero [data-migo-avoid]').evaluateAll((els,box)=>els.every(el=>{const b=el.getBoundingClientRect();return box.x+box.width<=b.left-11||box.x>=b.right+11||box.y+box.height<=b.top-11||box.y>=b.bottom+11;}),a);
+ }).toBe(true);
+ await page.getByRole('button',{name:'Explore tours',exact:true}).click();await expect(page).toHaveURL(/\/excursions/);
+});
