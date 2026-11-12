@@ -10,7 +10,7 @@ import { CulinaryCollection, CulinaryTrigger } from "@/components/dining/Culinar
 import { CulinaryMedia } from "@/components/dining/CulinaryMedia";
 import { CulinaryGallery } from "@/components/dining/CulinaryGallery";
 import { AskMigoButton } from "@/components/dining/AskMigoButton";
-import { ExcursionArt } from "@/components/excursion/ExcursionArt";
+import { ExcursionPhoto, ExcursionPhotoCredit } from "@/components/excursion/ExcursionPhoto";
 import { TideLink } from "@/components/transition/TideTransition";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ArrowIcon } from "@/components/dining/ArrowIcon";
@@ -59,8 +59,8 @@ export default async function TastePage() {
         <div className="culinary-tours">{tours.map((e) => {
           const s = snap.find((x) => x.excursionId === e.id)!; const port = getPort(e.portId)!;
           return <article key={e.id} className="culinary-tour-card">
-            <div className="culinary-tour-art"><ExcursionArt art={e.art} /><span>Original illustration · demo excursion</span></div>
-            <div className="culinary-tour-copy"><p className="culinary-kicker">{port.name} · Tidewalk Tours (demo)</p><h3>{e.title}</h3><p>{e.tagline}</p><dl><div><dt>Departure</dt><dd>{fmtMin(toMin(e.start))} · {fmtDuration(e.durationMin)}</dd></div><div><dt>Availability</dt><dd>{s.onSale ? `${s.seatsLeft} of ${s.capacity} seats open` : "Not on sale"}</dd></div><div><dt>LastBoard</dt><dd>{s.feasibility.status} · {s.feasibility.reasons[0]}</dd></div></dl><div className="culinary-tour-bottom" data-migo-avoid><p>{fmtUsd(e.priceCents)} <small>/ guest</small></p><TideLink href={`/excursions/${e.id}`} className="culinary-primary">View timing &amp; reserve →</TideLink></div></div>
+            <div className="culinary-tour-art"><ExcursionPhoto excursionId={e.id} art={e.art} className="h-full min-h-[180px] w-full" /></div>
+            <div className="culinary-tour-copy"><p className="culinary-kicker">{port.name} · Tidewalk Tours (demo)</p><h3>{e.title}</h3><p>{e.tagline}</p><ExcursionPhotoCredit excursionId={e.id} /><dl><div><dt>Departure</dt><dd>{fmtMin(toMin(e.start))} · {fmtDuration(e.durationMin)}</dd></div><div><dt>Availability</dt><dd>{s.onSale ? `${s.seatsLeft} of ${s.capacity} seats open` : "Not on sale"}</dd></div><div><dt>LastBoard</dt><dd>{s.feasibility.status} · {s.feasibility.reasons[0]}</dd></div></dl><div className="culinary-tour-bottom" data-migo-avoid><p>{fmtUsd(e.priceCents)} <small>/ guest</small></p><TideLink href={`/excursions/${e.id}`} className="culinary-primary">View timing &amp; reserve →</TideLink></div></div>
           </article>;
         })}<aside className="culinary-pairing"><span aria-hidden>✧</span><h3>Leave a little<br /><em>room for the sea.</em></h3><p>Pair a tasting with a gentler afternoon. Explore existing experiences; availability and timing are checked again when you reserve.</p><TideLink href="/excursions?mood=relax" className="culinary-text-link">Explore slower adventures →</TideLink></aside></div>
       </section>
