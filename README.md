@@ -6,6 +6,8 @@ ShoreMigo is a cruise shore-excursion companion: discover tours that fit your sh
 
 Built for the PayPal AI Hackathon 2026.
 
+**Cinematic package status:** WP-01 is proposed on an isolated feature branch, not merged or deployed. Final moving-water/wake/sunset media remains missing; the current fallback is a disclosed concept still. [Shared engineering handoff](docs/HANDOFF.md) · [Current evidence and limitations](docs/signature/README.md).
+
 **Live demo:** https://shoremigo.vercel.app (PayPal **sandbox** only; no real money) · **Status matrix:** [docs/STATUS.md](docs/STATUS.md) · **Judge guide:** [docs/SUBMISSION.md](docs/SUBMISSION.md#testing-instructions-for-judges) · **Evidence:** [docs/VERIFICATION.md](docs/VERIFICATION.md)
 
 ```
@@ -51,6 +53,11 @@ npm test                     # unit + service tests (Vitest)
 ```
 
 Requirements: Node 20+. Sandbox credentials: developer.paypal.com → Apps & Credentials → **Sandbox** → Create App. Use a sandbox *personal* (buyer) account to approve payments.
+
+Browser checks: `npm run test:ui` needs a Playwright/system Chromium (`PLAYWRIGHT_CHROMIUM_PATH` optionally selects it). Native-film fixture tests additionally require **system FFmpeg and ffprobe**, with **libx264** encoder and **drawtext** filter (`ffmpeg -encoders`, `ffmpeg -filters` to inspect). Fixtures are labeled engineering patterns, generated only in ignored `work/`; they are not production media. Missing executables cause a clearly reported skip, never a native-media pass. Engineering acceptance requires a configured environment that actually runs those tests. `npm run media:check` also uses ffprobe for real deliveries and currently exits 2 because the production manifest is pending.
+
+Use `NEXT_DIST_DIR=.next-review npm run build` for a separate build directory while another server runs; lint ignores `.next-*/` and `work/`. Never rebuild the directory served by active tests. New review evidence follows [EVIDENCE_POLICY.md](docs/EVIDENCE_POLICY.md); run `npm run evidence:check`.
+
 
 > **Windows note:** if the project lives in a very deep folder, Turbopack's dev cache can exceed the Windows path limit. `npm run dev` therefore uses webpack; `npm run build` still uses Turbopack.
 
@@ -240,3 +247,14 @@ Run `npm test`, `npm run lint`, `npm run typecheck`, and `npm run build`. For br
 ### Cinematic Luxury · Phase 1.5
 
 The shared fictional Aurora Tide environment, contact-driven Migo motion/audio, responsive captures, actual browser recording and remaining rig limitations are documented in [the Phase 1.5 review](docs/CINEMATIC_PHASE_15.md). Assets and business logic from Phase 1 are preserved; this update does not deploy or merge the redesign.
+
+
+### Cinematic execution and independent review
+
+The current WP-01 signature package is proposed in [draft PR #2](https://github.com/mrodriguez20020-tech/shoremigo/pull/2) on `feat/wp01-cinematic-environment`, targeting `design/cinematic-luxury`. **Final moving-water/wake/sunset visual acceptance is blocked by missing production footage.** The public manifest remains pending and the interim experience uses a disclosed static concept. No merge or production deployment is included.
+
+Start with [AGENTS.md](AGENTS.md) / [CLAUDE.md](CLAUDE.md), the [handoff](docs/HANDOFF.md), [work ownership](docs/WORK_PACKAGES.md), [design bible](docs/DESIGN_BIBLE.md), [acceptance gates](docs/ACCEPTANCE.md), [asset registry](docs/ASSET_REGISTRY.md) and [decision log](docs/DECISIONS.md). [Current code/evidence and limitations](docs/signature/README.md) supersede the historical cinematic presentation claims above. Existing functional/provider verification remains in [docs/VERIFICATION.md](docs/VERIFICATION.md), and asset rights remain in [ASSETS.md](ASSETS.md).
+
+## Current engineering review evidence
+
+WP-01 application/tests3c74658 passed42/42 browser cases in three consecutive headed runs,3 focused headless cases,84 unit/service tests (4 database skips), types/lint/build and17/17 isolated HTTP smoke checks. [Final reconciliation and exact source hashes](docs/reviews/WP01_REMEDIATION.md). [Versioned actual recording/screenshots](https://drive.google.com/drive/folders/16JQ68qmLUxMpvWY5WGU8yPgPt4Ixp0-S) require authorized Drive sign-in; GitHub binary upload returned401, so no public prerelease asset set is claimed. Final cinematic media/model acceptance remains blocked; independent Claude re-review is pending. [Next prepared WP-04 package](docs/WP04_BRIEF.md). No merge, production deploy or spending.

@@ -1,3 +1,31 @@
+# Final remediation handoff · 2026-11-12 UTC
+
+WP-01 application/tests **3c74658**, capture3d9aa77: **42/42 ×3 full headed runs**, 3 focused headless, unit84+4PG skips, types/lint/build pass, isolated smoke17/17. Claude independent re-review pending. [Current handoff](HANDOFF.md) · [actual authenticated Drive evidence](https://drive.google.com/drive/folders/16JQ68qmLUxMpvWY5WGU8yPgPt4Ixp0-S) · [finding reconciliation](reviews/WP01_REMEDIATION.md). GitHub binary upload failed401; the Drive archive was downloaded and hash-verified. No public-release claim.
+
+Final cinematic assets remain BLOCKED. WP-02 review of414b627 is REQUEST CHANGES; later4a3bd65 awaits independent re-review/owner decisions. WP-04 is prepared only. No merge, production deployment or spending. Earlier snapshots below are historical.
+
+---
+
+# Current remediation/review update · 2026-11-12
+
+WP-01 engineering source `79173ba` addresses Claude's PR #2 conditions; [current handoff](HANDOFF.md) and [finding reconciliation/final check record](reviews/WP01_REMEDIATION.md). Claude's independent re-review is pending for the revised head. **Final moving-water/wake/sunset visual acceptance remains BLOCKED**; native QA patterns and the static concept are not production assets.
+
+Codex reviewed WP-02 `414b627` on [PR #3](https://github.com/mrodriguez20020-tech/shoremigo/pull/3#pullrequestreview-5869346197): REQUEST CHANGES, no production-model approval. Claude owns corrections. Provisional basis: 158 m/nine decks/104 staterooms/~208 guests, Cabin 7214 on Deck 7. Interior Staterooms/conventional theatre/Kids' splash removed from planned migration; Tidekeeper future-only; boutique lounge allocation requires validation. Existing ship/domain demo awaits a scoped migration.
+
+[WP-04 Taste & Indulge brief](WP04_BRIEF.md) is prepared for the next independent implementation; no WP-04 app code started. No merge, production deployment or spending. All earlier status/provider/deployment results below are historical.
+
+---
+
+# Current cinematic package snapshot · 2026-11-12 UTC
+
+Remote refs observed: `main` = `630d0b251d8247fcd762ab676e5d06b79337d142`; cinematic integration = `000a837adfa8bf3ed39f05be61e09a4bc3f6df3e`. These are branch refs, not a new verification of the deployed site's runtime commit. Earlier deployment/provider records below are retained as historical evidence.
+
+WP-01's previously unpushed signature work is preserved on `feat/wp01-cinematic-environment`. Its native media integration and shared workflow are proposed in [draft PR #2](https://github.com/mrodriguez20020-tech/shoremigo/pull/2) for independent review; **genuine moving-water, integrated wake and matched physical sunset acceptance remain BLOCKED**. The public film manifest is `awaiting-production-media`; the current environment is a disclosed concept still and Migo retains the original limited poses. The prior Phase 1.5 ocean result was rejected as insufficiently cinematic.
+
+[Actual handoff](HANDOFF.md) · [Package states/ownership](WORK_PACKAGES.md) · [Current evidence/check results](signature/README.md) · [Exact production dependency](signature/ASSET_PRODUCTION_SPEC.md). Claude review is pending; future packages are not silently assigned or started. No production deployment, integration merge, main merge or hackathon-submission change is included.
+
+---
+
 # ShoreMigo implementation status (2026-11-11)
 
 Legend: **IMPLEMENTED** = working and checked · **PARTIAL** = exists, missing parts or verification · **MISSING** · **BLOCKED** (reason given) · **DEFERRED** (after submission, intent recorded).
