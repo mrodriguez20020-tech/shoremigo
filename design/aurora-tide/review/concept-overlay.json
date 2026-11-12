@@ -1,18 +1,55 @@
 {
-  "geometryId": "sha256:26208856942a33202c1bafbdf1a453587e54d575564e03f954189344fad6a016",
+  "specId": "sha256:562498459523bbed3cabb0e4be4d0a84b16c32c31b572ca621e5405cc4cf7442",
+  "massingModelId": "sha256:5087c4867f47be88e76de8b7943caef5e257fd08c5ac5a74d5b6e080fb77a4d8",
   "concept": "public/cinematic/aurora-tide.webp",
-  "camera": {
-    "az": -38.21108992879675,
-    "el": 5.82955202750273,
-    "dist": 1044.1837026731728,
-    "roll": -2.3360039265450765
+  "seed": 20261112,
+  "search": {
+    "grid": {
+      "azDeg": [
+        -60,
+        -10,
+        5
+      ],
+      "elDeg": [
+        6,
+        36,
+        5
+      ],
+      "distM": [
+        180,
+        260,
+        380,
+        600,
+        1200
+      ]
+    },
+    "refine": {
+      "iterations": 6,
+      "samplesPerIteration": 60,
+      "initialStep": {
+        "az": 3,
+        "el": 3,
+        "distFrac": 0.25,
+        "roll": 1.5
+      },
+      "decay": 0.6
+    },
+    "maskWidthPx": 350,
+    "alignment": "bbox left + bottom"
   },
-  "silhouetteIoU": 0.8992,
-  "coarseIoU": 0.9007,
+  "camera": {
+    "model": "perspective, target (79, 0, 14) m, up +z",
+    "az": -37.8474,
+    "el": 5.1571,
+    "dist": 947.4818,
+    "roll": -3.1159
+  },
+  "silhouetteIoU": 0.8986,
+  "coarseIoU": 0.9004,
   "pixels": {
-    "overlap": 383913,
-    "missingFromModel": 19038,
-    "modelExcess": 24021
+    "overlap": 383936,
+    "missingFromModel": 19015,
+    "modelExcess": 24299
   },
   "byLengthBand": [
     {
@@ -38,7 +75,7 @@
     {
       "band": "40-50% (stern→bow)",
       "missingPct": 0.3,
-      "excessPct": 0.2
+      "excessPct": 0.3
     },
     {
       "band": "50-60% (stern→bow)",
@@ -47,7 +84,7 @@
     },
     {
       "band": "60-70% (stern→bow)",
-      "missingPct": 0.1,
+      "missingPct": 0.2,
       "excessPct": 0.7
     },
     {
@@ -62,7 +99,7 @@
     },
     {
       "band": "90-100% (stern→bow)",
-      "missingPct": 0,
+      "missingPct": 0.1,
       "excessPct": 1.8
     }
   ]

@@ -1,6 +1,6 @@
 {
   "$comment": "Canonical PROPOSED geometry contract for the fictional vessel Aurora Tide (WP-02). Derived from the approved appearance reference public/cinematic/aurora-tide.webp (A-02). Values marked proposed require owner approval before final modeling. Not a real ship, not an engineering or classification document.",
-  "version": "0.2.0-provisional",
+  "version": "0.3.0-provisional",
   "status": "provisionally-approved-direction; subject to Codex independent review and final appearance approval",
   "identity": {
     "name": "Aurora Tide",
@@ -99,7 +99,7 @@
       "name": "Oceanview",
       "z": 10,
       "visible": true,
-      "use": "oceanview staterooms; aft lounge opening onto terrace T1",
+      "use": "oceanview staterooms; boutique entertainment lounge aft, opening onto terrace T1 (sheet 09)",
       "observedFeature": "rectangular hull windows; lowest aft terrace"
     },
     {
@@ -107,7 +107,7 @@
       "name": "Promenade",
       "z": 12.9,
       "visible": true,
-      "use": "lifeboat/embarkation promenade, atrium, main dining aft (terrace T2), suites forward",
+      "use": "lifeboat/embarkation promenade with Nightwatch Patisserie, atrium with shore-excursion concierge desk, main dining aft (terrace T2), premium balcony staterooms forward",
       "observedFeature": "recessed lifeboat bay with two orange enclosed boats and liferaft canisters; first panoramic band forward"
     },
     {
@@ -115,7 +115,7 @@
       "name": "Horizon",
       "z": 15.8,
       "visible": true,
-      "use": "panoramic balcony suites; aft lounge terrace T3",
+      "use": "premium balcony staterooms; aft lounge terrace T3",
       "observedFeature": "second continuous panoramic glazing band"
     },
     {
@@ -123,7 +123,7 @@
       "name": "Meridian",
       "z": 18.7,
       "visible": true,
-      "use": "panoramic balcony suites; aft pool terrace T4 with umbrellas",
+      "use": "premium balcony staterooms incl. Signature Cabin 7214; aft pool and recreation terrace T4",
       "observedFeature": "third panoramic band; uppermost aft terrace with umbrellas and loungers"
     },
     {
@@ -272,17 +272,17 @@
       },
       {
         "deck": 5,
-        "type": "Balcony Suite (forward of lifeboat bay)",
+        "type": "Premium Balcony Stateroom (forward of lifeboat bay)",
         "count": 16
       },
       {
         "deck": 6,
-        "type": "Panoramic Balcony Suite",
+        "type": "Premium Balcony Stateroom",
         "count": 30
       },
       {
         "deck": 7,
-        "type": "Panoramic Balcony Suite",
+        "type": "Premium Balcony Stateroom",
         "count": 30
       }
     ],
@@ -293,7 +293,47 @@
       "note": "typical boutique-luxury balcony module; proposal"
     },
     "replacesDemoValues": "src/lib/domain/ship.ts currently states ~1,900 guests and 14 decks, which the approved concept cannot hold",
-    "derivation": "Computed by generate.mjs (derivedCapacity) from the unit module, corridor and core rule; recorded in manifest.json. Not asserted independently."
+    "derivation": "Computed by generate.mjs (derivedCapacity) from the unit module, corridor and core rule; recorded in manifest.json. Not asserted independently.",
+    "offering": [
+      {
+        "type": "Oceanview Stateroom",
+        "decks": [
+          4
+        ],
+        "status": "offered"
+      },
+      {
+        "type": "Premium Balcony Stateroom",
+        "decks": [
+          5,
+          6,
+          7
+        ],
+        "status": "offered"
+      },
+      {
+        "type": "Signature Cabin 7214",
+        "decks": [
+          7
+        ],
+        "status": "offered (a Premium Balcony Stateroom; see cabin7214)"
+      }
+    ],
+    "removed": [
+      {
+        "type": "Interior Stateroom",
+        "reason": "not supported by the canonical layout (all staterooms are exterior)",
+        "decision": "D-W02-6"
+      }
+    ],
+    "futureConcepts": [
+      {
+        "type": "Tidekeeper Suite",
+        "status": "future design concept only — NOT available accommodation",
+        "gate": "geometry, deck placement and capacity impact must be validated and approved first",
+        "decision": "D-W02-6"
+      }
+    ]
   },
   "unseenAndAssumed": [
     "starboard side (assumed mirror, including lifeboats and shell doors)",
@@ -325,6 +365,26 @@
     "D-W02-5": {
       "status": "constraint",
       "text": "Zero unapproved spending. No paid freelancer, GPU rental, render subscription or asset purchase. Do not commission production rendering until: Codex review, defects corrected, design approved, film-framing/golden-hour conflict resolved, viable zero-cost resource arranged. The GLB is massing only."
+    },
+    "D-W02-6": {
+      "status": "approved",
+      "text": "Accommodation offering: Offer Oceanview Stateroom and Premium Balcony Stateroom, with Signature Cabin 7214 (Deck 7). Interior Staterooms removed (not supported by the canonical layout). Tidekeeper Suite kept as a future design concept only, never shown as available until its geometry, deck placement and capacity impact are validated and approved. The derived 104 staterooms / ~208 guests basis is preserved."
+    },
+    "D-W02-7": {
+      "status": "approved; lounge location proposed on sheet 09 (pending owner acceptance)",
+      "text": "Amenities: Remove the large conventional theatre and the kids' splash zone. Replace the theatre with an intimate boutique entertainment lounge (live music, evening performance, social gatherings), advertised only once located in the canonical deck plan. Retain pool and aft recreation terraces, sun deck, spa and fitness, panoramic observation lounge, premium dining, Nightwatch Patisserie, promenade and the shore-excursion concierge desk. No unsupported amenities."
+    },
+    "D-W02-8": {
+      "status": "provisionally approved",
+      "text": "Cabin 7214 programme and figures: Spatial programme approved as the provisional interior foundation. 31.9 m² net interior and 9.0 m² balcony accepted as the provisional basis, subject to independent geometry/clearance verification. Minimum clearance is a fictional design target, not a certified accessibility or maritime-safety claim."
+    },
+    "D-W02-9": {
+      "status": "approved",
+      "text": "Concept overlay and identity: ~90 % silhouette agreement accepted as design-control evidence; no further optimisation for the percentage. Overlay must be reproducible (deterministic seed, recorded camera). Specification identity and generated-model identity are distinct."
+    },
+    "D-W02-10": {
+      "status": "approved direction; implementation with WP-01",
+      "text": "Golden-hour composition: Move the featured-excursion card into the left-side safe area; vessel stays on the right. Implementation is WP-01's (Codex, PR #2). Camera, ship and environment identical across daylight and sunset."
     }
   },
   "cabin7214": {
@@ -397,13 +457,26 @@
         "golden hour",
         "evening"
       ]
+    },
+    "designTargets": {
+      "status": "provisional basis (D-W02-8), subject to independent geometry/clearance verification",
+      "netInteriorM2": 31.9,
+      "balconyClearM2": 9,
+      "minClearanceM": 0.75,
+      "note": "Fictional design targets for this fictional vessel. Not a certified accessibility or maritime-safety claim."
     }
   },
   "amenityMap": {
-    "status": "proposed mapping of existing demo amenities onto the approved deck stack (for the future Ships & Rooms migration)",
+    "status": "approved amenity set (D-W02-7) mapped onto the canonical deck stack for the Ships & Rooms migration",
     "entries": [
       {
-        "amenity": "Main dining (Compass Rose)",
+        "amenity": "Boutique entertainment lounge (live music, evening performance, social)",
+        "deck": 4,
+        "where": "aft, opening onto terrace T1 (sheet 09)",
+        "status": "proposed location; advertise after owner acceptance"
+      },
+      {
+        "amenity": "Premium main dining (Compass Rose)",
         "deck": 5,
         "where": "aft, opening onto terrace T2"
       },
@@ -416,11 +489,6 @@
         "amenity": "Shore Excursions desk / atrium",
         "deck": 5,
         "where": "midship atrium"
-      },
-      {
-        "amenity": "Lounge terrace T3",
-        "deck": 6,
-        "where": "aft"
       },
       {
         "amenity": "Pool + Sea Glass Grill (recreation terrace T4)",
@@ -451,13 +519,26 @@
         "amenity": "Marina / tender embarkation",
         "deck": 3,
         "where": "aft shell doors and stern marina platform"
+      },
+      {
+        "amenity": "Lounge terrace T3",
+        "deck": 6,
+        "where": "aft"
       }
     ],
-    "unresolved": [
-      "Theatre: no large-venue space is visible in the concept; owner to decide whether the boutique ship has one (e.g. Deck 4 aft lounge) or it is dropped",
-      "Kids' splash zone: not established by the concept; owner to confirm before it appears again",
-      "Interior Stateroom and Tidekeeper Suite types: the derived layout contains only exterior staterooms; owner to confirm whether to drop them or designate suites (e.g. Deck 7 aft)"
-    ]
+    "removed": [
+      {
+        "amenity": "Large conventional theatre",
+        "decision": "D-W02-7",
+        "replacement": "boutique entertainment lounge"
+      },
+      {
+        "amenity": "Kids' splash zone",
+        "decision": "D-W02-7",
+        "replacement": null
+      }
+    ],
+    "rule": "No amenity is advertised unless it has a located space in the canonical deck plan."
   },
   "geometryCorrections": [
     {
@@ -478,5 +559,24 @@
       "basis": "concept-overlay pass 2 residuals",
       "changes": "bow sheer lowered from 18.7 m to 16.5 m (forecastle too high vs A-02). Further tuning stopped: remaining differences are omitted detail (umbrellas, railings, planters) and the generated concept's non-physical perspective."
     }
-  ]
+  ],
+  "entertainmentLounge": {
+    "status": "proposed location (D-W02-7); advertise only after owner acceptance",
+    "workingName": "Entertainment lounge (name to be decided by the owner)",
+    "deck": 4,
+    "zone": "aft, between the terrace T1 glazed wall and the first oceanview stateroom",
+    "geometry": "derived by generate.mjs from terrace T1 and the deck 4 cabin rule (manifest.json → entertainmentLounge); no staterooms displaced",
+    "programme": [
+      "aft glazed wall opening onto terrace T1 (sea view astern)",
+      "lounge seating in conversational groups, ~1.8 m² per seated guest",
+      "small performance platform for live music / evening performance",
+      "bar and back-of-house band along the forward bulkhead, also the acoustic buffer to the oceanview staterooms",
+      "entry from the deck 4 corridor on the centreline"
+    ],
+    "constraints": [
+      "acoustic separation to adjacent staterooms required (buffer band + upgraded bulkhead); not yet engineered",
+      "second means of escape via terrace T1 assumed; fire/escape arrangement not designed or certified",
+      "capacity figures are fictional design targets, not certified occupancy"
+    ]
+  }
 }

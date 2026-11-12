@@ -1,5 +1,7 @@
 {
-  "geometryId": "sha256:26208856942a33202c1bafbdf1a453587e54d575564e03f954189344fad6a016",
+  "specId": "sha256:b599ca3921f44ab8934aa71d6f7555f63387462283bf07d94724a75d1dd305d6",
+  "generatorId": "sha256:11226090cb65f22e67392ceb2319947112d0020ba82b31560cd362d996bb77a0",
+  "massingModelId": "sha256:5087c4867f47be88e76de8b7943caef5e257fd08c5ac5a74d5b6e080fb77a4d8",
   "cameraId": "sha256:5292e371823e8c8e370bcf231797e2f08291c17f4b3a4e8e14a3c9c3a851b454",
   "camera": {
     "name": "review-3q-port-aft",
@@ -8,19 +10,21 @@
     "projection": "orthographic",
     "note": "matches A-02 framing family; review camera only"
   },
-  "specVersion": "0.2.0-provisional",
+  "specVersion": "0.3.0-provisional",
   "status": "provisionally-approved-direction; subject to Codex independent review and final appearance approval",
   "generatedFrom": "design/aurora-tide/vessel.json",
+  "identity": "specId = vessel.json; generatorId = generate.mjs source (LF-normalised); massingModelId = the generated massing geometry (face vertices rounded to 1 mm, with materials). A generator change that alters geometry changes massingModelId even when specId is unchanged. File hashes below identify each output byte-for-byte. A production model will get its own id, recorded against the specId it was built to.",
   "files": {
-    "sheets/01-port-elevation.svg": "sha256:225087db0414391b0d073f6e614d52859991b4993827bebd3a5d4152f3fac909",
-    "sheets/02-starboard-elevation.svg": "sha256:56dd5295259ff7b2d40d3cd5a4f2b2eff1fea0d83d9698f9570a2cacf6ae0c55",
-    "sheets/03-bow.svg": "sha256:b032c396417c42c70f522c0b9cb7f64874d1faf09b3da782d5b9a02eb6358108",
-    "sheets/04-stern.svg": "sha256:ffb436e7c3ba36550d99674be36db9f63a9ca15e5225de8c35c352c32d8faa14",
-    "sheets/05-plan.svg": "sha256:12e676a0bdfa18cf76965398ad3b946ee5fced41cf001bd101e298e11e92e0d3",
-    "sheets/06-deck7-arrangement.svg": "sha256:6c454ff881d2f092e47289ed39544d080624a39c0a940cd1ad0e0282df344390",
-    "sheets/07-three-quarter-massing.svg": "sha256:69fa957c9051d31f5235cdf85b16c04eddb8310d786374fc4746148d07b24cb4",
-    "sheets/08-cabin-7214-plan.svg": "sha256:1824d5e7f0416c2c9851850a272ba2e5a4e166a838ce658d3dc1b305035a71f0",
-    "model/aurora-tide-massing.glb": "sha256:3d1ee4b4bc5c1458e93fe28d1173557bf1a9c2f88adfe3b8191f6fc053c456e6"
+    "sheets/01-port-elevation.svg": "sha256:ef4cb8828689aa91a185397b5bb8b1b6062b896b8172d36bc666b1e74a0ca1f3",
+    "sheets/02-starboard-elevation.svg": "sha256:85bea44ecc107c6e40d52fb3eeb1c330cd54586d8bb59b12fe7a5b85dae2a562",
+    "sheets/03-bow.svg": "sha256:f6a545ff53c42ce7d1bdc16b980daec0e8556b13a95e75a605462a4545a065e1",
+    "sheets/04-stern.svg": "sha256:256923cccf8dd66874cd8d0edac54f8bb920bc0d204499a7b39c6c30e17f86e8",
+    "sheets/05-plan.svg": "sha256:cea0db5db04ad35841abe4e5b446ca968d3f7b0cf1234dc639b0e89f532cbccc",
+    "sheets/06-deck7-arrangement.svg": "sha256:f486dea412c8223254dad6537d66484e66262870fb30d4622aaf6c99a162ca06",
+    "sheets/07-three-quarter-massing.svg": "sha256:28d380a88f6485f5731f33de93142a1881fad1cb39c7347de14f7859d35cd23b",
+    "sheets/08-cabin-7214-plan.svg": "sha256:fec790ee60219fff643a981c906ec275bf9a5faad859e79df8f42bca5a8d15e6",
+    "sheets/09-deck4-lounge.svg": "sha256:514a6c229760cf369350d4530499d499b48b2869daddd594a321f83f501ef12f",
+    "model/aurora-tide-massing.glb": "sha256:3d9d44d88b9ef9d76f0db5d93eea9d0af27bdbab9da8aece58a4ab77fb31fede"
   },
   "derivedCapacity": {
     "rule": "4.6 m modules both sides of a central corridor, 3 m aft clearance, 8 m forward clearance, three vertical cores skipped",
@@ -112,5 +116,20 @@
     ]
   },
   "deck7CabinCount": 30,
-  "note": "Hashes identify this proposal revision. The approved canonical geometryId is issued only after owner approval of vessel.json."
+  "entertainmentLounge": {
+    "deck": 4,
+    "xAft": 9,
+    "xFwd": 22.95,
+    "lengthM": 13.95,
+    "widthAftM": 20.4,
+    "widthFwdM": 22.33,
+    "grossM2": 300.8,
+    "barAndBackOfHouseM2": 66.7,
+    "stageM2": 12,
+    "seatingNetM2": 173.8,
+    "seatedTarget": 96,
+    "basis": "fictional design target: 1.8 m² per seated guest after a 15 % circulation allowance; not a certified occupancy",
+    "stateroomsDisplaced": 0
+  },
+  "note": "Hashes identify this proposal revision. The approved canonical specId/massingModelId pair is frozen only after owner approval of vessel.json."
 }

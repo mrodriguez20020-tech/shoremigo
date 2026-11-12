@@ -17,8 +17,14 @@ fs.mkdirSync(out("sheets"), { recursive: true });
 fs.mkdirSync(out("model"), { recursive: true });
 
 const sha = (buf) => "sha256:" + crypto.createHash("sha256").update(buf).digest("hex");
-// Geometry identity = canonical JSON (key order as authored, whitespace-insensitive).
-const geometryId = sha(JSON.stringify(V));
+// Identity (D-W02-9): three distinct hashes.
+// specId: the canonical specification (vessel.json content; key order as authored, whitespace-insensitive).
+const specId = sha(JSON.stringify(V));
+// generatorId: this generator's source, line endings normalised so Windows and Linux checkouts agree.
+const generatorId = sha(fs.readFileSync(fileURLToPath(import.meta.url), "utf8").replace(/\r\n/g, "\n"));
+// massingModelId: the produced massing geometry itself (assigned once the prisms exist). It changes whenever the
+// generated geometry changes, even when a generator change leaves specId untouched.
+let massingModelId = "pending";
 
 const P = V.principal, H = V.hull, S = V.superstructure, C = V.identity.palette;
 const B2 = P.beam / 2;
@@ -53,7 +59,7 @@ function sheet({ title, sub, w, h, body, scaleNote }) {
 <g font-size="15" fill="#0d2f43">
   <rect x="0" y="${h - 64}" width="${w}" height="64" fill="#0d2f43"/>
   <text x="24" y="${h - 36}" fill="#f2eee5" font-size="18" font-weight="700">AURORA TIDE (fictional) · ${esc(title)}</text>
-  <text x="24" y="${h - 14}" fill="#c9d6d9" font-size="12">${esc(sub)} · PROPOSED geometry ${esc(V.version)} · ${geometryId.slice(0, 23)}… · design-control drawing, not a render · ${esc(scaleNote ?? "")}</text>
+  <text x="24" y="${h - 14}" fill="#c9d6d9" font-size="12">${esc(sub)} · PROPOSED geometry ${esc(V.version)} · spec ${specId.slice(7, 19)} · model ${massingModelId.slice(7, 19)} · design-control drawing, not a render · ${esc(scaleNote ?? "")}</text>
 </g>
 </svg>`;
 }
@@ -86,7 +92,8 @@ function elevation(side) {
   }
   // T1 aft terrace on deck 4
   b += poly([[X(S.aftTerraceT1.aftX), Z(deckZ[4] + 1.1)], [X(S.aftTerraceT1.wallX), Z(deckZ[4] + 1.1)], [X(S.aftTerraceT1.wallX), Z(deckZ[4])], [X(S.aftTerraceT1.aftX), Z(deckZ[4])]], "none", "#7a6a55", 1, 'stroke-dasharray="3 2"');
-  b += `<rect x="${Math.min(X(S.aftTerraceT1.wallX), X(30))}" y="${Z(deckZ[4] + 2.4)}" width="${Math.abs(X(30) - X(S.aftTerraceT1.wallX))}" height="${1.4 * k}" fill="${C.glazing}"/>`;
+  // entertainment-lounge glazing: only over the lounge's own extent and below the deck 5 floor
+  { const lg = deck4Layout().lounge; b += `<rect x="${Math.min(X(lg.xAft), X(lg.xFwd))}" y="${Z(deckZ[4] + 2.7)}" width="${Math.abs(X(lg.xFwd) - X(lg.xAft))}" height="${1.2 * k}" fill="${C.glazing}"/>`; }
   // superstructure levels
   for (const L of S.levels) {
     const z0 = deckZ[L.deck], z1 = z0 + DH;
@@ -229,13 +236,14 @@ function plan(arrangement) {
       if (target || idx[side] % 3 === 1) b += text(X(x) + 3, (sgn > 0 ? Y(outer) : Y(-outer)) + (sgn > 0 ? 12 : -4), String(num), 9, target ? "#032029" : "#7c7466", target ? 'font-weight="700"' : "");
     }
   }
-  b += text(40, 46, "DECK 7 'MERIDIAN' ARRANGEMENT — schematic. Highlighted: Option A location for the demo cabin (7214, port, zone 2 midship). Owner decision required on the 9214 number.", 15, "#0d2f43", 'font-weight="700"');
+  b += text(40, 46, "DECK 7 'MERIDIAN' ARRANGEMENT — schematic. Highlighted: Signature Cabin 7214 (Premium Balcony Stateroom, port, zone 2 midship; D-W02-1).", 15, "#0d2f43", 'font-weight="700"');
   b += text(40, 70, `Module ${m.width} m × ${m.depthInterior} m interior + ${m.balconyDepth} m balcony (proposal). Numbering convention assumed: even = port, zone 1 aft / 2 midship / 3 forward.`, 12, "#4b5d63");
   return sheet({ title: "deck 7 arrangement", sub: "schematic cabin layout", w: W, h: Hh, body: b, scaleNote: "1 m = 13.2 px" });
 }
 
 // ---------- derived accommodation (same module/core rule as the deck 7 sheet) ----------
 const CORES = [[44, 52], [86, 92], [118, 124]];
+const DECK4_CABIN_FROM = S.aftTerraceT1.wallX + 11, DECK4_CABIN_TO = 132;
 function cabinsOnDeck(fromX, toX) {
   const m = V.accommodation.unitModule; let n = 0;
   for (let x = fromX + 3; x + m.width <= toX - 8; x += m.width) if (!CORES.some(([a, f]) => x + m.width > a && x < f)) n += 2;
@@ -244,9 +252,104 @@ function cabinsOnDeck(fromX, toX) {
 function derivedCapacity() {
   const lv = Object.fromEntries(S.levels.map((l) => [l.deck, l]));
   const g5 = S.glazingBands.find((b) => b.deck === 5);
-  const decks = { 4: cabinsOnDeck(S.aftTerraceT1.wallX + 11, 132), 5: cabinsOnDeck(g5.fromX, g5.toX + 2), 6: cabinsOnDeck(lv[6].aftWallX, lv[6].foreX), 7: cabinsOnDeck(lv[7].aftWallX, lv[7].foreX) };
+  const decks = { 4: cabinsOnDeck(DECK4_CABIN_FROM, DECK4_CABIN_TO), 5: cabinsOnDeck(g5.fromX, g5.toX + 2), 6: cabinsOnDeck(lv[6].aftWallX, lv[6].foreX), 7: cabinsOnDeck(lv[7].aftWallX, lv[7].foreX) };
   const staterooms = Object.values(decks).reduce((a, b) => a + b, 0);
   return { rule: "4.6 m modules both sides of a central corridor, 3 m aft clearance, 8 m forward clearance, three vertical cores skipped", perDeck: decks, staterooms, guestsDoubleOccupancy: staterooms * 2 };
+}
+
+// ---------- deck 4: oceanview staterooms + boutique entertainment lounge aft (D-W02-7) ----------
+// The lounge occupies exactly the space aft of the first deck-4 stateroom that the capacity rule already leaves
+// free (terrace T1 wall → first module), so it displaces no staterooms and changes no capacity.
+function deck4Layout() {
+  const m = V.accommodation.unitModule, T1 = S.aftTerraceT1, lining = 0.3, bulkhead = 0.1;
+  const w = (x) => halfBreadth(x) - lining;
+  const firstModuleX = DECK4_CABIN_FROM + 3; // same start rule as cabinsOnDeck()
+  const xAft = T1.wallX, xFwd = firstModuleX - bulkhead / 2;
+  const integ = (a, f, width) => { let s = 0; const dx = 0.05; for (let x = a; x < f - 1e-9; x += dx) s += width(Math.min(f, x + dx / 2)) * Math.min(dx, f - x); return s; };
+  const gross = integ(xAft, xFwd, (x) => 2 * w(x));
+  const barBand = { xAft: xFwd - 3.0, xFwd, note: "bar + back-of-house; acoustic buffer to staterooms" };
+  const stage = { xAft: xAft + 0.4, xFwd: xAft + 2.8, halfWidth: 2.5 };
+  const apron = { xAft: xAft, xFwd: stage.xFwd + 1.2, halfWidth: 3.7 }; // stage + 1.2 m apron + side access, kept clear of seating
+  const barArea = integ(barBand.xAft, barBand.xFwd, (x) => 2 * w(x));
+  const apronArea = (apron.xFwd - apron.xAft) * 2 * apron.halfWidth;
+  const circulation = 0.15;
+  const seatingNet = (gross - barArea - apronArea) * (1 - circulation);
+  const m2PerSeat = 1.8;
+  const cabins = [];
+  let idx = { port: 0, stbd: 0 }, lastZone = 0;
+  for (let x = firstModuleX; x + m.width <= DECK4_CABIN_TO - 8; x += m.width) {
+    if (CORES.some(([a, f]) => x + m.width > a && x < f)) continue;
+    const zone = x < 60 ? 1 : x < 100 ? 2 : 3;
+    if (zone !== lastZone) { idx = { port: 0, stbd: 0 }; lastZone = zone; }
+    for (const side of ["port", "stbd"]) {
+      idx[side]++;
+      cabins.push({ num: 4000 + zone * 100 + (side === "port" ? idx.port * 2 : idx.stbd * 2 - 1), side, xFrom: +x.toFixed(2), xTo: +(x + m.width).toFixed(2), outboard: +w(x + m.width / 2).toFixed(2) });
+    }
+  }
+  const lounge = {
+    deck: 4, xAft: +xAft.toFixed(2), xFwd: +xFwd.toFixed(2), lengthM: +(xFwd - xAft).toFixed(2),
+    widthAftM: +(2 * w(xAft)).toFixed(2), widthFwdM: +(2 * w(xFwd)).toFixed(2),
+    grossM2: +gross.toFixed(1), barAndBackOfHouseM2: +barArea.toFixed(1), stageM2: +((stage.xFwd - stage.xAft) * 2 * stage.halfWidth).toFixed(1),
+    seatingNetM2: +seatingNet.toFixed(1), seatedTarget: Math.floor(seatingNet / m2PerSeat),
+    basis: `fictional design target: ${m2PerSeat} m² per seated guest after a ${circulation * 100} % circulation allowance; not a certified occupancy`,
+    stateroomsDisplaced: 0,
+  };
+  return { lounge, barBand, stage, apron, cabins, lining, w };
+}
+function deck4Plan() {
+  const D = deck4Layout(), L = D.lounge, W = 2400, Hh = 1400, k = 13.2, ox = 120, cy = 300;
+  const X = (x) => ox + x * k, Y = (y) => cy - y * k;
+  let b = "";
+  const outline = [];
+  for (let x = 0; x <= P.lengthOverall; x += 1) outline.push([X(x), Y(halfBreadth(x))]);
+  for (let x = P.lengthOverall; x >= 0; x -= 1) outline.push([X(x), Y(-halfBreadth(x))]);
+  b += poly(outline, "#e9e4d8", "#0b1a2b", 1.5);
+  const T1 = S.aftTerraceT1;
+  b += `<rect x="${X(T1.aftX)}" y="${Y(D.w(T1.aftX))}" width="${(T1.wallX - T1.aftX) * k}" height="${2 * D.w(T1.aftX) * k}" fill="${C.deckTeak}" fill-opacity="0.55"/>` + text(X(T1.aftX) + 3, Y(0) + 4, "T1", 11, "#4d3b25");
+  const lp = [];
+  for (let x = L.xAft; x <= L.xFwd + 1e-9; x += 0.5) lp.push([X(x), Y(D.w(x))]);
+  for (let x = L.xFwd; x >= L.xAft - 1e-9; x -= 0.5) lp.push([X(x), Y(-D.w(x))]);
+  b += poly(lp, "#40c7c5", "#0d5c78", 1.5, 'fill-opacity="0.75"');
+  b += text(X(L.xAft), Y(halfBreadth(L.xAft)) - 10, "ENTERTAINMENT LOUNGE", 11, "#032029", 'font-weight="700"');
+  b += `<rect x="${X(DECK4_CABIN_FROM + 3)}" y="${Y(0.9)}" width="${(D.cabins.at(-1).xTo - DECK4_CABIN_FROM - 3) * k}" height="${1.8 * k}" fill="#cfc6b4"/>`;
+  for (const [a, f] of CORES) b += `<rect x="${X(a)}" y="${Y(4)}" width="${(f - a) * k}" height="${8 * k}" fill="#b7ae9c"/>`;
+  for (const c of D.cabins) {
+    const sgn = c.side === "port" ? 1 : -1, y0 = sgn > 0 ? Y(c.outboard) : Y(-0.9), hgt = (c.outboard - 0.9) * k;
+    b += `<rect x="${X(c.xFrom)}" y="${y0}" width="${(c.xTo - c.xFrom) * k}" height="${hgt}" fill="#f7f3ea" stroke="#a39c8e" stroke-width="0.8"/>`;
+    if ((c.num % 100) <= 2) b += text(X(c.xFrom) + 3, (sgn > 0 ? Y(c.outboard) + 12 : Y(-c.outboard) - 4), String(c.num), 9, "#7c7466");
+  }
+  b += text(40, 40, `DECK 4 'OCEANVIEW' ARRANGEMENT: ${D.cabins.length} oceanview staterooms + boutique entertainment lounge aft (D-W02-7). Schematic; no staterooms displaced.`, 15, "#0d2f43", 'font-weight="700"');
+  b += text(40, 62, "Lounge = the space the capacity rule already leaves between the terrace T1 glazed wall and the first stateroom module. Theatre and kids' splash zone removed.", 12, "#4b5d63");
+  // enlarged lounge plan (1 m = 34 px), aft at left
+  const k2 = 24, ox2 = 200, cy2 = 800;
+  const X2 = (x) => ox2 + (x - L.xAft) * k2, Y2 = (y) => cy2 - y * k2;
+  const lp2 = [];
+  for (let x = L.xAft; x <= L.xFwd + 1e-9; x += 0.25) lp2.push([X2(x), Y2(D.w(x))]);
+  for (let x = L.xFwd; x >= L.xAft - 1e-9; x -= 0.25) lp2.push([X2(x), Y2(-D.w(x))]);
+  b += poly(lp2, "#f6f1e6", "#6f6758", 3);
+  b += text(ox2, Y2(D.w(L.xFwd)) - 30, `ENLARGED: entertainment lounge (deck 4 aft) · x ${L.xAft}–${L.xFwd} m · 1 m = ${k2} px`, 15, "#0d2f43", 'font-weight="700"');
+  b += `<rect x="${X2(L.xAft) - 6}" y="${Y2(D.w(L.xAft))}" width="6" height="${2 * D.w(L.xAft) * k2}" fill="#7fb7c8"/>` + text(X2(L.xAft) - 140, Y2(0) - 8, "glazed aft wall", 12, "#24525f") + text(X2(L.xAft) - 140, Y2(0) + 8, "→ terrace T1", 12, "#24525f");
+  const bb = D.barBand, rect2 = (x0, x1, hw, fill, stroke = "#8d8473") => `<rect x="${X2(x0)}" y="${Y2(hw)}" width="${(x1 - x0) * k2}" height="${2 * hw * k2}" fill="${fill}" stroke="${stroke}"/>`;
+  const hwF = D.w(bb.xAft);
+  b += rect2(bb.xAft, bb.xFwd, hwF, "#d9c4a0") + text(X2(bb.xFwd) + 12, Y2(hwF) + 22, "BAR + BACK-OF-HOUSE (3.0 m band)", 13, "#4d3b25", 'font-weight="700"') + text(X2(bb.xFwd) + 12, Y2(hwF) + 40, "acoustic buffer to the staterooms forward; entry from the deck 4 corridor on the centreline", 11, "#5b4a33");
+  b += `<rect x="${X2(bb.xAft)}" y="${Y2(0.9)}" width="${(bb.xFwd - bb.xAft) * k2}" height="${1.8 * k2}" fill="#cfc6b4"/>` + text(X2(bb.xAft) + 4, Y2(0) + 4, "entry", 11, "#4b4436");
+  b += rect2(D.apron.xAft, D.apron.xFwd, D.apron.halfWidth, "none", "#9a8f7c").replace("/>", ' stroke-dasharray="5 4"/>');
+  b += rect2(D.stage.xAft, D.stage.xFwd, D.stage.halfWidth, "#c9a77d") + text(X2(D.stage.xAft) + 4, Y2(0) + 5, "STAGE", 12, "#3d3529", 'font-weight="700"');
+  b += text(X2(D.apron.xFwd) + 14, Y2(6.5), "LOUNGE SEATING", 15, "#3d3529", 'font-weight="700"');
+  b += text(X2(D.apron.xFwd) + 14, Y2(6.5) + 18, "conversational groups", 12, "#5b5345") + text(X2(D.apron.xFwd) + 14, Y2(6.5) + 34, `≈ ${L.seatedTarget} seated (design target)`, 12, "#5b5345");
+  // metrics block
+  const mx = 1500; let my = 760;
+  const rows = [
+    ["Gross floor", `${L.grossM2} m²`], ["Length × width", `${L.lengthM} m × ${L.widthAftM}–${L.widthFwdM} m`],
+    ["Bar + back-of-house", `${L.barAndBackOfHouseM2} m²`], ["Performance platform", `${L.stageM2} m²`],
+    ["Net seating area", `${L.seatingNetM2} m²`], ["Seated target", `≈ ${L.seatedTarget} guests (~${Math.round((100 * L.seatedTarget) / V.accommodation.guestsDoubleOccupancy)} % of ~${V.accommodation.guestsDoubleOccupancy})`],
+    ["Staterooms displaced", "0 (capacity unchanged)"],
+  ];
+  b += text(mx, my, "LOUNGE METRICS (computed)", 15, "#0d2f43", 'font-weight="700"'); my += 26;
+  for (const [a, v] of rows) { b += text(mx, my, a, 13, "#4b5d63") + text(mx + 230, my, v, 13, "#0d2f43", 'font-weight="700"'); my += 22; }
+  my += 14;
+  for (const s of ["Not engineered or certified: acoustic separation, fire/escape", "(second escape via terrace T1 assumed) and occupancy need", "naval-architect review before any real-world claim."]) { b += text(mx, my, s, 12, "#9a5b2b"); my += 18; }
+  return sheet({ title: "deck 4 arrangement + entertainment lounge", sub: "schematic, bow right", w: W, h: Hh, body: b, scaleNote: "plan 1 m = 13.2 px; enlargement 1 m = 24 px" });
 }
 
 // ---------- massing volumes (shared by the 3/4 view and the GLB) ----------
@@ -370,7 +473,7 @@ function glb() {
     meshes.push({ name: mat, primitives: [{ attributes: { POSITION: accessors.length - 2, NORMAL: accessors.length - 1 }, material: materials.length - 1 }] });
   }
   const bin = Buffer.concat(chunks);
-  const gltf = { asset: { version: "2.0", generator: "ShoreMigo WP-02 massing generator", extras: { geometryId, fictional: true, status: V.status } }, scene: 0, scenes: [{ nodes: meshes.map((_, i) => i) }], nodes: meshes.map((m, i) => ({ mesh: i, name: m.name })), meshes, materials, accessors, bufferViews: views, buffers: [{ byteLength: bin.length }] };
+  const gltf = { asset: { version: "2.0", generator: "ShoreMigo WP-02 massing generator", extras: { specId, fictional: true, status: V.status } }, scene: 0, scenes: [{ nodes: meshes.map((_, i) => i) }], nodes: meshes.map((m, i) => ({ mesh: i, name: m.name })), meshes, materials, accessors, bufferViews: views, buffers: [{ byteLength: bin.length }] };
   let json = Buffer.from(JSON.stringify(gltf));
   while (json.length % 4) json = Buffer.concat([json, Buffer.from(" ")]);
   const header = Buffer.alloc(12); header.writeUInt32LE(0x46546c67, 0); header.writeUInt32LE(2, 4); header.writeUInt32LE(12 + 8 + json.length + 8 + bin.length, 8);
@@ -506,6 +609,9 @@ function cabinPlan() {
   return sheet({ title: "Cabin 7214 floor plan", sub: "plan, corridor top / sea bottom, aft left", w: 1700, h: 1220, body: b, scaleNote: "1 m = 96 px" });
 }
 
+// ---------- massing identity (geometry only; independent of drawing code and spec prose) ----------
+massingModelId = sha(JSON.stringify(prisms.map((pr) => [pr.name, facesOf(pr).map((f) => [f.mat, f.v.map((p) => p.map((c) => Math.round(c * 1000)))])])));
+
 // ---------- write everything + manifest ----------
 const files = {
   "sheets/01-port-elevation.svg": elevation("port"),
@@ -517,7 +623,12 @@ const files = {
   "sheets/07-three-quarter-massing.svg": threeQuarter(),
 };
 files["sheets/08-cabin-7214-plan.svg"] = cabinPlan(); // after plan(true) so cabin locations exist
-const manifest = { geometryId, cameraId, camera: CAMERA, specVersion: V.version, status: V.status, generatedFrom: "design/aurora-tide/vessel.json", files: {} };
+files["sheets/09-deck4-lounge.svg"] = deck4Plan();
+const manifest = {
+  specId, generatorId, massingModelId, cameraId, camera: CAMERA, specVersion: V.version, status: V.status, generatedFrom: "design/aurora-tide/vessel.json",
+  identity: "specId = vessel.json; generatorId = generate.mjs source (LF-normalised); massingModelId = the generated massing geometry (face vertices rounded to 1 mm, with materials). A generator change that alters geometry changes massingModelId even when specId is unchanged. File hashes below identify each output byte-for-byte. A production model will get its own id, recorded against the specId it was built to.",
+  files: {},
+};
 for (const [rel, content] of Object.entries(files)) { fs.writeFileSync(out(rel), content); manifest.files[rel] = sha(content); }
 const model = glb();
 fs.writeFileSync(out("model/aurora-tide-massing.glb"), model);
@@ -525,9 +636,14 @@ manifest.files["model/aurora-tide-massing.glb"] = sha(model);
 manifest.derivedCapacity = derivedCapacity();
 manifest.cabin7214 = { location: globalThis.cabinLocations?.[7214] ?? null, ...(() => { const l = cabinLayout(); return { metrics: l.metrics, viewpoints: l.viewpoints }; })() };
 manifest.deck7CabinCount = Object.keys(globalThis.cabinLocations ?? {}).length;
-manifest.note = "Hashes identify this proposal revision. The approved canonical geometryId is issued only after owner approval of vessel.json.";
+{
+  const d4 = deck4Layout();
+  if (d4.cabins.length !== manifest.derivedCapacity.perDeck[4]) throw new Error(`deck 4 sheet (${d4.cabins.length}) disagrees with capacity rule (${manifest.derivedCapacity.perDeck[4]})`);
+  manifest.entertainmentLounge = d4.lounge;
+}
+manifest.note = "Hashes identify this proposal revision. The approved canonical specId/massingModelId pair is frozen only after owner approval of vessel.json.";
 fs.writeFileSync(out("manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
-console.log(JSON.stringify({ geometryId, cameraId, prisms: prisms.length, glbBytes: model.length, files: Object.keys(manifest.files).length }));
+console.log(JSON.stringify({ specId, massingModelId, generatorId, cameraId, prisms: prisms.length, glbBytes: model.length, files: Object.keys(manifest.files).length }));
 
 // Optional: export massing faces (plus radomes as 16-gon prisms) for the concept-overlay fit.
 if (process.env.WP02_FACES_OUT) {
@@ -536,6 +652,6 @@ if (process.env.WP02_FACES_OUT) {
     return { name: `radome${i}`, mat: "superstructure", plan: pts, z0: top(9) + (S.radomePlatformHeight ?? 0), z1: top(9) + (S.radomePlatformHeight ?? 0) + r.diameter };
   });
   const faces = [...prisms, ...extra].flatMap((pr) => facesOf(pr).map((f) => ({ name: pr.name, mat: f.mat, v: f.v })));
-  fs.writeFileSync(process.env.WP02_FACES_OUT, JSON.stringify({ geometryId, faces }));
+  fs.writeFileSync(process.env.WP02_FACES_OUT, JSON.stringify({ specId, massingModelId, faces }));
   console.log("faces exported:", faces.length);
 }
