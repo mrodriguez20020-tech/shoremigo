@@ -1,0 +1,1065 @@
+{
+  "$comment": "Canonical PROPOSED geometry contract for the fictional vessel Aurora Tide (WP-02). Derived from the approved appearance reference public/cinematic/aurora-tide.webp (A-02). Values marked proposed require owner approval before final modeling. Not a real ship, not an engineering or classification document.",
+  "version": "0.4.0-provisional",
+  "status": "provisionally-approved-direction; subject to Codex independent review and final appearance approval",
+  "identity": {
+    "name": "Aurora Tide",
+    "fictional": true,
+    "type": "boutique luxury exploration cruiser (fictional)",
+    "appearanceAuthority": "public/cinematic/aurora-tide.webp",
+    "palette": {
+      "superstructure": "#f1ece2",
+      "hull": "#132a45",
+      "seaGlass": "#7fc8bd",
+      "glazing": "#1b2a33",
+      "deckTeak": "#b98a5a",
+      "lifeboat": "#e8762c",
+      "funnelCasing": "#1c2c40",
+      "exhaust": "#8a8f94"
+    }
+  },
+  "units": "metres. x = 0 at the stern (top of the raked transom) increasing to the bow; y = 0 on the centreline, positive = port; z = 0 at the baseline (keel). All z values, including the mast top, are above the baseline; heights above the waterline are stated as such.",
+  "principal": {
+    "lengthOverall": 158,
+    "beam": 23,
+    "draft": 5.4,
+    "waterlineZ": 5.4,
+    "status": "provisionally approved (D-W02-2)",
+    "rationale": "Generation brief for A-02 described ~160 m with five to six observation tiers; L/B 6.9 is typical of boutique/expedition proportions; 5.4 m draft keeps decks 1-2 below the waterline as in the concept, where only portholes appear near the water.",
+    "airDraft": {
+      "aboveDWL": 32.1,
+      "definition": "mast top z 37.5 m above baseline (superstructure.mast.topZ) minus design waterline z 5.4 m (principal.waterlineZ)",
+      "note": "Earlier field airDraftToMastTop = 37.5 was a baseline height mislabelled as air draft; geometry unchanged."
+    }
+  },
+  "hull": {
+    "sheerTopZ": 12.9,
+    "bowSheerTopZ": 16.5,
+    "parallelMidbody": [
+      26,
+      108
+    ],
+    "bowTaperStartX": 108,
+    "bowRakeTopX": 158,
+    "bowRakeWaterlineX": 140,
+    "transomWidthFactor": 0.82,
+    "sternRakeTopX": 0,
+    "sternRakeWaterlineX": 3,
+    "bootTopLineZ": 5.9,
+    "seaGlassSheerStripeZ": 12.6,
+    "windowRows": [
+      {
+        "deck": 3,
+        "z": 8.2,
+        "type": "small square portholes, sparse (crew / marina level)"
+      },
+      {
+        "deck": 4,
+        "z": 11,
+        "type": "rectangular windows (oceanview staterooms)"
+      }
+    ],
+    "shellDoors": [
+      {
+        "x": 34,
+        "deck": 3,
+        "purpose": "aft shell door (tender / marina, assumed)",
+        "observed": true
+      },
+      {
+        "x": 96,
+        "deck": 3,
+        "purpose": "gangway shell door (assumed, starboard mirror unseen)",
+        "observed": false
+      }
+    ],
+    "visibleBelowWaterline": 1.2,
+    "sheerProfile": [
+      [
+        0,
+        11
+      ],
+      [
+        30,
+        12.6
+      ],
+      [
+        100,
+        12.9
+      ],
+      [
+        130,
+        14.3
+      ],
+      [
+        158,
+        16.5
+      ]
+    ],
+    "sheerNote": "Top of the hull shell (bulwark top around terrace T1 aft of x = 9). Linear between points.",
+    "taperExponent": 1.7,
+    "modelledBelowDWLNote": "The massing hull stops visibleBelowWaterline below the DWL; the underwater body is intentionally omitted.",
+    "bowTaperRule": "Waterplane half-breadths in the bow taper are compressed so each waterline ends on the raked stem: at height z the hull ends at x = bowRakeWaterlineX + (z − DWL)/(bowSheerTopZ − DWL) × (bowRakeTopX − bowRakeWaterlineX).",
+    "sternRakeRule": "The transom rakes from x = sternRakeWaterlineX at the DWL to x = sternRakeTopX at the deck 4 / terrace T1 level."
+  },
+  "decks": [
+    {
+      "deck": 1,
+      "name": "Tank top",
+      "z": 1.6,
+      "visible": false,
+      "use": "tanks, machinery (not modeled in detail)"
+    },
+    {
+      "deck": 2,
+      "name": "Engine & crew",
+      "z": 4.3,
+      "visible": false,
+      "use": "engine room, crew services"
+    },
+    {
+      "deck": 3,
+      "name": "Marina",
+      "z": 7.2,
+      "visible": true,
+      "use": "crew mess/cabins, tender & marina embarkation, provisions",
+      "observedFeature": "lowest porthole row"
+    },
+    {
+      "deck": 4,
+      "name": "Oceanview",
+      "z": 10,
+      "visible": true,
+      "use": "oceanview staterooms; boutique entertainment lounge aft, opening onto terrace T1 (sheet 09)",
+      "observedFeature": "rectangular hull windows; lowest aft terrace"
+    },
+    {
+      "deck": 5,
+      "name": "Promenade",
+      "z": 12.9,
+      "visible": true,
+      "use": "lifeboat/embarkation promenade with Nightwatch Patisserie, atrium with shore-excursion concierge desk, main dining aft (terrace T2), premium balcony staterooms forward",
+      "observedFeature": "recessed lifeboat bay with two orange enclosed boats and liferaft canisters; first panoramic band forward"
+    },
+    {
+      "deck": 6,
+      "name": "Horizon",
+      "z": 15.8,
+      "visible": true,
+      "use": "premium balcony staterooms; aft lounge terrace T3",
+      "observedFeature": "second continuous panoramic glazing band"
+    },
+    {
+      "deck": 7,
+      "name": "Meridian",
+      "z": 18.7,
+      "visible": true,
+      "use": "premium balcony staterooms incl. Signature Cabin 7214; aft pool and recreation terrace T4",
+      "observedFeature": "third panoramic band; uppermost aft terrace with umbrellas and loungers"
+    },
+    {
+      "deck": 8,
+      "name": "Observation",
+      "z": 21.6,
+      "visible": true,
+      "use": "forward observation lounge + navigation bridge (forward end, assumed), spa and gym midship, funnel casing aft",
+      "observedFeature": "top glazed level beneath radome platform; funnel casing base with sea-glass stripe"
+    },
+    {
+      "deck": 9,
+      "name": "Sun deck",
+      "z": 24.5,
+      "visible": true,
+      "use": "open sun deck, radome and mast platform, funnel top",
+      "observedFeature": "two radomes, mast, funnel with four exhausts and louvered navy casing"
+    }
+  ],
+  "superstructure": {
+    "$comment": "Each level is a plan footprint: aftX/foreX on centreline, side inset from the hull side, rounded aft end. Aft terraces are the open area between the hull/level below and this level's aft wall.",
+    "levels": [
+      {
+        "deck": 5,
+        "aftWallX": 10,
+        "foreX": 124,
+        "sideInset": 0,
+        "terrace": "T2",
+        "terraceAftX": 5
+      },
+      {
+        "deck": 6,
+        "aftWallX": 15,
+        "foreX": 127,
+        "sideInset": 0.4,
+        "terrace": "T3",
+        "terraceAftX": 7
+      },
+      {
+        "deck": 7,
+        "aftWallX": 21,
+        "foreX": 129,
+        "sideInset": 0.8,
+        "terrace": "T4",
+        "terraceAftX": 10
+      },
+      {
+        "deck": 8,
+        "aftWallX": 27,
+        "foreX": 124,
+        "sideInset": 1.6,
+        "terrace": null,
+        "terraceAftX": 16
+      },
+      {
+        "deck": 9,
+        "aftWallX": 40,
+        "foreX": 116,
+        "sideInset": 3.2,
+        "terrace": null,
+        "terraceAftX": 40,
+        "enclosed": false
+      }
+    ],
+    "aftTerraceT1": {
+      "deck": 4,
+      "aftX": 3,
+      "wallX": 9,
+      "observed": true,
+      "bulwarkThickness": 0.15,
+      "deckZ": 10
+    },
+    "glazingBands": [
+      {
+        "deck": 5,
+        "fromX": 64,
+        "toX": 122,
+        "note": "forward of the lifeboat bay"
+      },
+      {
+        "deck": 6,
+        "fromX": 17,
+        "toX": 125
+      },
+      {
+        "deck": 7,
+        "fromX": 23,
+        "toX": 127,
+        "note": "forward end wraps (bridge/lookout assumed)"
+      },
+      {
+        "deck": 8,
+        "fromX": 86,
+        "toX": 122,
+        "note": "observation lounge"
+      }
+    ],
+    "lifeboatBay": {
+      "deck": 5,
+      "fromX": 38,
+      "toX": 62,
+      "boatsPerSide": 2,
+      "boatLength": 9.8,
+      "liferaftCanistersPerSide": 4,
+      "starboardMirrored": "assumed (unseen)",
+      "recessDepth": 2.6,
+      "boatOutboardOfShell": 0.5
+    },
+    "funnel": {
+      "x": 46,
+      "length": 18,
+      "baseDeck": 8,
+      "topZ": 36,
+      "exhausts": 4,
+      "casing": "louvered navy, swept aft, sea-glass stripe at base",
+      "casingBase": {
+        "fromX": 27,
+        "toX": 70,
+        "height": 3,
+        "halfWidth": 4.5,
+        "rake": {
+          "aft": 6,
+          "fore": 3
+        }
+      },
+      "halfWidth": 3,
+      "topRake": {
+        "aft": 2,
+        "fore": 4
+      }
+    },
+    "radomes": [
+      {
+        "x": 92,
+        "y": 3.5,
+        "diameter": 3.8
+      },
+      {
+        "x": 100,
+        "y": -3.5,
+        "diameter": 3.2
+      }
+    ],
+    "mast": {
+      "x": 108,
+      "topZ": 37.5,
+      "yardHalfSpan": 2.5
+    },
+    "deckHeight": 2.9,
+    "levelRake": {
+      "aft": 1.2,
+      "fore": 1.6,
+      "note": "aft and forward end walls rake over these lengths (x) from deck to deck head"
+    },
+    "glazingPanel": {
+      "fromDeck": 0.8,
+      "toDeck": 2.3,
+      "offsetFromWall": 0.005,
+      "thickness": 0.06,
+      "note": "panels follow the local wall line of their level on both sides"
+    },
+    "radomeMastHouse": {
+      "fromX": 88,
+      "toX": 104,
+      "halfWidth": 5,
+      "baseDeck": 9,
+      "topZ": 29.4,
+      "note": "radome platform; replaces the floating platform at deck 9 head height (deck 9 is an open sun deck)"
+    },
+    "sunDeck": {
+      "deck": 9,
+      "open": true,
+      "plateThickness": 0.3,
+      "windscreenHeight": 1.2,
+      "windscreenThickness": 0.06,
+      "note": "D9 is an open deck: teak plate + glass windscreen, not an enclosed level"
+    }
+  },
+  "accommodation": {
+    "status": "approved design basis (D-W02-3)",
+    "staterooms": 104,
+    "guestsDoubleOccupancy": 208,
+    "crew": 150,
+    "breakdown": [
+      {
+        "deck": 4,
+        "type": "Oceanview Stateroom",
+        "count": 28
+      },
+      {
+        "deck": 5,
+        "type": "Premium Balcony Stateroom (forward of lifeboat bay)",
+        "count": 16
+      },
+      {
+        "deck": 6,
+        "type": "Premium Balcony Stateroom",
+        "count": 30
+      },
+      {
+        "deck": 7,
+        "type": "Premium Balcony Stateroom",
+        "count": 30,
+        "note": "includes 7305/7306 with the forward tapered balcony (D-W02-11)"
+      }
+    ],
+    "unitModule": {
+      "width": 4.6,
+      "depthInterior": 7.2,
+      "balconyDepth": 2.1,
+      "note": "typical boutique-luxury balcony module; proposal"
+    },
+    "replacesDemoValues": "src/lib/domain/ship.ts currently states ~1,900 guests and 14 decks, which the approved concept cannot hold",
+    "derivation": "Computed by generate.mjs (derivedCapacity) from the unit module, corridor and core rule; recorded in manifest.json. Not asserted independently.",
+    "offering": [
+      {
+        "type": "Oceanview Stateroom",
+        "decks": [
+          4
+        ],
+        "status": "offered"
+      },
+      {
+        "type": "Premium Balcony Stateroom",
+        "decks": [
+          5,
+          6,
+          7
+        ],
+        "status": "offered"
+      },
+      {
+        "type": "Signature Cabin 7214",
+        "decks": [
+          7
+        ],
+        "status": "offered (a Premium Balcony Stateroom; see cabin7214)"
+      }
+    ],
+    "removed": [
+      {
+        "type": "Interior Stateroom",
+        "reason": "not supported by the canonical layout (all staterooms are exterior)",
+        "decision": "D-W02-6"
+      }
+    ],
+    "futureConcepts": [
+      {
+        "type": "Tidekeeper Suite",
+        "status": "future design concept only — NOT available accommodation",
+        "gate": "geometry, deck placement and capacity impact must be validated and approved first",
+        "decision": "D-W02-6"
+      }
+    ],
+    "corridorHalfWidth": 0.9,
+    "corridorBulkhead": 0.12,
+    "cores": [
+      [
+        44,
+        52
+      ],
+      [
+        86,
+        92
+      ],
+      [
+        118,
+        124
+      ]
+    ],
+    "slotRule": {
+      "aftClearance": 3,
+      "foreClearance": 8,
+      "note": "modules run from level aft wall + aftClearance to level fore end − foreClearance, skipping cores"
+    },
+    "deck4": {
+      "hullLining": 0.3
+    },
+    "sideStructureAllowance": 0.1,
+    "fitRule": "A slot is valid only if, over its complete footprint (sampled every 0.05 m), corridorHalfWidth + corridorBulkhead + interiorDepth + balconyDepth (balcony decks; cabinVariants override it for the listed cabins only) + sideStructureAllowance ≤ the local side line of its level (decks 5–7: superstructure side; deck 4: hull side − hullLining).",
+    "slotRanges": {
+      "4": [
+        20,
+        132
+      ],
+      "5": [
+        64,
+        124
+      ],
+      "6": [
+        15,
+        127
+      ],
+      "7": [
+        21,
+        129
+      ],
+      "note": "slot range per deck: deck 4 = terrace T1 wall + 11 m to 132 m; deck 5 = forward of the lifeboat bay (glazing band 64–122 + 2 m); decks 6–7 = level extent"
+    },
+    "zoneBoundaries": [
+      60,
+      100
+    ],
+    "cabinVariants": [
+      {
+        "id": "forward-tapered-balcony",
+        "nums": [
+          7305,
+          7306
+        ],
+        "type": "Premium Balcony Stateroom (forward tapered balcony)",
+        "interiorDepth": 7.2,
+        "balconyDepth": 1.86,
+        "balconyClearM2Target": 7.92,
+        "decision": "D-W02-11",
+        "reason": "standard 2.1 m balcony is 0.23 m short in the forward taper over the full footprint (Codex review finding 6)",
+        "appData": "must be carried into the app accommodation data (per-cabin balcony depth/area)",
+        "verification": "Approved at 1.87 m subject to final geometric verification. Full-footprint check: available 9.2898 m from the corridor edge at x 116 allows at most 1.8698 m; 1.87 m overshoots by 0.2 mm, so the verified value is rounded down to 1.86 m (7.92 m² clear, 0.01 m margin)."
+      }
+    ]
+  },
+  "unseenAndAssumed": [
+    "starboard side (assumed mirror, including lifeboats and shell doors)",
+    "stern transom and marina platform (only aft quarter terraces seen)",
+    "bow front, anchor pockets, mooring deck",
+    "deck 8 forward: bridge vs observation lounge split",
+    "funnel exact plan shape; mast equipment",
+    "exterior pool size/location on deck 7 aft (umbrellas observed, pool not visible)"
+  ],
+  "decisions": {
+    "date": "2026-11-12",
+    "by": "project owner",
+    "D-W02-1": {
+      "status": "approved",
+      "text": "Option A: Cabin 9214 renamed Cabin 7214, premium Balcony Stateroom, Deck 7 port. No owner's-suite conversion, no deck re-basing. Preserve the approved luxury interior/spatial experience."
+    },
+    "D-W02-2": {
+      "status": "provisionally approved",
+      "text": "158 m x 23 m x 5.4 m, nine decks, four stepped aft terraces, three principal panoramic glazing bands, pearl-white superstructure, deep navy hull, restrained sea-glass detailing. Fictional design-control values, not certified maritime engineering."
+    },
+    "D-W02-3": {
+      "status": "approved",
+      "text": "Replace the 1,900-guest / 14-deck values with ~208 guests, 104 staterooms, nine decks; derived capacity is the current design basis. Reconcile every future Ships & Rooms display; no unrelated system changes."
+    },
+    "D-W02-4": {
+      "status": "provisionally approved",
+      "text": "Mirrored starboard, stepped stern and marina platform, Deck 8 forward bridge, proposed funnel, Deck 9 open sun deck, Deck 7 aft recreation/terrace. Present complete sheets and the concept overlay before freezing."
+    },
+    "D-W02-5": {
+      "status": "constraint",
+      "text": "Zero unapproved spending. No paid freelancer, GPU rental, render subscription or asset purchase. Do not commission production rendering until: Codex review, defects corrected, design approved, film-framing/golden-hour conflict resolved, viable zero-cost resource arranged. The GLB is massing only."
+    },
+    "D-W02-6": {
+      "status": "approved",
+      "text": "Accommodation offering: Offer Oceanview Stateroom and Premium Balcony Stateroom, with Signature Cabin 7214 (Deck 7). Interior Staterooms removed (not supported by the canonical layout). Tidekeeper Suite kept as a future design concept only, never shown as available until its geometry, deck placement and capacity impact are validated and approved. The derived 104 staterooms / ~208 guests basis is preserved."
+    },
+    "D-W02-7": {
+      "status": "approved; lounge location proposed on sheet 09 (pending owner acceptance)",
+      "text": "Amenities: Remove the large conventional theatre and the kids' splash zone. Replace the theatre with an intimate boutique entertainment lounge (live music, evening performance, social gatherings), advertised only once located in the canonical deck plan. Retain pool and aft recreation terraces, sun deck, spa and fitness, panoramic observation lounge, premium dining, Nightwatch Patisserie, promenade and the shore-excursion concierge desk. No unsupported amenities."
+    },
+    "D-W02-8": {
+      "status": "provisionally approved",
+      "text": "Cabin 7214 programme and figures: Spatial programme approved as the provisional interior foundation. 31.9 m² net interior and 9.0 m² balcony accepted as the provisional basis, subject to independent geometry/clearance verification. Minimum clearance is a fictional design target, not a certified accessibility or maritime-safety claim."
+    },
+    "D-W02-9": {
+      "status": "approved",
+      "text": "Concept overlay and identity: ~90 % silhouette agreement accepted as design-control evidence; no further optimisation for the percentage. Overlay must be reproducible (deterministic seed, recorded camera). Specification identity and generated-model identity are distinct."
+    },
+    "D-W02-10": {
+      "status": "approved direction; implementation with WP-01",
+      "text": "Golden-hour composition: Move the featured-excursion card into the left-side safe area; vessel stays on the right. Implementation is WP-01's (Codex, PR #2). Camera, ship and environment identical across daylight and sunset."
+    },
+    "D-W02-11": {
+      "status": "approved",
+      "text": "Forward tapered balconies: cabins 7305 and 7306 (deck 7, x 111.4–116) keep their slot and full 7.2 m interior; only their balconies are reduced from 2.1 m; approved at 1.87 m (≈7.97 m²) subject to final geometric verification, which allows at most 1.8698 m, so the recorded value is 1.86 m (7.92 m² clear). Applies to these two cabins only. Capacity stays 104 staterooms / ~208 guests; vessel dimensions, exterior geometry and Signature Cabin 7214 (9.0 m² balcony) unchanged."
+    }
+  },
+  "cabin7214": {
+    "formerDesignation": "9214",
+    "status": "approved designation (D-W02-1)",
+    "class": "Premium Balcony Stateroom",
+    "location": {
+      "deck": 7,
+      "side": "port",
+      "zone": "2 (midship)",
+      "xFrom": 97.6,
+      "xTo": 102.2,
+      "source": "computed by generate.mjs from the numbering rule; updates automatically if the deck layout changes"
+    },
+    "decision": {
+      "id": "A",
+      "recommended": true,
+      "label": "Renumber the demo cabin to 7214",
+      "location": {
+        "deck": 7,
+        "side": "port",
+        "zone": "2 (midship)",
+        "xFrom": 97.6,
+        "xTo": 102.2,
+        "source": "computed by generate.mjs from the numbering rule; updates automatically if the deck layout changes"
+      },
+      "keeps": "class (panoramic balcony stateroom), geometry, conventional numbering",
+      "changes": "cabin number in WP-03/app copy"
+    },
+    "rejectedOptions": [
+      {
+        "id": "B",
+        "label": "Keep 9214 as a deck-8/9 owner's suite"
+      },
+      {
+        "id": "C",
+        "label": "Re-base deck labels (+2) so balcony bands are 'Decks 8-9'"
+      }
+    ],
+    "envelope": {
+      "moduleWidth": 4.6,
+      "interiorDepth": 7.2,
+      "balconyDepth": 2.1,
+      "deckHeight": 2.9,
+      "clearCeiling": 2.4,
+      "mullionRhythm": 1.15
+    },
+    "partitions": {
+      "cabinDividingBulkhead": 0.1,
+      "corridorBulkhead": 0.12,
+      "bathroomWall": 0.08,
+      "note": "Proposed fictional values typical of marine prefabricated cabin panels; for coherent planning only."
+    },
+    "programme": {
+      "sleeping": "king bed 1.93 x 2.03 m, headboard against the bathroom/wardrobe wall, facing the sea",
+      "living": "two-seat sofa, armchair, coffee table at the glazing",
+      "storage": "full-height wardrobe with sliding doors in the entry passage (forward side), drawers in the desk",
+      "bathroom": "inboard, beside the entry on the aft side: shower, vanity, WC; pocket sliding door off the entry passage",
+      "glazing": "panoramic sliding glass doors across the full width (4 panels on the 1.15 m mullion rhythm)",
+      "balcony": "private, glass balustrade, privacy screens to both neighbouring cabins, two chairs and a side table",
+      "materials": [
+        "light oak",
+        "warm ivory",
+        "champagne hardware",
+        "sea-glass accents"
+      ],
+      "lightingStates": [
+        "daylight",
+        "golden hour",
+        "evening"
+      ]
+    },
+    "designTargets": {
+      "status": "fictional design targets (D-W02-8), subject to independent verification; not certified accessibility or maritime-safety values",
+      "netInteriorM2": 31.9,
+      "balconyClearM2": 9,
+      "primaryRouteMinWidth": 0.8,
+      "secondaryAccessMinWidth": 0.6,
+      "viewpointClearanceTall": 0.25,
+      "viewpointClearanceAny": 0.1
+    },
+    "convention": {
+      "frame": "u along the ship from the aft dividing-bulkhead centreline (u = 0) to the forward one (u = moduleWidth); w outboard from the inner face of the corridor bulkhead (w = 0).",
+      "corridorBulkhead": "occupies w −0.12…0, outside the interior depth; its outer face is the corridor edge at |y| = corridorHalfWidth",
+      "dividingBulkheads": "0.10 m, centred on u = 0 and u = moduleWidth (interior u 0.05…4.55)",
+      "glazingLine": "sliding-door frame 0.10 m centred on w = interiorDepth (7.15…7.25)",
+      "balcony": "floor from w 7.25 to the balustrade inner face at w = interiorDepth + balconyDepth − 0.05; balustrade 0.05 m",
+      "shipY": "|y| = corridorHalfWidth + corridorBulkhead + w",
+      "areas": "gross module = moduleWidth × interiorDepth (to bulkhead centrelines and glazing line); net floor = interior floor polygon minus internal partition footprints (door openings counted as floor); balcony = clear floor between privacy screens"
+    },
+    "layout": {
+      "note": "Corrected after Codex review P1 (entry obstructed by the wardrobe). Rectangles in the cabin frame: [u0, u1, w0, w1]. tall = full height (blocks sight lines).",
+      "entryDoor": {
+        "u0": 2.79,
+        "u1": 3.69,
+        "hingeU": 2.79,
+        "swing": "inward, leaf rests along the bathroom side",
+        "leaf": 0.9
+      },
+      "bathroomDoor": {
+        "wallU0": 2.55,
+        "wallU1": 2.63,
+        "w0": 1.05,
+        "w1": 1.8,
+        "type": "pocket sliding door (no swing)",
+        "pocketW0": 0.3,
+        "pocketW1": 1.05
+      },
+      "balconyDoorway": {
+        "u0": 2.32,
+        "u1": 3.43,
+        "type": "two operable panels slide behind the forward fixed panel"
+      },
+      "partitions": {
+        "bathroomOutboardWall": {
+          "r": [
+            0.05,
+            2.63,
+            2.32,
+            2.4
+          ],
+          "tall": true
+        },
+        "bathroomForwardWall": {
+          "r": [
+            2.55,
+            2.63,
+            0,
+            2.32
+          ],
+          "tall": true,
+          "opening": "bathroomDoor"
+        }
+      },
+      "items": {
+        "shower": {
+          "r": [
+            0.05,
+            1.25,
+            0,
+            0.95
+          ],
+          "tall": true,
+          "zone": "bathroom"
+        },
+        "vanity": {
+          "r": [
+            1.45,
+            2.55,
+            0,
+            0.55
+          ],
+          "zone": "bathroom"
+        },
+        "wc": {
+          "r": [
+            0.05,
+            0.75,
+            1.72,
+            2.12
+          ],
+          "zone": "bathroom"
+        },
+        "wardrobe": {
+          "r": [
+            3.85,
+            4.55,
+            0,
+            1.8
+          ],
+          "tall": true,
+          "doors": "sliding, on the u = 3.85 face"
+        },
+        "bed": {
+          "r": [
+            0.7,
+            2.63,
+            2.45,
+            4.48
+          ],
+          "label": "king bed 1.93 × 2.03"
+        },
+        "nightstandAft": {
+          "r": [
+            0.15,
+            0.6,
+            2.45,
+            2.9
+          ]
+        },
+        "nightstandFwd": {
+          "r": [
+            2.68,
+            3.13,
+            2.45,
+            2.9
+          ]
+        },
+        "sofa": {
+          "r": [
+            0.05,
+            0.9,
+            5.1,
+            7.1
+          ]
+        },
+        "coffeeTable": {
+          "r": [
+            1.35,
+            2.25,
+            5.6,
+            6.2
+          ]
+        },
+        "armchair": {
+          "r": [
+            3.55,
+            4.3,
+            6,
+            6.75
+          ]
+        },
+        "desk": {
+          "r": [
+            4.05,
+            4.55,
+            4.6,
+            5.6
+          ]
+        },
+        "deskStool": {
+          "r": [
+            3.6,
+            4,
+            4.9,
+            5.3
+          ]
+        },
+        "balconyChairAft": {
+          "r": [
+            0.45,
+            1.05,
+            7.55,
+            8.15
+          ],
+          "zone": "balcony"
+        },
+        "balconyTable": {
+          "r": [
+            1.1,
+            1.35,
+            7.7,
+            7.95
+          ],
+          "zone": "balcony"
+        },
+        "balconyChairFwd": {
+          "r": [
+            1.4,
+            2,
+            7.55,
+            8.15
+          ],
+          "zone": "balcony"
+        }
+      },
+      "routes": {
+        "primary": [
+          {
+            "id": "entry-to-balcony",
+            "to": [
+              2.9,
+              8.7
+            ]
+          }
+        ],
+        "secondary": [
+          {
+            "id": "bathroom",
+            "to": [
+              1.6,
+              1.5
+            ]
+          },
+          {
+            "id": "wc",
+            "to": [
+              1.2,
+              1.92
+            ]
+          },
+          {
+            "id": "shower-entry",
+            "to": [
+              0.8,
+              1.32
+            ]
+          },
+          {
+            "id": "vanity",
+            "to": [
+              2,
+              1
+            ]
+          },
+          {
+            "id": "wardrobe",
+            "to": [
+              3.4,
+              1
+            ]
+          },
+          {
+            "id": "bed-aft-side",
+            "to": [
+              0.37,
+              3.6
+            ]
+          },
+          {
+            "id": "bed-fwd-side",
+            "to": [
+              3.4,
+              3.6
+            ]
+          },
+          {
+            "id": "sofa",
+            "to": [
+              1.4,
+              5.1
+            ]
+          },
+          {
+            "id": "desk",
+            "to": [
+              3.15,
+              5.1
+            ]
+          },
+          {
+            "id": "armchair",
+            "to": [
+              3.2,
+              6.4
+            ]
+          },
+          {
+            "id": "balcony-seats",
+            "to": [
+              1.5,
+              8.6
+            ]
+          }
+        ],
+        "start": [
+          3.24,
+          0.05
+        ],
+        "note": "targets are standing/approach points (about 0.45 m in front of each fixture or seat)"
+      },
+      "viewpoints": [
+        {
+          "id": "V1-entry",
+          "u": 3.24,
+          "w": 0.6,
+          "lookU": 2.9,
+          "lookW": 9.3,
+          "note": "from the door: passage, bed and the sea through the sliding doors"
+        },
+        {
+          "id": "V2-bedside",
+          "u": 3.6,
+          "w": 3.4,
+          "lookU": 1.6,
+          "lookW": 7.2,
+          "note": "living area and glazing beyond"
+        },
+        {
+          "id": "V3-living",
+          "u": 2.8,
+          "w": 6.6,
+          "lookU": 1.7,
+          "lookW": 2.6,
+          "note": "looking back to the bed and the bathroom wall"
+        },
+        {
+          "id": "V4-bathroom",
+          "u": 3.1,
+          "w": 1.45,
+          "lookU": 0.9,
+          "lookW": 1.3,
+          "note": "through the bathroom door"
+        },
+        {
+          "id": "V5-balcony-out",
+          "u": 2.9,
+          "w": 8.5,
+          "lookU": 2.9,
+          "lookW": 30,
+          "note": "open sea over the glass balustrade"
+        },
+        {
+          "id": "V6-balcony-in",
+          "u": 2.9,
+          "w": 9,
+          "lookU": 2.3,
+          "lookW": 2.6,
+          "note": "back into the cabin through the open doors to the bed"
+        }
+      ]
+    }
+  },
+  "amenityMap": {
+    "status": "approved amenity set (D-W02-7) mapped onto the canonical deck stack for the Ships & Rooms migration",
+    "entries": [
+      {
+        "amenity": "Boutique entertainment lounge (live music, evening performance, social)",
+        "deck": 4,
+        "where": "aft, opening onto terrace T1 (sheet 09)",
+        "status": "proposed location; advertise after owner acceptance"
+      },
+      {
+        "amenity": "Premium main dining (Compass Rose)",
+        "deck": 5,
+        "where": "aft, opening onto terrace T2"
+      },
+      {
+        "amenity": "Promenade + Nightwatch Patisserie",
+        "deck": 5,
+        "where": "lifeboat/embarkation promenade"
+      },
+      {
+        "amenity": "Shore Excursions desk / atrium",
+        "deck": 5,
+        "where": "midship atrium"
+      },
+      {
+        "amenity": "Pool + Sea Glass Grill (recreation terrace T4)",
+        "deck": 7,
+        "where": "aft"
+      },
+      {
+        "amenity": "Spa, thermal suite, fitness",
+        "deck": 8,
+        "where": "midship"
+      },
+      {
+        "amenity": "Observation lounge",
+        "deck": 8,
+        "where": "forward, aft of the bridge"
+      },
+      {
+        "amenity": "Navigation bridge",
+        "deck": 8,
+        "where": "forward end (not a guest amenity)"
+      },
+      {
+        "amenity": "Sun deck",
+        "deck": 9,
+        "where": "open, around the funnel and radome platform"
+      },
+      {
+        "amenity": "Marina / tender embarkation",
+        "deck": 3,
+        "where": "aft shell doors and stern marina platform"
+      },
+      {
+        "amenity": "Lounge terrace T3",
+        "deck": 6,
+        "where": "aft"
+      }
+    ],
+    "removed": [
+      {
+        "amenity": "Large conventional theatre",
+        "decision": "D-W02-7",
+        "replacement": "boutique entertainment lounge"
+      },
+      {
+        "amenity": "Kids' splash zone",
+        "decision": "D-W02-7",
+        "replacement": null
+      }
+    ],
+    "rule": "No amenity is advertised unless it has a located space in the canonical deck plan."
+  },
+  "geometryCorrections": [
+    {
+      "pass": 1,
+      "date": "2026-11-12",
+      "basis": "design/aurora-tide/review/concept-overlay.json (measured silhouette IoU vs A-02)",
+      "changes": "aft tiers extended aft; forward superstructure shortened (open forecastle); funnel raised to 34.5 m with swept casing base; radomes/mast moved aft, main radome enlarged; stem rake increased"
+    },
+    {
+      "pass": 2,
+      "date": "2026-11-12",
+      "basis": "concept-overlay pass 1 residuals",
+      "changes": "forward ends of decks 5-7 shortened 4 m; upper terraces/deck 8 extended aft; funnel 36.0 m with longer/taller swept casing; radomes on a 2.0 m platform; mast to x 108; stem rake to 140 m at the waterline; 1.2 m of boot-top hull modeled below the waterline for silhouette comparison"
+    },
+    {
+      "pass": 3,
+      "date": "2026-11-12",
+      "basis": "concept-overlay pass 2 residuals",
+      "changes": "bow sheer lowered from 18.7 m to 16.5 m (forecastle too high vs A-02). Further tuning stopped: remaining differences are omitted detail (umbrellas, railings, planters) and the generated concept's non-physical perspective."
+    },
+    {
+      "pass": 4,
+      "date": "2026-11-12",
+      "basis": "Codex independent review of 414b627 (PR #3 review 5869346197)",
+      "changes": "one canonical solid model drives every output; hull lofted from the sheer/stem/transom rules (raked waterline bow, T1 recess at z 10); deck 4 enclosure fills hull-to-deck-5; superstructure sides follow the hull at their own deck height; D9 open sun deck; radome mast house replaces floating platform; funnel casing starts at the deck 8 aft wall (x 27); glazing follows the local wall; Cabin 7214 entry/wardrobe conflict removed"
+    }
+  ],
+  "entertainmentLounge": {
+    "status": "proposed location (D-W02-7); advertise only after owner acceptance",
+    "workingName": "Entertainment lounge (name to be decided by the owner)",
+    "deck": 4,
+    "zone": "aft, between the terrace T1 glazed wall and the first oceanview stateroom",
+    "geometry": "derived by generate.mjs from terrace T1 and the deck 4 cabin rule (manifest.json → entertainmentLounge); no staterooms displaced",
+    "programme": [
+      "aft glazed wall opening onto terrace T1 (sea view astern)",
+      "lounge seating in conversational groups, ~1.8 m² per seated guest",
+      "small performance platform for live music / evening performance",
+      "bar and back-of-house band along the forward bulkhead, also the acoustic buffer to the oceanview staterooms",
+      "entry from the deck 4 corridor on the centreline"
+    ],
+    "constraints": [
+      "acoustic separation to adjacent staterooms required (buffer band + upgraded bulkhead); not yet engineered",
+      "second means of escape via terrace T1 assumed; fire/escape arrangement not designed or certified",
+      "capacity figures are fictional design targets, not certified occupancy"
+    ]
+  }
+}

@@ -16,12 +16,12 @@ export default function ShipsPage() {
           <Reveal>
             <p className="eyebrow flex flex-wrap items-center gap-3">
               <span>Ships &amp; Rooms</span>
-              <span className="demo-tag">Demo vessel · illustrative cabins</span>
+              <span className="demo-tag">Fictional vessel · provisional design</span>
             </p>
             <h1 className="font-display mt-3 max-w-4xl text-5xl leading-[1.02] sm:text-7xl">Step aboard the Aurora Tide.</h1>
             <p className="mt-5 max-w-2xl text-lg text-ink-soft">
-              Walk the decks, look inside a balcony stateroom and browse the onboard menus before you sail. A fictional ship shows how ShoreMigo connects your vessel
-              to your port days.
+              Nine decks, 104 staterooms and one signature cabin to explore. Walk the decks, step inside Cabin 7214 and browse the onboard menus before you sail. A
+              fictional ship shows how ShoreMigo connects your vessel to your port days.
             </p>
           </Reveal>
           <div className="mt-10">
