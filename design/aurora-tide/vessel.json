@@ -1,0 +1,343 @@
+{
+  "$comment": "Canonical PROPOSED geometry contract for the fictional vessel Aurora Tide (WP-02). Derived from the approved appearance reference public/cinematic/aurora-tide.webp (A-02). Values marked proposed require owner approval before final modeling. Not a real ship, not an engineering or classification document.",
+  "version": "0.1.0-proposal",
+  "status": "proposed-awaiting-owner-approval",
+  "identity": {
+    "name": "Aurora Tide",
+    "fictional": true,
+    "type": "boutique luxury exploration cruiser (fictional)",
+    "appearanceAuthority": "public/cinematic/aurora-tide.webp",
+    "palette": {
+      "superstructure": "#f1ece2",
+      "hull": "#132a45",
+      "seaGlass": "#7fc8bd",
+      "glazing": "#1b2a33",
+      "deckTeak": "#b98a5a",
+      "lifeboat": "#e8762c",
+      "funnelCasing": "#1c2c40",
+      "exhaust": "#8a8f94"
+    }
+  },
+  "units": "metres; x = 0 at stern transom increasing to bow, y = 0 on centreline (positive = port), z = 0 at baseline (keel)",
+  "principal": {
+    "lengthOverall": 158,
+    "beam": 23,
+    "draft": 5.4,
+    "waterlineZ": 5.4,
+    "airDraftToMastTop": 37.5,
+    "status": "proposed",
+    "rationale": "Generation brief for A-02 described ~160 m with five to six observation tiers; L/B 6.9 is typical of boutique/expedition proportions; 5.4 m draft keeps decks 1-2 below the waterline as in the concept, where only portholes appear near the water."
+  },
+  "hull": {
+    "sheerTopZ": 12.9,
+    "bowSheerTopZ": 18.7,
+    "parallelMidbody": [
+      26,
+      112
+    ],
+    "bowTaperStartX": 112,
+    "bowRakeTopX": 158,
+    "bowRakeWaterlineX": 151,
+    "transomWidthFactor": 0.82,
+    "sternRakeTopX": 0,
+    "sternRakeWaterlineX": 3,
+    "bootTopLineZ": 5.9,
+    "seaGlassSheerStripeZ": 12.6,
+    "windowRows": [
+      {
+        "deck": 3,
+        "z": 8.2,
+        "type": "small square portholes, sparse (crew / marina level)"
+      },
+      {
+        "deck": 4,
+        "z": 11,
+        "type": "rectangular windows (oceanview staterooms)"
+      }
+    ],
+    "shellDoors": [
+      {
+        "x": 34,
+        "deck": 3,
+        "purpose": "aft shell door (tender / marina, assumed)",
+        "observed": true
+      },
+      {
+        "x": 96,
+        "deck": 3,
+        "purpose": "gangway shell door (assumed, starboard mirror unseen)",
+        "observed": false
+      }
+    ]
+  },
+  "decks": [
+    {
+      "deck": 1,
+      "name": "Tank top",
+      "z": 1.6,
+      "visible": false,
+      "use": "tanks, machinery (not modeled in detail)"
+    },
+    {
+      "deck": 2,
+      "name": "Engine & crew",
+      "z": 4.3,
+      "visible": false,
+      "use": "engine room, crew services"
+    },
+    {
+      "deck": 3,
+      "name": "Marina",
+      "z": 7.2,
+      "visible": true,
+      "use": "crew mess/cabins, tender & marina embarkation, provisions",
+      "observedFeature": "lowest porthole row"
+    },
+    {
+      "deck": 4,
+      "name": "Oceanview",
+      "z": 10,
+      "visible": true,
+      "use": "oceanview staterooms; aft lounge opening onto terrace T1",
+      "observedFeature": "rectangular hull windows; lowest aft terrace"
+    },
+    {
+      "deck": 5,
+      "name": "Promenade",
+      "z": 12.9,
+      "visible": true,
+      "use": "lifeboat/embarkation promenade, atrium, main dining aft (terrace T2), suites forward",
+      "observedFeature": "recessed lifeboat bay with two orange enclosed boats and liferaft canisters; first panoramic band forward"
+    },
+    {
+      "deck": 6,
+      "name": "Horizon",
+      "z": 15.8,
+      "visible": true,
+      "use": "panoramic balcony suites; aft lounge terrace T3",
+      "observedFeature": "second continuous panoramic glazing band"
+    },
+    {
+      "deck": 7,
+      "name": "Meridian",
+      "z": 18.7,
+      "visible": true,
+      "use": "panoramic balcony suites; aft pool terrace T4 with umbrellas",
+      "observedFeature": "third panoramic band; uppermost aft terrace with umbrellas and loungers"
+    },
+    {
+      "deck": 8,
+      "name": "Observation",
+      "z": 21.6,
+      "visible": true,
+      "use": "forward observation lounge + navigation bridge (forward end, assumed), spa and gym midship, funnel casing aft",
+      "observedFeature": "top glazed level beneath radome platform; funnel casing base with sea-glass stripe"
+    },
+    {
+      "deck": 9,
+      "name": "Sun deck",
+      "z": 24.5,
+      "visible": true,
+      "use": "open sun deck, radome and mast platform, funnel top",
+      "observedFeature": "two radomes, mast, funnel with four exhausts and louvered navy casing"
+    }
+  ],
+  "superstructure": {
+    "$comment": "Each level is a plan footprint: aftX/foreX on centreline, side inset from the hull side, rounded aft end. Aft terraces are the open area between the hull/level below and this level's aft wall.",
+    "levels": [
+      {
+        "deck": 5,
+        "aftWallX": 14,
+        "foreX": 132,
+        "sideInset": 0,
+        "terrace": "T2",
+        "terraceAftX": 8
+      },
+      {
+        "deck": 6,
+        "aftWallX": 20,
+        "foreX": 136,
+        "sideInset": 0.4,
+        "terrace": "T3",
+        "terraceAftX": 13
+      },
+      {
+        "deck": 7,
+        "aftWallX": 27,
+        "foreX": 138,
+        "sideInset": 0.8,
+        "terrace": "T4",
+        "terraceAftX": 19
+      },
+      {
+        "deck": 8,
+        "aftWallX": 40,
+        "foreX": 136,
+        "sideInset": 1.6,
+        "terrace": null,
+        "terraceAftX": 30
+      },
+      {
+        "deck": 9,
+        "aftWallX": 46,
+        "foreX": 128,
+        "sideInset": 3.2,
+        "terrace": null,
+        "terraceAftX": 46
+      }
+    ],
+    "aftTerraceT1": {
+      "deck": 4,
+      "aftX": 3,
+      "wallX": 9,
+      "observed": true
+    },
+    "glazingBands": [
+      {
+        "deck": 5,
+        "fromX": 64,
+        "toX": 130,
+        "note": "forward of the lifeboat bay"
+      },
+      {
+        "deck": 6,
+        "fromX": 22,
+        "toX": 134
+      },
+      {
+        "deck": 7,
+        "fromX": 29,
+        "toX": 136,
+        "note": "forward end wraps (bridge/lookout assumed)"
+      },
+      {
+        "deck": 8,
+        "fromX": 92,
+        "toX": 134,
+        "note": "observation lounge"
+      }
+    ],
+    "lifeboatBay": {
+      "deck": 5,
+      "fromX": 38,
+      "toX": 62,
+      "boatsPerSide": 2,
+      "boatLength": 9.8,
+      "liferaftCanistersPerSide": 4,
+      "starboardMirrored": "assumed (unseen)"
+    },
+    "funnel": {
+      "x": 52,
+      "length": 16,
+      "baseDeck": 8,
+      "topZ": 31.5,
+      "exhausts": 4,
+      "casing": "louvered navy, swept aft, sea-glass stripe at base"
+    },
+    "radomes": [
+      {
+        "x": 98,
+        "y": 3.5,
+        "diameter": 3.4
+      },
+      {
+        "x": 106,
+        "y": -3.5,
+        "diameter": 2.8
+      }
+    ],
+    "mast": {
+      "x": 118,
+      "topZ": 37.5
+    }
+  },
+  "accommodation": {
+    "status": "proposed planning assumption (fictional)",
+    "staterooms": 104,
+    "guestsDoubleOccupancy": 208,
+    "crew": 150,
+    "breakdown": [
+      {
+        "deck": 4,
+        "type": "Oceanview Stateroom",
+        "count": 28
+      },
+      {
+        "deck": 5,
+        "type": "Balcony Suite (forward of lifeboat bay)",
+        "count": 18
+      },
+      {
+        "deck": 6,
+        "type": "Panoramic Balcony Suite",
+        "count": 28
+      },
+      {
+        "deck": 7,
+        "type": "Panoramic Balcony Suite",
+        "count": 30
+      }
+    ],
+    "unitModule": {
+      "width": 4.6,
+      "depthInterior": 7.2,
+      "balconyDepth": 2.1,
+      "note": "typical boutique-luxury balcony module; proposal"
+    },
+    "replacesDemoValues": "src/lib/domain/ship.ts currently states ~1,900 guests and 14 decks, which the approved concept cannot hold",
+    "derivation": "Computed by generate.mjs (derivedCapacity) from the unit module, corridor and core rule; recorded in manifest.json. Not asserted independently."
+  },
+  "cabin9214": {
+    "status": "OWNER DECISION REQUIRED",
+    "conflict": "Conventional numbering of the concept gives 9 decks; Deck 9 is the open sun deck, so a balcony stateroom numbered 9214 cannot exist without changing either the number or the cabin class.",
+    "options": [
+      {
+        "id": "A",
+        "recommended": true,
+        "label": "Renumber the demo cabin to 7214",
+        "location": {
+          "deck": 7,
+          "side": "port",
+          "zone": "2 (midship, forward part)",
+          "xFrom": 99,
+          "xTo": 103.6
+        },
+        "keeps": "class (panoramic balcony stateroom), geometry, conventional numbering",
+        "changes": "cabin number in WP-03/app copy"
+      },
+      {
+        "id": "B",
+        "label": "Keep 9214 as a deck-8/9 owner's suite",
+        "location": {
+          "deck": 8,
+          "side": "port",
+          "zone": "midship under the radome platform"
+        },
+        "keeps": "number '9214' only if deck labels are re-based",
+        "changes": "cabin class becomes a top-deck suite; deck labels non-conventional"
+      },
+      {
+        "id": "C",
+        "label": "Re-base deck labels (+2) so balcony bands are 'Decks 8-9'",
+        "keeps": "the name 9214",
+        "changes": "labels no longer match a physically plausible count below the waterline; least recommended"
+      }
+    ],
+    "spatialConstraintsOptionA": {
+      "module": "4.6 m wide x 7.2 m interior + 2.1 m private balcony (≈ 33 m² interior + 9.7 m² balcony)",
+      "neighbours": "7212 aft, 7216 forward (port = even numbers; numbering restarts per zone; positions computed by generate.mjs)",
+      "corridor": "single central corridor, entry door inboard",
+      "zones": "entry & bathroom inboard, bedroom midway, living area at the glazing, balcony outboard",
+      "exteriorRelationship": "balcony faces port within the deck-7 panoramic band; glazing pattern must match the band's mullion rhythm (1.15 m)",
+      "position": "x 99-103.6 m from the stern transom, port side, outboard half-breadth 10.7 m"
+    }
+  },
+  "unseenAndAssumed": [
+    "starboard side (assumed mirror, including lifeboats and shell doors)",
+    "stern transom and marina platform (only aft quarter terraces seen)",
+    "bow front, anchor pockets, mooring deck",
+    "deck 8 forward: bridge vs observation lounge split",
+    "funnel exact plan shape; mast equipment",
+    "exterior pool size/location on deck 7 aft (umbrellas observed, pool not visible)"
+  ]
+}

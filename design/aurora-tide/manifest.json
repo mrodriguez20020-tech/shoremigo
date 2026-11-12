@@ -1,0 +1,44 @@
+{
+  "geometryId": "sha256:cadd91c1d50e7516f544278ea355305f6381ccfd27435a3c20271890c3d557c2",
+  "cameraId": "sha256:5292e371823e8c8e370bcf231797e2f08291c17f4b3a4e8e14a3c9c3a851b454",
+  "camera": {
+    "name": "review-3q-port-aft",
+    "azimuthDeg": -34,
+    "elevationDeg": 16,
+    "projection": "orthographic",
+    "note": "matches A-02 framing family; review camera only"
+  },
+  "specVersion": "0.1.0-proposal",
+  "status": "proposed-awaiting-owner-approval",
+  "generatedFrom": "design/aurora-tide/vessel.json",
+  "files": {
+    "sheets/01-port-elevation.svg": "sha256:c5ec31804f4fb8f41f5eeb21a22d12cab94a336725fffd342d755233836ecefe",
+    "sheets/02-starboard-elevation.svg": "sha256:9d5dcff92c731262f0fc8ce18cd124c2596e4b773e9ac75a99e8fddbe7eefd83",
+    "sheets/03-bow.svg": "sha256:9cd4fe9721bf621768f9901756cd91412a694a5cbb6732adf8cdcb8946a1a02e",
+    "sheets/04-stern.svg": "sha256:da7a398e24dac1f6f6cb95626203e3e035989742529da046f318f94012108f99",
+    "sheets/05-plan.svg": "sha256:64f8c6c9a66fc086dde8854e088bc4a52fecf17892480367e1c30c916b7f8bfd",
+    "sheets/06-deck7-arrangement.svg": "sha256:b77d84a4590438c7607b6b96b7f8aad2deeb8993f826662c638897f41c87e01f",
+    "sheets/07-three-quarter-massing.svg": "sha256:62f0542e4bd21b84ef975606783828e009b0e493e117787ae69f871c820f7ee7",
+    "model/aurora-tide-massing.glb": "sha256:eff2b287ab1bdb0b53569099f5ebda836bbff45d6299678e4d9a9762c9f7542c"
+  },
+  "derivedCapacity": {
+    "rule": "4.6 m modules both sides of a central corridor, 3 m aft clearance, 8 m forward clearance, three vertical cores skipped",
+    "perDeck": {
+      "4": 28,
+      "5": 18,
+      "6": 28,
+      "7": 30
+    },
+    "staterooms": 104,
+    "guestsDoubleOccupancy": 208
+  },
+  "cabin7214": {
+    "deck": 7,
+    "side": "port",
+    "xFrom": 99,
+    "xTo": 103.6,
+    "outboardHalfBreadth": 10.7
+  },
+  "deck7CabinCount": 30,
+  "note": "Hashes identify this proposal revision. The approved canonical geometryId is issued only after owner approval of vessel.json."
+}
