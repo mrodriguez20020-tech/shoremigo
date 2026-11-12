@@ -1,5 +1,6 @@
 import "server-only";
-import { PORTS } from "@/lib/domain/catalog";
+import { POLICY, PORTS } from "@/lib/domain/catalog";
+import { groundPrices } from "./grounding";
 import { type Card, TOOL_DECLARATIONS, type ToolContext, runTool } from "./tools";
 
 export interface ChatTurn {
@@ -17,13 +18,15 @@ export interface ConciergeReply {
   model?: string;
   /** tool calls exactly as requested by the model (args before normalization) */
   toolCalls?: { name: string; args: Record<string, unknown> }[];
+  /** USD amounts the model wrote that no tool returned this turn; removed from `text` before sending. */
+  ungroundedPrices?: string[];
 }
 
 const SYSTEM = `You are Migo, "The Little Tidekeeper": ShoreMigo's AI cruise shore-excursion companion. You are an AI assistant and say so if asked.
 Personality: warm, curious, gently playful, concise. Ocean metaphors sparingly. 2–4 short sentences, then a clear next step.
 HARD RULES:
 - Only state prices, availability, times, meeting points, policies and payment status that came from a tool result in THIS conversation. If you have not called a tool, call one.
-- Never invent discounts, scarcity, testimonials, safety guarantees or urgency. Never pressure.
+- Never invent discounts, scarcity, testimonials, safety guarantees or urgency. Never pressure. ShoreMigo has no discounts, deals or promotions; every price is the standard catalog rate.
 - You cannot charge, refund or change bookings. When the customer wants to book, call prepare_booking; the customer then confirms on the card and pays with PayPal themselves.
 - Never say a booking or payment succeeded unless get_my_booking/get_payment_status shows it.
 - Booking or payment details require verification; if a tool says verification_required, ask them to verify with booking reference + last name using the card.
@@ -60,13 +63,24 @@ async function generate(models: string[], body: unknown): Promise<{ json: { cand
   let lastStatus = 0;
   for (const model of models) {
     for (let attempt = 0; attempt < 2; attempt++) {
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY! },
-        body: JSON.stringify(body),
-        cache: "no-store",
-        signal: AbortSignal.timeout(Number(process.env.LLM_TIMEOUT_MS) || 20000),
-      });
+      let res: Response;
+      try {
+        res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY! },
+          body: JSON.stringify(body),
+          cache: "no-store",
+          signal: AbortSignal.timeout(Number(process.env.LLM_TIMEOUT_MS) || 20000),
+        });
+      } catch (e) {
+        // A slow (often cold) model must not skip the rest of the chain: move to the next model
+        // without retrying this one, so the worst case stays bounded.
+        const name = (e as Error)?.name;
+        if (name !== "TimeoutError" && name !== "AbortError") throw e;
+        console.error("Gemini timeout", model);
+        lastStatus = 504;
+        break;
+      }
       if (res.ok) return { json: await res.json(), model };
       lastStatus = res.status;
       const text = await res.text();
@@ -89,6 +103,12 @@ export async function converse(history: ChatTurn[], ctx: ToolContext): Promise<C
   const cards: Card[] = [];
   const toolsUsed: string[] = [];
   const toolCalls: { name: string; args: Record<string, unknown> }[] = [];
+  const toolResults: unknown[] = [];
+  const grounded = (raw: string) => {
+    const g = groundPrices(raw, toolResults, POLICY.maxGuests);
+    if (g.corrected.length) console.warn("Concierge: removed ungrounded prices", g.corrected);
+    return { text: g.text, ...(g.corrected.length ? { ungroundedPrices: g.corrected } : {}) };
+  };
   let answeredBy = "";
   let mood: ConciergeReply["mood"] = "speaking";
 
@@ -109,7 +129,7 @@ export async function converse(history: ChatTurn[], ctx: ToolContext): Promise<C
     const calls = content.parts.filter((p) => p.functionCall);
     if (!calls.length) {
       const text = content.parts.map((p) => p.text ?? "").join("").trim();
-      return { text: text || "I'm here! What would you like to explore?", cards: dedupe(cards), mood, toolsUsed, toolCalls, model: answeredBy, engine: "gemini" };
+      return { ...grounded(text || "I'm here! What would you like to explore?"), cards: dedupe(cards), mood, toolsUsed, toolCalls, model: answeredBy, engine: "gemini" };
     }
     const responses: GeminiPart[] = [];
     for (const c of calls) {
@@ -117,6 +137,7 @@ export async function converse(history: ChatTurn[], ctx: ToolContext): Promise<C
       toolsUsed.push(name);
       toolCalls.push({ name, args: args ?? {} });
       const out = await runTool(name, args ?? {}, ctx);
+      toolResults.push(out.result);
       if (out.cards) cards.push(...out.cards);
       if (out.mood === "concerned") mood = "concerned";
       else if (out.mood === "excited" && mood !== "concerned") mood = "excited";
@@ -189,6 +210,10 @@ export async function offlineConverse(history: ChatTurn[], ctx: ToolContext): Pr
   if (/meet|pickup|pick up|where do/.test(q) && port) {
     const r = await call("search_excursions", { port_id: port.id });
     return done(`In ${port.name}, every tour meets at the ShoreMigo flag near the pier exit. Open any tour for the exact spot.`, { cards: r.cards });
+  }
+  if (/discount|coupon|promo|deal|cheaper|voucher/.test(q)) {
+    const s = await call("search_excursions", { port_id: port?.id, category: cat });
+    return done("ShoreMigo doesn't offer promotional discounts or limited-time deals: every price is the catalog rate, calculated by our server. Here are the tours that match, with their live prices.", { cards: s.cards });
   }
   if (/book|reserve|sign me up|i('| a)?ll take/.test(q)) {
     const s = await call("search_excursions", { port_id: port?.id, category: cat });

@@ -178,11 +178,14 @@ export async function runTool(name: string, rawArgs: Record<string, unknown>, ct
       port: getPort(e.portId)!.name,
       category: e.category,
       price_per_guest: fmtUsd(e.priceCents),
+      // Catalog rate; ShoreMigo has no discounts or promotions. Stated explicitly so the model cannot infer one.
+      price_type: "standard catalog rate (no discounts or promotions exist)",
       starts: e.startMode === "fixed" ? fmtMin(toMin(e.start)) : `flexible, ${fmtMin(toMin(e.start))}–${fmtMin(toMin(e.latestStart!))}`,
       duration: fmtDuration(e.durationMin),
       intensity: e.intensity,
       seats_left: s.seatsLeft,
-      on_sale: s.onSale,
+      // "accepting_bookings", not "on_sale": the model read "on sale" as a discount in live testing.
+      accepting_bookings: s.onSale,
       schedule_fit: s.feasibility.status,
     };
   };
