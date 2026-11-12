@@ -5,6 +5,7 @@ import { type CulinaryItem, photoFor } from "@/lib/culinary/catalog";
 import { fmtUsd } from "@/lib/domain/time";
 import { CulinaryCollection, CulinaryTrigger } from "./CulinaryCollection";
 import { CulinaryMedia } from "./CulinaryMedia";
+import { ArrowIcon } from "./ArrowIcon";
 
 export function CulinaryGallery({ items, filterable = false }: { items: CulinaryItem[]; filterable?: boolean }) {
   const [region, setRegion] = useState("All flavours");
@@ -16,7 +17,7 @@ export function CulinaryGallery({ items, filterable = false }: { items: Culinary
       <div className="culinary-grid">
         {visible.map((item, i) => <article className="culinary-card" key={item.id}>
           <CulinaryTrigger item={item}>
-            <div className="culinary-card-media"><CulinaryMedia item={item} /><span className="culinary-expand" aria-hidden>↗</span></div>
+            <div className="culinary-card-media"><CulinaryMedia item={item} /><span className="culinary-expand"><ArrowIcon /></span></div>
             <div className="culinary-card-copy">
               <p className="culinary-kicker">{item.sample ? "Sample menu · USD" : item.region}</p>
               <div className="culinary-card-title"><h3>{item.name}</h3><span aria-hidden>{String(i + 1).padStart(2, "0")}</span></div>

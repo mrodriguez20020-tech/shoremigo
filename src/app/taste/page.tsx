@@ -13,6 +13,7 @@ import { AskMigoButton } from "@/components/dining/AskMigoButton";
 import { ExcursionArt } from "@/components/excursion/ExcursionArt";
 import { TideLink } from "@/components/transition/TideTransition";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ArrowIcon } from "@/components/dining/ArrowIcon";
 import "./taste.css";
 
 export const dynamic = "force-dynamic";
@@ -33,14 +34,14 @@ export default async function TastePage() {
           <p>Follow your curiosity, from the first warm bara to a slow, sweet finish. Discover the dishes, linger over a menu, and leave room for a little adventure.</p>
           <div className="culinary-hero-actions" data-migo-avoid>
             <a href="#flavours" className="culinary-primary">Explore local flavours <span aria-hidden>↓</span></a>
-            <AskMigoButton prompt="Use the dining guide to help me plan a food day in Cozumel. Which food experiences fit my ship schedule? Keep sample menus separate from bookable tours." className="culinary-text-link">Plan with Migo ↗</AskMigoButton>
+            <AskMigoButton prompt="Use the dining guide to help me plan a food day in Cozumel. Which food experiences fit my ship schedule? Keep sample menus separate from bookable tours." className="culinary-text-link">Plan with Migo <ArrowIcon /></AskMigoButton>
           </div>
           <p className="culinary-hero-note">A dish guide, fictional sample menus and genuine demo booking controls. No restaurant partnerships are implied.</p>
         </div>
         <CulinaryCollection items={[doubles, ...GUIDE_ITEMS.filter((d) => d.id === "jerk" || d.id === "cochinita")]}>
           <figure className="culinary-hero-feature">
-            <CulinaryTrigger item={doubles} className="culinary-hero-image"><CulinaryMedia item={doubles} priority /><span className="culinary-feature-open">Meet doubles <span aria-hidden>↗</span></span></CulinaryTrigger>
-            <figcaption><span>01 / Trinidad &amp; Tobago</span><span>Photo: Grueslayer @Wikipedia · CC BY-SA 4.0 · <a href="#photo-credits">Credits</a></span></figcaption>
+            <CulinaryTrigger item={doubles} className="culinary-hero-image"><CulinaryMedia item={doubles} priority /><span className="culinary-feature-open">Meet doubles <ArrowIcon /></span></CulinaryTrigger>
+            <figcaption data-migo-avoid><span>01 / Trinidad &amp; Tobago</span><span>Photo: Grueslayer @Wikipedia · CC BY-SA 4.0 · <a href="#photo-credits">Credits</a></span></figcaption>
           </figure>
         </CulinaryCollection>
       </header>
@@ -50,7 +51,7 @@ export default async function TastePage() {
         <CulinaryGallery items={GUIDE_ITEMS.filter((d) => d.kind !== "drink")} filterable />
       </section>
       <section id="restaurants" className="culinary-section culinary-restaurant">
-        <div className="culinary-restaurant-story"><p className="culinary-kicker">02 / Restaurants</p><h2>A table.<br />A conversation.<br /><em>Take your time.</em></h2><p>Browse Tidewalk Kitchen, a <strong>fictional demo venue</strong>. Breakfast, street food and long lunches, with a sample menu you can explore at your own pace.</p><p className="culinary-disclosure">Illustrative USD prices. No restaurant reservation integration. Verified partners will appear only when they exist.</p><AskMigoButton prompt="Explain the Tidewalk Kitchen sample menu using the dining guide. It is a fictional venue, not a restaurant I can reserve. Help me compare the local dishes." className="culinary-text-link">Talk menus with Migo ↗</AskMigoButton></div>
+        <div className="culinary-restaurant-story"><p className="culinary-kicker">02 / Restaurants</p><h2>A table.<br />A conversation.<br /><em>Take your time.</em></h2><p>Browse Tidewalk Kitchen, a <strong>fictional demo venue</strong>. Breakfast, street food and long lunches, with a sample menu you can explore at your own pace.</p><p className="culinary-disclosure">Illustrative USD prices. No restaurant reservation integration. Verified partners will appear only when they exist.</p><AskMigoButton prompt="Explain the Tidewalk Kitchen sample menu using the dining guide. It is a fictional venue, not a restaurant I can reserve. Help me compare the local dishes." className="culinary-text-link">Talk menus with Migo <ArrowIcon /></AskMigoButton></div>
         <MenuViewer venue={DEMO_VENUE} />
       </section>
       <section id="tours" className="culinary-section culinary-light">
@@ -59,7 +60,7 @@ export default async function TastePage() {
           const s = snap.find((x) => x.excursionId === e.id)!; const port = getPort(e.portId)!;
           return <article key={e.id} className="culinary-tour-card">
             <div className="culinary-tour-art"><ExcursionArt art={e.art} /><span>Original illustration · demo excursion</span></div>
-            <div className="culinary-tour-copy"><p className="culinary-kicker">{port.name} · Tidewalk Tours (demo)</p><h3>{e.title}</h3><p>{e.tagline}</p><dl><div><dt>Departure</dt><dd>{fmtMin(toMin(e.start))} · {fmtDuration(e.durationMin)}</dd></div><div><dt>Availability</dt><dd>{s.onSale ? `${s.seatsLeft} of ${s.capacity} seats open` : "Not on sale"}</dd></div><div><dt>LastBoard</dt><dd>{s.feasibility.status} · {s.feasibility.reasons[0]}</dd></div></dl><div className="culinary-tour-bottom"><p>{fmtUsd(e.priceCents)} <small>/ guest</small></p><TideLink href={`/excursions/${e.id}`} className="culinary-primary">View timing &amp; reserve →</TideLink></div></div>
+            <div className="culinary-tour-copy"><p className="culinary-kicker">{port.name} · Tidewalk Tours (demo)</p><h3>{e.title}</h3><p>{e.tagline}</p><dl><div><dt>Departure</dt><dd>{fmtMin(toMin(e.start))} · {fmtDuration(e.durationMin)}</dd></div><div><dt>Availability</dt><dd>{s.onSale ? `${s.seatsLeft} of ${s.capacity} seats open` : "Not on sale"}</dd></div><div><dt>LastBoard</dt><dd>{s.feasibility.status} · {s.feasibility.reasons[0]}</dd></div></dl><div className="culinary-tour-bottom" data-migo-avoid><p>{fmtUsd(e.priceCents)} <small>/ guest</small></p><TideLink href={`/excursions/${e.id}`} className="culinary-primary">View timing &amp; reserve →</TideLink></div></div>
           </article>;
         })}<aside className="culinary-pairing"><span aria-hidden>✧</span><h3>Leave a little<br /><em>room for the sea.</em></h3><p>Pair a tasting with a gentler afternoon. Explore existing experiences; availability and timing are checked again when you reserve.</p><TideLink href="/excursions?mood=relax" className="culinary-text-link">Explore slower adventures →</TideLink></aside></div>
       </section>

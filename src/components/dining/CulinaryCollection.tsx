@@ -5,6 +5,7 @@ import { useCompanion } from "@/components/migo/CompanionProvider";
 import { type CulinaryItem, photoFor } from "@/lib/culinary/catalog";
 import { fmtUsd } from "@/lib/domain/time";
 import { CulinaryMedia } from "./CulinaryMedia";
+import { ArrowIcon } from "./ArrowIcon";
 import "./culinary.css";
 
 const GalleryContext = createContext<((id: string, button: HTMLButtonElement) => void) | null>(null);
@@ -104,7 +105,7 @@ export function CulinaryCollection({ items, children }: { items: CulinaryItem[];
           {item.tags?.includes("contains-alcohol") && <p className="culinary-disclosure">Contains alcohol · legal drinking age only.</p>}
           <p className="culinary-disclosure">{item.sample ? "Fictional demo menu. This venue cannot be booked. " : "Dish guide; no venue, tour availability or serving is implied. "}Confirm ingredients and allergens with staff; no dietary guarantees.</p>
           {photo ? <p className="culinary-credit"><a href={photo.source} target="_blank" rel="noreferrer">{photo.title.replace("File:", "")} — {photo.author}</a> · <a href={photo.licenseUrl} target="_blank" rel="noreferrer">{photo.license}</a>. Resized / converted to WebP. This photograph illustrates the dish; it is not a sample-menu serving or a bookable experience.</p> : <p className="culinary-credit">Original ShoreMigo vector illustration. A verified photograph of this subject is not available here.</p>}
-          <button className="culinary-ask" type="button" onClick={() => close(() => openConcierge(`Tell me about ${item.name}. Use the dining guide, explain the sample-menu status, and help me find food experiences that fit my port schedule.`))}>Ask Migo about this dish <span aria-hidden>↗</span></button>
+          <button className="culinary-ask" type="button" onClick={() => close(() => openConcierge(`Tell me about ${item.name}. Use the dining guide, explain the sample-menu status, and help me find food experiences that fit my port schedule.`))}>Ask Migo about this dish <ArrowIcon /></button>
           <div className="culinary-gallery-controls">
             <button type="button" aria-label="Previous dish" disabled={items.length < 2 || closing} onClick={() => move(-1)}>←</button>
             <p role="status" aria-live="polite">{selected! + 1} / {items.length} · {item.name}</p>
