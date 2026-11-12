@@ -3,7 +3,7 @@ import { fmtDuration, fmtMin, fmtUsd, toMin } from "@/lib/domain/time";
 import type { Category } from "@/lib/domain/types";
 import { availabilitySnapshot } from "@/lib/server/bookings";
 import { SceneRoute } from "@/components/scene/SceneProvider";
-import { ExcursionArt } from "@/components/excursion/ExcursionArt";
+import { ExcursionPhoto } from "@/components/excursion/ExcursionPhoto";
 import { LastBoardTimeline } from "@/components/excursion/LastBoardTimeline";
 import { TideLink } from "@/components/transition/TideTransition";
 import { Reveal } from "@/components/ui/Reveal";
@@ -112,7 +112,7 @@ export default async function ExcursionsPage({ searchParams }: { searchParams: P
               <Reveal key={e.id} delay={(i % 3) * 0.06}>
                 <TideLink href={`/excursions/${e.id}`} className="surface group block overflow-hidden rounded-[28px] transition duration-500 hover:-translate-y-1.5">
                   <div className="relative">
-                    <ExcursionArt art={e.art} className="h-48 transition duration-700 group-hover:scale-[1.03]" />
+                    <ExcursionPhoto excursionId={e.id} art={e.art} className="h-48 transition duration-700 group-hover:scale-[1.03]" />
                     <span className="absolute left-4 top-4 rounded-full bg-black/35 px-3 py-1 text-[11px] font-bold tracking-[0.16em] text-white uppercase backdrop-blur">
                       {p.name}
                     </span>
