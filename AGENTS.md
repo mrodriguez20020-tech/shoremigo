@@ -30,6 +30,8 @@ Every new asset needs a stable registry ID, source, rights record in `ASSETS.md`
 
 WP-01 through WP-07 are presentation/asset work. Do not change PayPal order/capture/refund verification, inventory capacity/holds, PostgreSQL transactions, Gemini tools, LastBoard, Trip Rescue, booking verification, operator authorization or audit trails. Do not replace working data with visual mocks. WP-08/WP-09 require separately authorized specifications before touching those boundaries.
 
+The owner's WP-01 remediation specifically authorizes MigoStage placement/avoidance, scene-observer reliability and greeting/proof copy. Preserve its bus, reducer, gait source, audio and original art. Claude owns WP-02 canonical vessel architecture; Codex must not independently change ShipExplorer facts or invent geometry.
+
 For WP-01, `src/app/api/`, `src/lib/server/`, `src/lib/domain/`, `src/lib/concierge/`, `supabase/`, payment components, original `public/migo/` assets and the Migo bus/machine/audio logic are out of scope. Treat global CSS/layout changes as cross-route risk and run regressions. Never commit secrets, local stores, provider payloads containing personal data or `.env` values. Keep source/rights records separate from code licensing.
 
 ## Verification and handoff
@@ -41,3 +43,9 @@ Use isolated local data for HTTP smoke checks. Label fake-provider tests, offlin
 Use `docs/ACCEPTANCE.md` for technical versus visual gates. A green test suite does not approve cinematic quality. Record limitations, missing assets and failed readiness gates. Keep historical evidence and licenses; append corrections/supersession notices rather than erasing them.
 
 Each PR targets integration and includes base SHA, changed modules, objective, implementation, exact check results, evidence links, unresolved dependencies and explicit independent-review questions. Update `docs/HANDOFF.md`, `docs/WORK_PACKAGES.md`, `docs/ASSET_REGISTRY.md` and relevant decisions. Include the next package's entry conditions. Never mark a package complete while its required visual proof is blocked.
+
+New review captures belong under ignored `work/evidence/` and versioned review-only GitHub assets; run `npm run evidence:check`. Preserve historical evidence and follow `docs/EVIDENCE_POLICY.md`.
+
+Native-media browser fixtures require system FFmpeg/ffprobe with libx264 and drawtext plus Chromium. Missing executables are clearly skipped, never counted as native-media verification; use a configured environment for acceptance. The README documents prerequisites. Use SHOREMIGO_DATA_DIR for isolated local smoke data. ESLint ignores alternate .next-*/ and work/ outputs.
+
+Current owner design basis: Aurora Tide 158 m, nine decks, 104 staterooms/~208 guests; Cabin 7214 on Deck 7. Remove Interior Staterooms, conventional theatre and Kids' splash from the planned migration; Tidekeeper Suite is future-only; validate the boutique entertainment lounge's spatial allocation. Claude owns WP-02 PR #3; Codex reviews. Codex's 414b627 review requests corrections, not final modeling approval. Shared docs record decisions without changing protected domain/explorer code. WP-04's next package brief is docs/WP04_BRIEF.md.

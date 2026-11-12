@@ -1,4 +1,12 @@
+import fs from "node:fs";
+import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
+
+const previewDir = process.env.EVIDENCE_DIR;
+if (previewDir) {
+  if (!path.resolve(previewDir).startsWith(path.resolve("work/evidence") + path.sep)) throw new Error("EVIDENCE_DIR must be under ignored work/evidence.");
+  fs.mkdirSync(previewDir, { recursive: true });
+}
 
 const welcome = (page: Page) =>
   page.getByRole("dialog", { name: "Welcome to ShoreMigo" });
@@ -122,7 +130,7 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     await page.goto("/");
     await expect(welcome(page)).toBeVisible();
-    await page.waitForTimeout(900); // allow Migo's entrance to settle for the review capture
+    await expect(page.locator("[data-greeting-phase]")).toHaveAttribute("data-greeting-phase", "wave");
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -131,15 +139,15 @@ for (const viewport of [
     expect(
       await welcome(page).evaluate((el) => el.scrollWidth <= el.clientWidth),
     ).toBeTruthy();
-    if (process.env.CAPTURE_PREVIEWS)
+    if (previewDir)
       await page.screenshot({
-        path: `docs/previews/welcome-${viewport.name}.png`,
+        path: `${previewDir}/welcome-${viewport.name}.png`,
       });
     await welcome(page).getByRole("button", { name: "Skip" }).click();
     await expect(welcome(page)).toHaveCount(0);
-    await page.waitForTimeout(600);
+    await expect(page.locator("[data-migo-stage]")).toHaveAttribute("data-placement-ready", "true");
     if (viewport.name === "mobile") {
-      const clearOfControls = await page.evaluate(() => {
+      await expect.poll(() => page.evaluate(() => {
         const stage = document
           .querySelector("[data-migo-stage]")!
           .getBoundingClientRect();
@@ -156,12 +164,11 @@ for (const viewport of [
             stage.top >= z.bottom
           );
         });
-      });
-      expect(clearOfControls).toBeTruthy();
+      })).toBe(true);
     }
-    if (process.env.CAPTURE_PREVIEWS)
+    if (previewDir)
       await page.screenshot({
-        path: `docs/previews/home-${viewport.name}.png`,
+        path: `${previewDir}/home-${viewport.name}.png`,
       });
     expect(
       await page.evaluate(
@@ -180,11 +187,10 @@ for (const viewport of [
         })(),
       ),
     ).toBe(750);
-    await page.waitForTimeout(850);
     await expect(page.locator(".cinematic-poster")).toHaveCSS("opacity", "1");
-    if (process.env.CAPTURE_PREVIEWS)
+    if (previewDir)
       await page.screenshot({
-        path: `docs/previews/sunset-${viewport.name}.png`,
+        path: `${previewDir}/sunset-${viewport.name}.png`,
       });
     await page.emulateMedia({ reducedMotion: "reduce" });
     expect(

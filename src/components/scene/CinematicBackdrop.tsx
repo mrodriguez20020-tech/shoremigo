@@ -36,10 +36,12 @@ export function CinematicBackdrop() {
   const [painted, setPainted] = useState<FilmLight | null>(null);
   const [failed, setFailed] = useState(false);
   const [failedPoster, setFailedPoster] = useState<string | null>(null);
+  const [retry, setRetry] = useState(0);
   const day = useRef<HTMLVideoElement>(null);
   const sunset = useRef<HTMLVideoElement>(null);
   const active = useRef<FilmLight>("day");
   const phase = useRef(0);
+  const gestureTried = useRef(false);
   const desired: FilmLight = scene === "sunset" ? "sunset" : "day";
   const available = pathname === "/" || portalOpen || intro;
   const variant =
@@ -66,7 +68,7 @@ export function CinematicBackdrop() {
   }, [available, manifest]);
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 639px)");
+    const mq = window.matchMedia("(max-aspect-ratio: 1/1)");
     const update = () => setMobile(mq.matches);
     update();
     mq.addEventListener("change", update);
@@ -143,12 +145,21 @@ export function CinematicBackdrop() {
   }, [variant, moving, available]);
 
   useEffect(() => {
-    if (!available) return;
+    if (!available) {
+      setPainted(null);
+      return;
+    }
     if (!moving || !variant) {
       const current = active.current === "day" ? day.current : sunset.current;
       if (current) phase.current = current.currentTime;
       day.current?.pause();
       sunset.current?.pause();
+      // Visibility pauses retain the actual decoded frame, including its lighting.
+      if (variant && !failed && !reducedMotion && !saveData &&
+          (hidden || !(inView || portalOpen || intro))) {
+        setState("paused");
+        return;
+      }
       setPainted(null);
       setShown(desired);
       setState(
@@ -169,30 +180,53 @@ export function CinematicBackdrop() {
     if (target.readyState === 0) target.load();
     let cancelled = false;
     let activating = false;
-    let aligned = false;
     let settle: ReturnType<typeof setTimeout> | undefined;
+    let abortSeek: (() => void) | undefined;
+    const duration = variant.frames / variant.fps;
+    const frame = 1 / variant.fps;
+    const seek = (time: number) => new Promise<void>((resolve) => {
+      const done = () => {
+        target.removeEventListener("seeked", done);
+        abortSeek = undefined;
+        resolve();
+      };
+      abortSeek = done;
+      target.addEventListener("seeked", done, { once: true });
+      target.currentTime = ((time % duration) + duration) % duration;
+    });
     const show = async () => {
       if (cancelled || activating || target.readyState < 2 || target.seeking)
         return;
-      const expected =
-        previous && !previous.paused ? previous.currentTime : phase.current;
-      if (
-        !aligned && (active.current !== desired || target.paused) &&
-        loopDistance(
-          target.currentTime,
-          expected,
-          variant.frames / variant.fps,
-        ) >
-          1 / variant.fps
-      ) {
-        aligned = true;
-        target.currentTime = expected % (variant.frames / variant.fps);
-        return;
-      }
       activating = true;
       try {
-        await target.play();
+        const paired = previous && previous !== target;
+        if (paired && previous.paused && previous.classList.contains("is-visible")) await previous.play();
+        let lead = 0;
+        let aligned = false;
+        for (let attempt = 0; attempt < 3 && !cancelled; attempt++) {
+          const expected = previous && !previous.paused ? previous.currentTime : phase.current;
+          if (loopDistance(target.currentTime, expected, duration) > frame) {
+            target.pause();
+            // Correct with the observed phase error, which includes seek/decode/play latency.
+            // Wall-clock promise timing alone overestimates browsers that advance before play resolves.
+            await seek(expected + (paired && !previous.paused ? lead : 0));
+          }
+          if (cancelled) return;
+          await target.play();
+          if (cancelled) return;
+          if (!paired || previous.paused || loopDistance(target.currentTime, previous.currentTime, duration) <= frame) {
+            aligned = true;
+            break;
+          }
+          if (paired) lead += ((previous.currentTime - target.currentTime + duration * 1.5) % duration) - duration / 2;
+        }
         if (cancelled) return;
+        if (!aligned) {
+          // Keep the outgoing scene; never dissolve two unaligned ocean phases.
+          target.pause();
+          setState("alignment-blocked");
+          return;
+        }
         active.current = desired;
         setShown(desired);
         setPainted(desired);
@@ -204,6 +238,7 @@ export function CinematicBackdrop() {
         }, 750);
       } catch {
         if (!cancelled) {
+          if (previous) phase.current = previous.currentTime;
           day.current?.pause();
           sunset.current?.pause();
           setPainted(null);
@@ -215,18 +250,40 @@ export function CinematicBackdrop() {
     setState("buffering");
     target.addEventListener("loadeddata", show);
     target.addEventListener("canplay", show);
-    target.addEventListener("seeked", show);
     void show();
     return () => {
       cancelled = true;
+      abortSeek?.();
       if (settle) clearTimeout(settle);
       target.removeEventListener("loadeddata", show);
       target.removeEventListener("canplay", show);
-      target.removeEventListener("seeked", show);
       // A pending play promise must not win after a scene reversal.
       if (active.current !== desired) target.pause();
     };
-  }, [desired, moving, available, variant, reducedMotion, saveData, failed]);
+  }, [desired, moving, available, variant, reducedMotion, saveData, failed, retry, hidden, inView, portalOpen, intro]);
+
+  useEffect(() => {
+    if (state !== "autoplay-blocked" || !moving || !available || gestureTried.current) return;
+    let cancelled = false;
+    const resume = () => {
+      gestureTried.current = true;
+      window.removeEventListener("pointerdown", resume);
+      window.removeEventListener("keydown", resume);
+      const target = desired === "day" ? day.current : sunset.current;
+      // Invoke play in the gesture itself, while browser user activation is live.
+      if (target) void target.play().then(() => {
+        if (cancelled) target.pause();
+        else setRetry(value => value + 1);
+      }).catch(() => {});
+    };
+    window.addEventListener("pointerdown", resume, { once: true });
+    window.addEventListener("keydown", resume, { once: true });
+    return () => {
+      cancelled = true;
+      window.removeEventListener("pointerdown", resume);
+      window.removeEventListener("keydown", resume);
+    };
+  }, [state, moving, available, desired]);
 
   useEffect(() => {
     if (!available) return;
@@ -249,6 +306,8 @@ export function CinematicBackdrop() {
       "--compass-a": golden ? "0.8" : "0.3",
     };
     const root = document.documentElement;
+    const previousLighting = root.dataset.cinematicLighting;
+    root.dataset.cinematicLighting = displayingFallback ? "interim" : shown;
     const previous = Object.fromEntries(
       Object.keys(properties).map((key) => [
         key,
@@ -258,6 +317,8 @@ export function CinematicBackdrop() {
     for (const [key, value] of Object.entries(properties))
       root.style.setProperty(key, value);
     return () => {
+      if (previousLighting) root.dataset.cinematicLighting = previousLighting;
+      else delete root.dataset.cinematicLighting;
       for (const [key, value] of Object.entries(previous)) {
         if (value) root.style.setProperty(key, value);
         else root.style.removeProperty(key);

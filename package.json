@@ -12,7 +12,8 @@
     "slice-migo": "node scripts/slice-migo.mjs",
     "test:ui": "playwright test",
     "typecheck": "tsc --noEmit",
-    "media:check": "node scripts/check-cinematic-delivery.mjs"
+    "media:check": "node scripts/check-cinematic-delivery.mjs",
+    "evidence:check": "node scripts/check-review-evidence.mjs"
   },
   "dependencies": {
     "motion": "^14.11.1",

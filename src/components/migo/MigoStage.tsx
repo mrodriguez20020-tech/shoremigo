@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useMotionValue, animate } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { migo, type MigoEvent } from "./bus";
 import { useCompanion } from "./CompanionProvider";
 import { poseFor, POSES } from "./poses";
@@ -14,6 +14,7 @@ import { track } from "@/lib/client/track";
 type Suggestion = Extract<MigoEvent, { type: "suggest" }>;
 
 const PANEL_W = 420;
+const compactViewport = (width: number, height: number) => width < 720 || (width < 1024 && height < 500);
 
 export function MigoStage() {
   const {
@@ -29,6 +30,7 @@ export function MigoStage() {
   const pathname = usePathname();
   const { go } = useTide();
   const stageX = useMotionValue(24);
+  const [placed, setPlaced] = useState(false);
   const stageRef = useRef<HTMLDivElement>(null);
   const [contact, setContact] = useState(1);
   const [gaitPhase, setGaitPhase] = useState("still");
@@ -61,8 +63,21 @@ export function MigoStage() {
   const suppressClick = useRef(false);
   const prevMode = useRef(state.mode);
 
-  const mobile = vw < 720;
+  const mobile = compactViewport(vw, vh);
   const size = mobile ? 84 : 124;
+
+  useLayoutEffect(() => {
+    const width = window.innerWidth;
+    const compact = compactViewport(width, window.innerHeight);
+    const start = Math.max(16, width - (compact ? 84 : 124) - (compact ? 10 : 32));
+    setVw(width);
+    setVh(window.innerHeight);
+    xRef.current = start;
+    dir.current = -1;
+    stageX.set(start);
+    setXState(start);
+    setPlaced(true);
+  }, [stageX]);
 
   useEffect(() => {
     const onR = () => {
@@ -75,20 +90,11 @@ export function MigoStage() {
       const img = new Image();
       img.src = p.src;
     });
-    // Start over the open sea on the right, away from primary page actions.
-    xRef.current = Math.max(
-      16,
-      window.innerWidth - (window.innerWidth < 720 ? 84 : 124) - 32,
-    );
-    dir.current = -1;
-    setX(xRef.current);
     window.addEventListener("resize", onR);
     return () => window.removeEventListener("resize", onR);
-    // Motion value is stable; initial placement runs once.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // The compact phone launcher also avoids marked controls vertically. A fixed
+  // The compact phone launcher avoids marked controls and editorial text vertically. A fixed
   // corner alone can overlap a full-width form when it reaches the viewport edge.
   useEffect(() => {
     if (!mobile || state.mode !== "roam") return;
@@ -157,7 +163,7 @@ export function MigoStage() {
   }, [state.mode, reducedMotion, mobile, pathname]);
 
   /** Nearest lane position whose footprint doesn't cover a marked control (data-migo-avoid). */
-  const safeSnap = (want: number) => {
+  const safeSnap = useCallback((want: number) => {
     const w = window.innerWidth;
     const h = window.innerHeight;
     const max = Math.max(16, w - size - 16);
@@ -179,8 +185,31 @@ export function MigoStage() {
       for (const px of [start - d, start + d])
         if (px >= 16 && px <= max && !blocked(px)) return px;
     }
+    // A narrow free gutter may lie between the coarse samples and the exact edge.
+    for (const edge of [max, 16]) if (!blocked(edge)) return edge;
     return start;
-  };
+  }, [size]);
+
+  // Recheck a standing companion when scrolling brings editorial content into its lane.
+  useEffect(() => {
+    if (!placed || mobile || state.mode !== "roam" || dragging || hopping) return;
+    let raf = 0;
+    const place = () => {
+      const next = safeSnap(xRef.current);
+      if (next === xRef.current) return;
+      xRef.current = next;
+      setX(next);
+    };
+    const schedule = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(place); };
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, [placed, mobile, state.mode, dragging, hopping, safeSnap, setX]);
   const moveTo = (px: number) => {
     const nx = safeSnap(px);
     setFacing(nx < xRef.current ? -1 : 1);
@@ -331,7 +360,7 @@ export function MigoStage() {
         if (!prefs.proactive || seen.current.has(e.key)) return;
         const w = window.innerWidth;
         const h = window.innerHeight;
-        const sz = w < 720 ? 84 : 124;
+        const sz = compactViewport(w, h) ? 84 : 124;
         const zones = [
           ...document.querySelectorAll<HTMLElement>("[data-migo-avoid], [data-migo-tip-avoid]"),
         ].map((el) => el.getBoundingClientRect());
@@ -396,13 +425,13 @@ export function MigoStage() {
   const pose = dragging || hopping ? "jump" : poseFor(expression, frame);
 
   useEffect(() => {
-    if (walking || dragging) return;
+    if (!placed || walking || dragging) return;
     const controls = animate(stageX, targetX, {
-      duration: reducedMotion ? 0 : hopping ? 0.7 : 0.35,
+      duration: reducedMotion || mobile ? 0 : hopping ? 0.7 : 0.35,
       ease: [0.25, 0.7, 0.3, 1],
     });
     return () => controls.stop();
-  }, [targetX, walking, dragging, reducedMotion, hopping, stageX]);
+  }, [targetX, walking, dragging, reducedMotion, hopping, stageX, placed, mobile]);
 
   if (state.mode === "hidden") {
     return (
@@ -429,12 +458,13 @@ export function MigoStage() {
         className="fixed z-40"
         ref={stageRef}
         data-migo-stage
+        data-placement-ready={placed}
         data-mode={state.mode}
         data-expression={expression}
         data-gait={gaitPhase}
         data-frame={frame}
         data-hopping={hopping}
-        style={{ left: 0, x: stageX }}
+        style={{ left: 0, x: stageX, visibility: placed ? "visible" : "hidden" }}
         initial={false}
         animate={{
           bottom: hopping ? [10, 120, bottom] : bottom,
@@ -519,6 +549,7 @@ export function MigoStage() {
         <div className="group relative">
           <button
             type="button"
+            disabled={!placed}
             onClick={() => {
               if (suppressClick.current) {
                 suppressClick.current = false;

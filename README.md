@@ -54,6 +54,11 @@ npm test                     # unit + service tests (Vitest)
 
 Requirements: Node 20+. Sandbox credentials: developer.paypal.com → Apps & Credentials → **Sandbox** → Create App. Use a sandbox *personal* (buyer) account to approve payments.
 
+Browser checks: `npm run test:ui` needs a Playwright/system Chromium (`PLAYWRIGHT_CHROMIUM_PATH` optionally selects it). Native-film fixture tests additionally require **system FFmpeg and ffprobe**, with **libx264** encoder and **drawtext** filter (`ffmpeg -encoders`, `ffmpeg -filters` to inspect). Fixtures are labeled engineering patterns, generated only in ignored `work/`; they are not production media. Missing executables cause a clearly reported skip, never a native-media pass. Engineering acceptance requires a configured environment that actually runs those tests. `npm run media:check` also uses ffprobe for real deliveries and currently exits 2 because the production manifest is pending.
+
+Use `NEXT_DIST_DIR=.next-review npm run build` for a separate build directory while another server runs; lint ignores `.next-*/` and `work/`. Never rebuild the directory served by active tests. New review evidence follows [EVIDENCE_POLICY.md](docs/EVIDENCE_POLICY.md); run `npm run evidence:check`.
+
+
 > **Windows note:** if the project lives in a very deep folder, Turbopack's dev cache can exceed the Windows path limit. `npm run dev` therefore uses webpack; `npm run build` still uses Turbopack.
 
 ---

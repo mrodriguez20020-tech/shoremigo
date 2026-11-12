@@ -3,6 +3,8 @@ import fs from "node:fs";
 import { spawnSync } from "node:child_process";
 
 test.beforeAll(() => {
+  const available = ["ffmpeg", "ffprobe"].every(command => spawnSync(command, ["-version"]).status === 0);
+  test.skip(!available, "Native-media tests need system FFmpeg/ffprobe (libx264 and drawtext). See README; skipped is not native-media verification.");
   fs.mkdirSync("work/signature/fixtures", { recursive: true });
   for (const light of ["day", "sunset"]) {
     const result = spawnSync("ffmpeg", [
@@ -79,7 +81,7 @@ async function useFixture(page: Page, broken = false) {
   await page.route("**/cinematic/film/manifest.json", (route) =>
     route.fulfill({ json: film }),
   );
-  await page.route(/\/cinematic\/film\/(day|sunset)\.mp4$/, (route) => {
+  await page.route(/\/cinematic\/film\/(?:portrait-)?(day|sunset)\.mp4$/, (route) => {
     const bytes = broken ? Buffer.from("not a video") : fs.readFileSync(
       `work/signature/fixtures/${route.request().url().includes("sunset") ? "sunset" : "day"}.mp4`,
     );
@@ -98,7 +100,7 @@ async function useFixture(page: Page, broken = false) {
       body,
     });
   });
-  await page.route(/\/cinematic\/film\/(day|sunset)\.webp$/, (route) =>
+  await page.route(/\/cinematic\/film\/(?:portrait-)?(day|sunset)\.webp$/, (route) =>
     route.fulfill({
       contentType: "image/webp",
       body: fs.readFileSync("public/cinematic/signature-still.webp"),
@@ -157,6 +159,7 @@ test("one native film pair plays silently and swaps matched phases on scene chan
   });
   await page.locator("#golden-hour").scrollIntoViewIfNeeded();
   await expect(backdrop).toHaveAttribute("data-light", "sunset");
+  await expect(page.locator("[data-golden-copy]")).toHaveAttribute("data-golden-copy", "sunset");
   await expect(backdrop).toHaveAttribute("data-media-state", "playing");
   const aligned = await page.locator("video").evaluateAll((videos) => {
     const [day, sunset] = videos as HTMLVideoElement[];
@@ -170,7 +173,9 @@ test("one native film pair plays silently and swaps matched phases on scene chan
     };
   });
   // Measure phase at the handoff, not after the outgoing film has paused and the incoming film advances.
-  expect(await page.evaluate(() => (window as unknown as { filmHandoff: number }).filmHandoff)).toBeLessThan(0.2);
+  const handoff = await page.evaluate(() => (window as unknown as { filmHandoff: number }).filmHandoff);
+  expect(handoff).toBeLessThanOrEqual(1 / 24);
+  test.info().annotations.push({ type: "phase-error-ms", description: String(handoff * 1000) });
   await expect(page.locator("video").first()).toHaveCSS("transition-duration", "0.75s");
   expect(aligned.dayPaused).toBe(true);
   expect(aligned.sunsetPlaying).toBe(true);
@@ -299,4 +304,108 @@ test("autoplay refusal leaves a usable poster instead of a blocked entrance", as
   await expect(page.locator(".cinematic-poster")).toBeVisible();
   await page.getByRole("button", { name: "Explore tours", exact: true }).click();
   await expect(page).toHaveURL(/excursions/);
+});
+
+test("delayed native seeks are rechecked before the sunset dissolve", async ({ page }) => {
+  await page.addInitScript(() => {
+    const time = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, "currentTime")!;
+    const seeking = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, "seeking")!;
+    const pending = new WeakSet<HTMLMediaElement>();
+    Object.defineProperty(HTMLMediaElement.prototype, "currentTime", {
+      configurable: true, get: time.get,
+      set(value: number) {
+        const video = this as HTMLVideoElement;
+        if (video.dataset.light !== "sunset") { time.set!.call(video, value); return; }
+        pending.add(video);
+        setTimeout(() => { pending.delete(video); time.set!.call(video, value); }, 120);
+      },
+    });
+    Object.defineProperty(HTMLMediaElement.prototype, "seeking", {
+      configurable: true, get() { return pending.has(this) || seeking.get!.call(this); },
+    });
+  });
+  await enter(page);
+  await useFixture(page);
+  await page.goto("/");
+  const backdrop = page.locator("[data-cinematic-backdrop]");
+  await expect(backdrop).toHaveAttribute("data-media-state", "playing");
+  await page.evaluate(() => {
+    const el = document.querySelector("[data-cinematic-backdrop]")!;
+    const observer = new MutationObserver(() => {
+      if (el.getAttribute("data-media-state") !== "transitioning" || el.getAttribute("data-light") !== "sunset") return;
+      const [a, b] = Array.from(document.querySelectorAll("video"));
+      const d = Math.abs(a.currentTime - b.currentTime) % 6;
+      (window as unknown as { delayedHandoff: number }).delayedHandoff = Math.min(d, 6 - d);
+      observer.disconnect();
+    });
+    observer.observe(el, { attributes: true });
+  });
+  await expect.poll(() => page.locator('video[data-light="day"]').evaluate((v: HTMLVideoElement) => v.currentTime)).toBeGreaterThan(0.5);
+  await page.locator(".golden-window").evaluate(el => window.scrollTo({ top: scrollY + el.getBoundingClientRect().top, behavior: "instant" }));
+  await expect(backdrop).toHaveAttribute("data-light", "sunset");
+  await expect.poll(() => page.evaluate(() => (window as unknown as { delayedHandoff?: number }).delayedHandoff)).toBeLessThanOrEqual(1 / 24);
+  test.info().annotations.push({ type: "delayed-seek-phase-error-ms", description: String(await page.evaluate(() => (window as unknown as { delayedHandoff: number }).delayedHandoff * 1000)) });
+  await expect(backdrop).toHaveAttribute("data-media-state", "playing");
+});
+
+test("offscreen and hidden pauses retain the decoded frame", async ({ page }) => {
+  await enter(page);
+  await useFixture(page);
+  await page.goto("/");
+  const backdrop = page.locator("[data-cinematic-backdrop]");
+  const day = page.locator('video[data-light="day"]');
+  await expect(backdrop).toHaveAttribute("data-media-state", "playing");
+  await expect.poll(() => day.evaluate((v: HTMLVideoElement) => v.currentTime)).toBeGreaterThan(0.5);
+  await page.locator("#ports").scrollIntoViewIfNeeded();
+  await expect.poll(() => day.evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
+  await expect(day).toHaveClass(/is-visible/);
+  const pausedAt = await day.evaluate((v: HTMLVideoElement) => v.currentTime);
+  await page.locator(".luxury-hero").scrollIntoViewIfNeeded();
+  await expect(backdrop).toHaveAttribute("data-media-state", "playing");
+  expect(await day.evaluate((v: HTMLVideoElement) => v.currentTime)).toBeGreaterThanOrEqual(pausedAt - 1 / 24);
+  await page.evaluate(() => {
+    Object.defineProperty(document, "hidden", { configurable: true, value: true });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect(backdrop).toHaveAttribute("data-media-state", "paused");
+  await expect(day).toHaveClass(/is-visible/);
+  await page.evaluate(() => {
+    Object.defineProperty(document, "hidden", { configurable: true, value: false });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect(backdrop).toHaveAttribute("data-media-state", "playing");
+});
+
+test("autoplay retries once in a real keyboard gesture", async ({ page }) => {
+  await page.addInitScript(() => {
+    const play = HTMLMediaElement.prototype.play;
+    let gesture = false;
+    window.addEventListener("keydown", () => { gesture = true; }, { capture: true });
+    HTMLMediaElement.prototype.play = function () {
+      return gesture ? play.call(this) : Promise.reject(new DOMException("Browser policy", "NotAllowedError"));
+    };
+  });
+  await enter(page);
+  await useFixture(page);
+  await page.goto("/");
+  const backdrop = page.locator("[data-cinematic-backdrop]");
+  await expect(backdrop).toHaveAttribute("data-media-state", "autoplay-blocked");
+  await page.keyboard.press("Shift");
+  await expect(backdrop).toHaveAttribute("data-media-state", "playing");
+  expect(await page.locator('video[data-light="day"]').evaluate((v: HTMLVideoElement) => !v.paused && v.muted && v.volume === 0)).toBe(true);
+});
+
+test("portrait tablets select the purpose-framed pair", async ({ page }) => {
+  await page.setViewportSize({ width: 820, height: 1180 });
+  await enter(page);
+  await useFixture(page);
+  await page.route("**/cinematic/film/manifest.json", route => route.fulfill({ json: {
+    ...film, mobile: { ...film.desktop,
+      day: { mp4: "/cinematic/film/portrait-day.mp4", poster: "/cinematic/film/portrait-day.webp" },
+      sunset: { mp4: "/cinematic/film/portrait-sunset.mp4", poster: "/cinematic/film/portrait-sunset.webp" },
+    },
+  } }));
+  await page.goto("/");
+  await expect(page.locator("[data-cinematic-backdrop]")).toHaveAttribute("data-media-state", "playing");
+  await expect(page.locator('video[data-light="day"]')).toHaveAttribute("src", /portrait-day\.mp4$/);
 });

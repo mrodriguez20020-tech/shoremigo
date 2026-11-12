@@ -1,0 +1,319 @@
+{
+  "head": "414b62713cb174265e29f15667418feb56904d6f",
+  "deterministic": true,
+  "cleanWorktree": true,
+  "fileHashes": [
+    {
+      "file": "sheets/01-port-elevation.svg",
+      "valid": true
+    },
+    {
+      "file": "sheets/02-starboard-elevation.svg",
+      "valid": true
+    },
+    {
+      "file": "sheets/03-bow.svg",
+      "valid": true
+    },
+    {
+      "file": "sheets/04-stern.svg",
+      "valid": true
+    },
+    {
+      "file": "sheets/05-plan.svg",
+      "valid": true
+    },
+    {
+      "file": "sheets/06-deck7-arrangement.svg",
+      "valid": true
+    },
+    {
+      "file": "sheets/07-three-quarter-massing.svg",
+      "valid": true
+    },
+    {
+      "file": "sheets/08-cabin-7214-plan.svg",
+      "valid": true
+    },
+    {
+      "file": "model/aurora-tide-massing.glb",
+      "valid": true
+    }
+  ],
+  "geometryIdMatchesJSON": true,
+  "cameraIdMatchesJSON": true,
+  "referenceSHA": "sha256:57502ff3367518d64783f93134e2ca5a3e36a9f3cbc5f2f6f284c94617d3be3f",
+  "glb": {
+    "headerValid": true,
+    "geometryIdEmbedded": "sha256:26208856942a33202c1bafbdf1a453587e54d575564e03f954189344fad6a016",
+    "triangles": 3196,
+    "bounds": [
+      0,
+      4.199999809265137,
+      -12,
+      158,
+      37.5,
+      12
+    ],
+    "dimensions": [
+      158,
+      33.30000019073486,
+      24
+    ],
+    "zeroNormalVertices": 1032,
+    "nonUnitNormalVertices": 1032,
+    "degenerateTriangles": 148,
+    "meshes": [
+      {
+        "name": "hull",
+        "triangles": 756,
+        "zeroNormalVertices": 0,
+        "degenerateTriangles": 4
+      },
+      {
+        "name": "teak",
+        "triangles": 156,
+        "zeroNormalVertices": 0,
+        "degenerateTriangles": 0
+      },
+      {
+        "name": "superstructure",
+        "triangles": 2080,
+        "zeroNormalVertices": 1032,
+        "degenerateTriangles": 144
+      },
+      {
+        "name": "glazing",
+        "triangles": 96,
+        "zeroNormalVertices": 0,
+        "degenerateTriangles": 0
+      },
+      {
+        "name": "lifeboat",
+        "triangles": 48,
+        "zeroNormalVertices": 0,
+        "degenerateTriangles": 0
+      },
+      {
+        "name": "funnel",
+        "triangles": 12,
+        "zeroNormalVertices": 0,
+        "degenerateTriangles": 0
+      },
+      {
+        "name": "exhaust",
+        "triangles": 48,
+        "zeroNormalVertices": 0,
+        "degenerateTriangles": 0
+      }
+    ]
+  },
+  "capacity": {
+    "counts": {
+      "4": 28,
+      "5": 16,
+      "6": 30,
+      "7": 30
+    },
+    "total": 104,
+    "module": {
+      "width": 4.6,
+      "depthInterior": 7.2,
+      "balconyDepth": 2.1,
+      "note": "typical boutique-luxury balcony module; proposal"
+    },
+    "minimumAvailableDepth": 9.2898,
+    "insufficientModules": [
+      {
+        "deck": 7,
+        "from": 111.4,
+        "to": 116,
+        "minAvailableDepth": 9.2898,
+        "requiredDepth": 9.3,
+        "rectangleOutsideAtFore": 0.2234
+      }
+    ],
+    "outboardRectangles": [
+      {
+        "deck": 4,
+        "from": 23,
+        "to": 27.6,
+        "minAvailableDepth": 10.5661,
+        "requiredDepth": 7.2,
+        "rectangleOutsideAtFore": 0.0321
+      },
+      {
+        "deck": 4,
+        "from": 105.8,
+        "to": 110.4,
+        "minAvailableDepth": 10.5341,
+        "requiredDepth": 7.2,
+        "rectangleOutsideAtFore": 0.0656
+      },
+      {
+        "deck": 4,
+        "from": 110.4,
+        "to": 115,
+        "minAvailableDepth": 10.1934,
+        "requiredDepth": 7.2,
+        "rectangleOutsideAtFore": 0.2
+      },
+      {
+        "deck": 5,
+        "from": 103.8,
+        "to": 108.4,
+        "minAvailableDepth": 10.5969,
+        "requiredDepth": 9.3,
+        "rectangleOutsideAtFore": 0.0031
+      },
+      {
+        "deck": 5,
+        "from": 108.4,
+        "to": 113,
+        "minAvailableDepth": 10.3705,
+        "requiredDepth": 9.3,
+        "rectangleOutsideAtFore": 0.149
+      },
+      {
+        "deck": 6,
+        "from": 18,
+        "to": 22.6,
+        "minAvailableDepth": 9.9629,
+        "requiredDepth": 9.3,
+        "rectangleOutsideAtFore": 0.1156
+      },
+      {
+        "deck": 6,
+        "from": 22.6,
+        "to": 27.2,
+        "minAvailableDepth": 10.1565,
+        "requiredDepth": 9.3,
+        "rectangleOutsideAtFore": 0.0389
+      },
+      {
+        "deck": 6,
+        "from": 105.4,
+        "to": 110,
+        "minAvailableDepth": 10.1517,
+        "requiredDepth": 9.3,
+        "rectangleOutsideAtFore": 0.0483
+      },
+      {
+        "deck": 6,
+        "from": 110,
+        "to": 114.6,
+        "minAvailableDepth": 9.8321,
+        "requiredDepth": 9.3,
+        "rectangleOutsideAtFore": 0.1903
+      },
+      {
+        "deck": 7,
+        "from": 24,
+        "to": 28.6,
+        "minAvailableDepth": 9.7849,
+        "requiredDepth": 9.3,
+        "rectangleOutsideAtFore": 0.0151
+      },
+      {
+        "deck": 7,
+        "from": 106.8,
+        "to": 111.4,
+        "minAvailableDepth": 9.6809,
+        "requiredDepth": 9.3,
+        "rectangleOutsideAtFore": 0.1016
+      },
+      {
+        "deck": 7,
+        "from": 111.4,
+        "to": 116,
+        "minAvailableDepth": 9.2898,
+        "requiredDepth": 9.3,
+        "rectangleOutsideAtFore": 0.2234
+      }
+    ]
+  },
+  "cabin": {
+    "cabin": {
+      "deck": 7,
+      "side": "port",
+      "xFrom": 97.6,
+      "xTo": 102.2,
+      "outboardHalfBreadth": 10.7
+    },
+    "forwardNeighbour": [
+      "7302",
+      {
+        "deck": 7,
+        "side": "port",
+        "xFrom": 102.2,
+        "xTo": 106.8,
+        "outboardHalfBreadth": 10.7
+      }
+    ],
+    "declaredNeighbours": "7212 aft, 7216 forward (port = even; numbering restarts per zone)"
+  },
+  "decks": {
+    "deck7PortBounds": [
+      21,
+      129
+    ],
+    "deck7StarboardBounds": [
+      21,
+      129
+    ],
+    "terraceT1": {
+      "name": "terraceT1",
+      "mat": "teak",
+      "z0": 12.65,
+      "z1": 12.9
+    },
+    "deck9": {
+      "name": "deck9",
+      "mat": "superstructure",
+      "z0": 24.5,
+      "z1": 27.349999999999998
+    },
+    "radomePrisms": 1
+  },
+  "glazing": [
+    {
+      "deck": 5,
+      "atX": 122,
+      "panelCentreY": 11.5,
+      "hullSideY": 10.179110482568477,
+      "outboardOffset": 1.3208895174315227
+    },
+    {
+      "deck": 6,
+      "atX": 125,
+      "panelCentreY": 11.1,
+      "hullSideY": 9.262564938064825,
+      "outboardOffset": 1.8374350619351745
+    },
+    {
+      "deck": 7,
+      "atX": 127,
+      "panelCentreY": 10.7,
+      "hullSideY": 8.480117668336398,
+      "outboardOffset": 2.2198823316636016
+    },
+    {
+      "deck": 8,
+      "atX": 122,
+      "panelCentreY": 9.9,
+      "hullSideY": 8.579110482568478,
+      "outboardOffset": 1.3208895174315227
+    }
+  ],
+  "identityFaultInjection": {
+    "note": "Private scratch copy only: change hard-coded DH 2.9 to 3.0 with vessel.json unchanged.",
+    "idUnchanged": true,
+    "modelChanged": true
+  },
+  "review": "https://github.com/mrodriguez20020-tech/shoremigo/pull/3#pullrequestreview-5869346197",
+  "overlay": {
+    "independentFullResolutionIoU": 0.8984,
+    "note": "Unseeded random fit in private copy; not a production asset or complete-geometry approval."
+  },
+  "scope": "Independent checks in detached worktree. No changes to Claude active branch. Raw QA outputs kept in ignored work/wp02-review."
+}

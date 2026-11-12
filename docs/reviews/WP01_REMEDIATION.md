@@ -1,0 +1,46 @@
+# WP-01 review remediation · 2026-11-12
+
+**Final visual acceptance remains BLOCKED.** The public manifest is `awaiting-production-media`. This remediation repairs engineering and composition around a disclosed static concept; it does not supply moving water, a production Aurora Tide model or matched sunset footage.
+
+Claude reviewed `c64ace134e228403c11ece9e152a8a30faa66350` in [PR #2 review 5869121191](https://github.com/mrodriguez20020-tech/shoremigo/pull/2#pullrequestreview-5869121191): **APPROVE WITH CONDITIONS**, requiring the changes below. He independently ran Windows checks; 51/54 non-media repetitions passed, and native-media tests were not run without FFmpeg. Those historical results are separate from Codex's new Linux verification. The revised source needs Claude's independent re-review; this report is not his approval.
+
+## Current PR #2 findings
+
+| ID | Resolution / evidence |
+|---|---|
+| N1 · phase after native seek | Reproduced against previous build with a 120 ms delayed native setter: **175.6 ms** handoff error. Player now rechecks actual phase after seeking **and** play completion, uses observed signed error to compensate decoder/seek/play latency, and bounds attempts at three. It only dissolves within one frame; otherwise retains the outgoing film (`alignment-blocked`). The first wall-clock compensation attempt failed a normal native case and was replaced; it is not the final implementation. Native tests measure handoff against ≤1/24 s and annotate actual errors. |
+| N2 · offscreen/hidden continuity | Reproduced the missing `is-visible` class after offscreen pause. Temporary visibility pauses retain the decoded frame and actual light; policy/accessibility/error fallbacks still use posters. Route teardown clears the retained-frame state. Tests verify offscreen and hidden pause/resume. |
+| N3 · autoplay retry | Reproduced absent keyboard recovery. One pointer/key gesture invokes native play synchronously under browser user activation; one attempt only, listeners cleaned, stale promise canceled. Refusal still leaves navigation/poster usable. Native keyboard test verifies recovery; permanently refused playback keeps the fallback. |
+| N4 · interim sunset/disclosure | `GoldenCopy` reads actual delivered cinematic lighting, with hydration-safe interim copy: “Stay for the evening.” The sunset claim appears only with sunset media/light. Disclosure reports concept still or illustrative cinematic scene as appropriate. Copy, disclosure and card are Migo avoidance regions. |
+| N5 · composition conflict | Owner accepted Claude's card-move direction. Desktop card is **below copy in the left content region**, not over the right vessel. Portrait/tablet editorial follows a dedicated vista. Same persistent camera across hero/golden. Updated production spec gives after-cover viewport masks, 90 px navigation and companion/disclosure reserves; tests measure disjoint geometry at six viewports. Final both-light film masks remain a delivery requirement, not fabricated proof. |
+| N6 · lint outputs | Ignore `.next-*/**` and `work/**`. Lint checked with deliberately invalid generated JavaScript in an alternate `.next-*` probe; 0 errors, original three sprite-image warnings. Probe removed. |
+| N7 · native prerequisites | README/AGENTS document Chromium, system FFmpeg/ffprobe, libx264/drawtext and byte-range fixtures. Missing binaries produce an explicit skip; skipped native coverage is not a pass. The final acceptance run uses installed executables. No new dependency or paid service. |
+
+## Historical PR #1 findings reconciled
+
+| Finding | Status / action |
+|---|---|
+| H1 · incompatible home / explorer vessel | **Assigned dependency remains:** Claude WP-02 PR #3; Codex reviewed actual `414b627` with REQUEST CHANGES. Owner provisionally selects 158 m, nine decks, 104 staterooms/~208 guests and Cabin 7214 on Deck 7. No independent WP-01 ship/domain redesign. Existing explorer facts await the scoped migration; this is not reported fixed in product. |
+| H2 · flaky hop/keyboard/contact assertions | Chat-hop test observes and stores actual rendered mode/hop mutations before the action. It asserts that the hop occurred, rather than polling a 700 ms transient. Keyboard test waits for placement and stable rendered geometry; control clearance polls geometry rather than a fixed sleep. Existing contact event test retained. |
+| H3 · phone launcher covers hero/CTA | Actual hero eyebrow/headline/subtitle/tagline now mark avoidance. First-paint placement is measured before visibility. Phone/short-landscape launcher avoids marked text/controls vertically; desktop standing resnap checks scroll/resize and exact viewport edges. Tablet gutter increased after a real failing layout case, rather than weakening the clearance test. Before/after reproduction found overlap at 320/390 before, none after at sampled positions. |
+| H3b · greeting scale | Existing 90 px mobile greeting wrapper retained; no replacement art. |
+| H4 · removed proof line | Owner-authorized quiet, localized LastBoard timing / PayPal Sandbox / AI verified-tool proof restored. Existing detailed working-system proof and PortDayClock remain. No live-provider success claim added. |
+| H5 · evidence Git footprint | Historical committed binary snapshots preserved exactly. New captures go under ignored `work/evidence` and versioned review-only GitHub artifacts, with source/hash manifest. `evidence:check` rejects new/overwritten docs binaries; negative probe tested. No history rewrite or claimed reclamation of existing Git bytes. |
+| H6 · golden card over vessel | Resolved through N5 and the owner's left-region decision; the separate full-width support-strip experiment was superseded before final capture. |
+| H7 · initial x=24 jump | Owner's remediation scope authorizes this fix: layout-time viewport placement plus hidden-until-ready launcher. First-visible measurements check the actual initial frame, not just a later settled position. |
+| H8 · first IO entry stale claim | Select the latest matching target entry by timestamp and process final enter/exit, including out-of-order callbacks. A controlled enter+exit batch previously left shade; corrected tests yield day. |
+| H9 · greeting language mismatch | EN/ES/FR/PT plain greetings share the same intent. Independent country-aware variants remain separate; no country→language coupling. |
+| H10 · unused stock ship | Removed unreferenced `public/images/ship.webp` from runtime tree; original source/license and immutable archived URL preserved in ASSETS. Aurora Tide/Migo authority files unchanged. |
+| H11 · per-frame gait layout reads | **Deferred to WP-07**, measured impact negligible in the review. Gait/bus/machine/audio and original art remain unchanged. No speculative animation refactor to close this low-priority item. |
+
+Previously withdrawn claims about non-element scene claims and an unreproduced desktop performance regression are not reopened as defects.
+
+## Design-control review and next package
+
+[PR #3 independent review](https://github.com/mrodriguez20020-tech/shoremigo/pull/3#pullrequestreview-5869346197), anchored at **414b62713cb174265e29f15667418feb56904d6f**, requests correction of entry obstruction, inconsistent views/GLB, detached glazing, invalid normals/triangles, identity holes, tapered-module fit and dimensional/area/numbering metadata. Independent overlay reproduced **89.84%** silhouette IoU; generator files reproduce byte-identically. [Small audit record](WP02_414b627_AUDIT.json). No active Claude branch edits, final modeling approval or production-quality claim.
+
+Shared references now use Cabin 7214/nine decks/104 staterooms/~208 guests and Claude implementation/Codex review. Owner removes Interior Staterooms, conventional theatre and Kids' splash from the planned migration. Tidekeeper Suite is a future concept; the boutique entertainment lounge needs spatial validation. [WP04_BRIEF](../WP04_BRIEF.md) prepares the next independent Taste & Indulge implementation without starting its source changes.
+
+## Verification and evidence
+
+The final exact source SHA, repeat results and immutable artifact links are recorded in the following verification addendum after the fixed-build runs. Earlier 31-case runs occurred before N1–N4 remediation and are not evidence for the final revision. Native fixtures are procedural QA patterns; screenshots/recording use the actual public pending manifest. No production film decode, physical mobile, screen-reader or live-provider/database success is inferred.

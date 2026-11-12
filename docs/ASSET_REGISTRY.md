@@ -10,7 +10,7 @@ This is the readiness/integration index. **[ASSETS.md](../ASSETS.md) remains the
 | A-02 | Approved Aurora Tide appearance, `public/cinematic/aurora-tide.webp` | Generated transparent WebP; exterior modeling authority and existing discovery card | Available single view; no definitive dimensions/unseen geometry/deck plan |
 | A-03 | Integrated fictional vessel/ocean interim still, `public/cinematic/signature-still.webp` | Generated WebP; current `CinematicBackdrop` fallback, no scene transforms | Temporary still, not film, not new geometry authority, not matched sunset |
 | A-04 | Original Migo eight poses, `public/migo/*.webp` | 440 × 440 transparent WebP; existing event-driven renderer/greeting | Approved artwork unchanged; only two flat walk poses, no articulation/eye/limb source |
-| A-05 | Shoreline, sunset, restaurant and harbor stock atmosphere, `public/images/` | Local optimized WebP, sources/license in ASSETS | Illustrative only; harbor is not Aurora Tide, restaurant is not a verified venue; not spatial/cinematic source |
+| A-05 | Shoreline, sunset and restaurant stock atmosphere (harbor retired from runtime), `public/images/` | Local optimized WebP, sources/license in ASSETS | Illustrative only; harbor is not Aurora Tide, restaurant is not a verified venue; not spatial/cinematic source |
 | A-06 | Fraunces/Manrope, `src/app/fonts/` | Local variable font files with OFL notices | Available, licensed; existing typography baseline |
 | A-07 | Synthesized app ambience/Migo/contact audio | Original Web Audio code under existing license; opt-in application output | Available, no external music/sample; keep muted by default and independent from films |
 | A-08 | Existing deck/cabin/menu demo diagrams/content | Original vector UI and fictional data in ship/dining modules | Functional demo; not definitive architecture, spatial cabin, food photography or real partner data |
@@ -29,17 +29,18 @@ For all visual entries: the owner must assign a production source owner and appr
 - **Delivery:** silent H.264 MP4 + optional identical VP9, frame-zero WebP posters; wide 1920×1080 preferred (minimum 1280×720, ≤6 MB per clip), portrait 900×1440 or 720×1280 (≤2.5 MB per clip). Proper HTTP byte-range serving is required for native seeking; zero audio streams.
 - **Rights/integration:** documented licensed/generated source rights and fictional disclosures; `public/cinematic/film/manifest.json` plus `CinematicBackdrop`; still/reduced-motion/Save-Data fallbacks. Exact [production spec](signature/ASSET_PRODUCTION_SPEC.md). Public manifest stays pending; final genuine moving-water/sunset browser proof is missing.
 
-### M-02 — WP-02 canonical vessel/decks (BLOCKED; next prepared package)
+### M-02 — WP-02 canonical vessel/decks (Claude-owned; production assets BLOCKED)
 
+- **Owner/dependency:** Claude owns WP-02; Codex independently reviews PR #3. A provisional spec, SVG sheets, cabin plan and massing GLB exist at `414b627`, with REQUEST CHANGES in [the independent review](https://github.com/mrodriguez20020-tech/shoremigo/pull/3#pullrequestreview-5869346197); these do not supply the production asset. the current homepage/explorer architecture/facts mismatch is not resolved by the concept still. Codex preserves this dependency and does not invent a second canonical vessel.
 - **Subject:** faithful pearl-white/navy/sea-glass Aurora Tide, glazing, tiered observation decks, exterior amenities and approved deck arrangement; preserve A-02.
 - **Geometry/source:** editable production scene and interchange USD/GLB, reusable topology/material IDs, textures and source provenance; approved dimensions/elevations/unseen views/deck plan required, not derivable reliably from one concept.
 - **Camera/light/motion:** approved port-aft hero plus front/rear/side/elevated review views; consistent scale; neutral/day/golden material studies, turntable and water/wake lookdev, same geometry identity in every view.
 - **Resolution/optimization:** review sheets ≥2048 px, source/master quality sufficient for M-01; future web LOD/texture budgets must be measured after runtime choice, not invented here. Do not ship large source/master files as web assets.
 - **Rights/integration:** source/model/texture commercial derivative rights and hashes; approved exports feed M-01 and later ship/deck/cabin modules without competing hero implementation. [WP02_BRIEF.md](WP02_BRIEF.md).
 
-### M-03 — WP-03 spatial Cabin 9214 (MISSING)
+### M-03 — WP-03 spatial Cabin 7214 (SOURCE MISSING; provisional plan under correction)
 
-- **Subject:** connected bedroom, living area, bathroom and private balcony of the same fictional cabin/vessel.
+- **Subject:** connected bedroom, living area, bathroom and private balcony of Cabin 7214 on Deck 7 of the same fictional vessel. WP-02 supplies a provisional envelope/plan; entry circulation, net-area/partition conventions and cross-view geometry require correction before spatial implementation.
 - **Geometry/source:** owner-approved coherent floor plan, dimensions, doors, circulation, materials and spatial source scene (or matched panoramic positions with explicit spatial map). Existing four vector views are insufficient.
 - **Camera/light/motion:** human-scale approved traversal/hotspots and accessible alternative views; consistent exterior/balcony ocean light, continuous transitions between physically connected spaces. Detailed control/storyboard reference missing.
 - **Resolution/optimization:** source masters and preview frames ≥2048 px; propose measured web texture/LOD/panorama budgets against the approved runtime and 320/390 px UI before production export. No unsupported universal budget is claimed.

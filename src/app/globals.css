@@ -405,3 +405,29 @@ html[data-intro="playing"]:has(.welcome-world) .cinematic-backdrop { z-index: 99
 .companion-ground { position: fixed; pointer-events: none; z-index: 39; inset: auto 0 0; height: 18px; background: linear-gradient(#cad8d21a, #112c35 22%, #071d26); border-top: 1px solid #dce7df15; }
 @media (max-width: 639px) { [data-migo-stage]::after { height: 3px; } }
 .companion-ground[data-surface="sand"] { background: linear-gradient(#e9d4a242, #776b52 24%, #263535); }
+
+/* WP-01 review: editorial controls stay left of the film's primary subject. */
+.hero-proof { display:flex; flex-wrap:wrap; gap:8px 20px; max-width:36rem; margin-top:28px; padding-top:16px; border-top:1px solid #ffffff26; color:#e2e8e2; font-size:11px; line-height:1.7; letter-spacing:.025em; }
+.hero-proof li::before { content:""; display:inline-block; width:4px; height:4px; margin-right:8px; margin-bottom:2px; border-radius:50%; background:#e8c895; }
+.golden-window { min-height:max(100dvh,900px); }
+.golden-editorial { position:absolute; top:0; left:0; display:flex; align-items:center; width:46%; min-height:max(100dvh,900px); padding:112px 0 120px clamp(24px,5.55vw,80px); }
+.golden-copy { max-width:480px; }
+.golden-disclosure { left:clamp(24px,5.55vw,80px); width:calc(46% - clamp(24px,5.55vw,80px)); max-width:480px; }
+.cinematic-subject-safe { position:absolute; pointer-events:none; top:22dvh; right:0; width:52%; height:53dvh; }
+@media (max-width:1023px), (max-aspect-ratio:1/1) {
+  .golden-window { min-height:100dvh; }
+  .golden-editorial { position:relative; width:100%; min-height:0; padding:48px; background:#081e27; }
+  .golden-copy { max-width:42rem; }
+  .golden-editorial > div { padding-right:144px; }
+  .golden-disclosure { left:24px; width:calc(100% - 48px); max-width:none; }
+  .cinematic-subject-safe { inset:20dvh 5% auto; width:auto; height:50dvh; }
+  .cinematic-poster,.cinematic-film { object-position:72% center; }
+}
+@media (min-width:720px) and (max-width:1023px) {
+  .golden-disclosure { width:calc(100% - 192px); }
+}
+@media (max-width:639px) {
+  .hero-proof { display:grid; gap:6px; font-size:11px; }
+  .golden-editorial { padding:40px 24px; }
+  .golden-editorial > div { padding-right:0; }
+}

@@ -19,7 +19,8 @@ import { migo } from "@/components/migo/bus";
  * view (e.g. the Golden Hour section) push temporary claims on top. The top
  * claim is written to <html data-scene>, and the registered CSS custom
  * properties in globals.css interpolate every color — sky, sea, UI surfaces
- * and Migo's lighting — so the whole world relights as one.
+ * and Migo's lighting on vector routes. The homepage film renderer consumes the
+ * same selection; physical relighting depends on the matched production media.
  */
 interface SceneCtx {
   scene: SceneId;
@@ -140,8 +141,16 @@ export function useSceneWhileVisible(
         window.innerHeight * Math.min(threshold / 2, 0.4),
       );
       io = new IntersectionObserver(
-        ([entry]) =>
-          entry.isIntersecting ? claim(id, scene, el) : release(id),
+        (entries) => {
+          // Several crossings for the same target may be queued in one callback.
+          const latest = entries.filter((entry) => entry.target === el).reduce<IntersectionObserverEntry | undefined>(
+            (last, entry) => !last || entry.time >= last.time ? entry : last,
+            undefined,
+          );
+          if (!latest) return;
+          if (latest.isIntersecting) claim(id, scene, el);
+          else release(id);
+        },
         { rootMargin: `-${inset}px 0px -${inset}px 0px`, threshold: 0 },
       );
       io.observe(el);

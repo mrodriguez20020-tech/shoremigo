@@ -160,9 +160,17 @@ test("chat hop returns and an interrupted landing produces no duplicate sound", 
 }) => {
   await returning(page);
   const stage = page.locator("[data-migo-stage]");
+  await expect(stage).toHaveAttribute("data-placement-ready", "true");
+  await page.evaluate(() => {
+    const stage = document.querySelector("[data-migo-stage]")!;
+    const history: string[] = [];
+    (window as unknown as { hopHistory: string[] }).hopHistory = history;
+    new MutationObserver(() => history.push(`${stage.getAttribute("data-mode")}:${stage.getAttribute("data-hopping")}`))
+      .observe(stage, { attributes: true, attributeFilter: ["data-hopping", "data-mode"] });
+  });
   await page.getByRole("button", { name: "Ask Migo", exact: true }).click();
   await expect(stage).toHaveAttribute("data-mode", "attend");
-  await expect(stage).toHaveAttribute("data-hopping", "true");
+  await expect.poll(() => page.evaluate(() => (window as unknown as { hopHistory: string[] }).hopHistory)).toContain("attend:true");
   await page
     .getByRole("button", { name: "Close concierge", exact: true })
     .click();
@@ -201,7 +209,6 @@ test("rapid scrolling settles on the right scene and keeps the same vessel asset
     await page.waitForTimeout(45);
   }
   await expect(page.locator("html")).toHaveAttribute("data-scene", "sunset");
-  await page.waitForTimeout(820);
   expect(
     await page
       .locator("html")
@@ -227,8 +234,7 @@ for (const width of [820, 390, 320]) {
         ),
       ).toBe(true);
       await page.locator(".hero-actions").scrollIntoViewIfNeeded();
-      await page.waitForTimeout(600);
-      const clear = await page.evaluate(() => {
+      await expect.poll(() => page.evaluate(() => {
         const a = document
           .querySelector("[data-migo-stage]")!
           .getBoundingClientRect();
@@ -245,8 +251,7 @@ for (const width of [820, 390, 320]) {
             a.top >= b.bottom
           );
         });
-      });
-      expect(clear).toBe(true);
+      })).toBe(true);
       const launcher = page.getByRole("button", {
         name: "Open Migo, your AI concierge",
       });
@@ -301,16 +306,16 @@ test("desktop keyboard and drag release leave Migo clear of marked controls", as
   const launcher = page.getByRole("button", {
     name: "Open Migo, your AI concierge",
   });
-  // Wait for client placement; the server's initial x=24 is not the interactive starting point.
-  await expect.poll(async () => (await launcher.boundingBox())!.x).toBeGreaterThan(1000);
+  await expect(page.locator("[data-migo-stage]")).toHaveAttribute("data-placement-ready", "true");
   await launcher.focus();
   // Stop autonomous travel with a real keyboard action, then wait for the move to settle.
   await page.keyboard.press("ArrowRight");
-  await expect.poll(async () => {
-    const first = (await launcher.boundingBox())!.x;
-    await page.waitForTimeout(120);
-    return Math.abs(first - (await launcher.boundingBox())!.x);
-  }).toBeLessThan(0.1);
+  await expect.poll(() => launcher.evaluate((el) => new Promise<number>((resolve) => {
+    requestAnimationFrame(() => {
+      const first = el.getBoundingClientRect().x;
+      requestAnimationFrame(() => resolve(Math.abs(first - el.getBoundingClientRect().x)));
+    });
+  }))).toBeLessThan(0.1);
   const before = await launcher.boundingBox();
   await page.keyboard.press("ArrowLeft");
   await expect
