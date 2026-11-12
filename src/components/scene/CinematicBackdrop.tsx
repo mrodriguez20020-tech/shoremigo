@@ -181,6 +181,8 @@ export function CinematicBackdrop() {
     let cancelled = false;
     let activating = false;
     let settle: ReturnType<typeof setTimeout> | undefined;
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
+    let retries = 0;
     let abortSeek: (() => void) | undefined;
     let abortFrame: (() => void) | undefined;
     const duration = variant.frames / variant.fps;
@@ -239,9 +241,14 @@ export function CinematicBackdrop() {
         }
         if (cancelled) return;
         if (!aligned) {
-          // Keep the outgoing scene; never dissolve two unaligned ocean phases.
+          // Keep the outgoing scene; never dissolve two unaligned ocean phases. Slow decoders get a
+          // bounded number of fresh attempts (WP-01 review R1) instead of staying blocked indefinitely.
           target.pause();
           setState("alignment-blocked");
+          if (retries < 4) {
+            retries++;
+            retryTimer = setTimeout(() => { activating = false; void show(); }, 700 * retries);
+          }
           return;
         }
         active.current = desired;
@@ -274,6 +281,7 @@ export function CinematicBackdrop() {
       abortFrame?.();
       target.playbackRate = 1;
       if (settle) clearTimeout(settle);
+      if (retryTimer) clearTimeout(retryTimer);
       target.removeEventListener("loadeddata", show);
       target.removeEventListener("canplay", show);
       // A pending play promise must not win after a scene reversal.
