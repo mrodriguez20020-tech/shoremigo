@@ -1,0 +1,73 @@
+.taste-page { --ink:#f5f0e6; --ink-soft:#c4cec7; --accent:#e5c59a; --accent-ink:#132d2c; color:var(--ink); background:#0a252a; padding-top:88px; }
+.taste-page h1,.taste-page h2,.taste-page h3 { font-family:var(--font-display),Georgia,serif; font-weight:400; }
+.taste-page em { font-weight:400; color:var(--accent); }
+.culinary-kicker { font-size:10px; text-transform:uppercase; letter-spacing:.18em; font-weight:700; line-height:1.8; color:var(--accent); }
+.culinary-hero { max-width:1440px; margin:auto; padding:64px 48px 56px; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
+.culinary-hero h1 { font-size:clamp(3.4rem,5.7vw,6.2rem); line-height:1.04; letter-spacing:-.045em; margin:24px 0; }
+.culinary-hero-copy>p:not(.culinary-kicker) { max-width:500px; color:var(--ink-soft); line-height:1.85; font-size:16px; }
+.culinary-hero-actions { display:flex; gap:24px; align-items:center; flex-wrap:wrap; margin:32px 0 24px; }
+.culinary-primary { display:inline-flex; align-items:center; justify-content:center; gap:24px; background:var(--accent); color:var(--accent-ink); border-radius:3px; padding:16px 20px; font-size:13px; font-weight:700; min-height:48px; text-decoration:none; }
+.culinary-text-link { padding:12px 0; border:0; background:none; color:var(--accent); font-size:13px; font-weight:600; text-decoration:underline; text-underline-offset:6px; }
+.culinary-hero-copy .culinary-hero-note { font-size:11px!important; line-height:1.7; max-width:430px; opacity:.8; }
+.culinary-hero-feature { min-width:0; }
+.culinary-hero-image { display:block; width:100%; position:relative; aspect-ratio:4/4.3; overflow:hidden; border-radius:160px 160px 3px 3px; background:#e1c8a6; }
+.culinary-feature-open { position:absolute; bottom:22px; left:22px; right:22px; background:#f8f2e5ee; color:#19332e; padding:16px 20px; display:flex; justify-content:space-between; font-family:var(--font-display),Georgia,serif; font-size:23px; }
+.culinary-hero-feature figcaption { display:flex; justify-content:space-between; gap:16px; margin-top:15px; font-size:9px; color:#becac4; line-height:1.7; }
+.culinary-section-nav { position:sticky; top:80px; z-index:25; background:#0a252af5; backdrop-filter:blur(12px); display:flex; gap:34px; padding:19px max(24px,calc((100vw - 1344px)/2)); border-top:1px solid #ffffff1c; border-bottom:1px solid #ffffff1c; overflow:auto; scrollbar-width:thin; }
+.culinary-section-nav a { white-space:nowrap; font-size:11px; letter-spacing:.04em; padding:6px 0; min-height:32px; }
+.culinary-section { padding:88px max(24px,calc((100vw - 1344px)/2)); scroll-margin-top:150px; }
+.culinary-light { background:#f3efe5; --ink:#173730; --ink-soft:#4b6259; --accent:#286657; --accent-ink:#fff9ed; color:var(--ink); }
+.culinary-section-heading { display:flex; justify-content:space-between; align-items:end; gap:60px; margin-bottom:36px; }
+.culinary-section h2 { font-size:clamp(2.6rem,4.1vw,4.5rem); line-height:1.1; letter-spacing:-.035em; margin-top:14px; }
+.culinary-section-heading>p { max-width:390px; font-size:14px; line-height:1.85; color:var(--ink-soft); }
+.culinary-filters { display:flex; gap:8px; overflow:auto; margin:0 0 30px; padding-bottom:8px; }
+.culinary-filters button { flex-shrink:0; padding:12px 16px; border:1px solid #17373038; border-radius:2px; font-size:11px; }
+.culinary-filters button[aria-pressed=true] { background:#173730; color:#f3efe5; border-color:#173730; }
+.culinary-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:40px 28px; }
+.culinary-card { min-width:0; border-bottom:1px solid #8b9c8a55; }
+.culinary-card>.culinary-trigger { display:block; width:100%; height:100%; text-align:left; }
+.culinary-card-media { aspect-ratio:4/3; overflow:hidden; position:relative; border-radius:4px; }
+.culinary-card-media img { transition:transform .35s ease; }
+.culinary-card button:hover img { transform:scale(1.035); }
+.culinary-expand { position:absolute; top:12px; right:12px; border-radius:50%; background:#f3efe5; color:#173730; width:34px; height:34px; display:grid; place-items:center; }
+.culinary-card-copy { padding:22px 0; }
+.culinary-card-title { display:flex; gap:12px; justify-content:space-between; align-items:baseline; margin:8px 0 12px; }
+.culinary-card-title h3 { font-size:30px; line-height:1.15; }
+.culinary-card-title>span { font-size:10px; opacity:.45; }
+.culinary-card-copy>p:not(.culinary-kicker) { font-size:13px; line-height:1.85; color:var(--ink-soft); }
+.culinary-card-copy .culinary-card-price { color:var(--accent)!important; font-weight:700; margin-top:12px; }
+.culinary-card-price span { font-size:10px; font-weight:400; }
+.culinary-card-copy .culinary-alcohol { font-size:10px!important; font-weight:700; margin-top:10px; }
+.culinary-card-link { display:flex; justify-content:space-between; margin-top:20px; padding-top:14px; border-top:1px solid #8b9c8a33; font-size:11px; color:var(--accent); font-weight:700; }
+.culinary-card-credit { display:block; margin-top:12px; font-size:9px; opacity:.75; }
+.culinary-restaurant { display:grid; grid-template-columns:.7fr 1.3fr; gap:70px; align-items:start; }
+.culinary-restaurant-story { position:sticky; top:190px; }
+.culinary-restaurant-story>p:not(.culinary-kicker) { font-size:14px; line-height:1.9; color:var(--ink-soft); margin-top:24px; }
+.culinary-restaurant .culinary-menu { background:#ffffff08; border-radius:4px; border-color:#e5c59a44; box-shadow:none; }
+.culinary-tours { display:grid; grid-template-columns:1.4fr .6fr; gap:32px; }
+.culinary-tour-card { background:#fffaf1; overflow:hidden; border:1px solid #17373020; border-radius:4px; }
+.culinary-tour-art { height:270px; position:relative; overflow:hidden; }
+.culinary-tour-art>span { position:absolute; bottom:12px; left:12px; font-size:9px; padding:6px 8px; background:#fff9edee; color:#173730; }
+.culinary-tour-copy { padding:32px; }
+.culinary-tour-copy h3 { font-size:32px; margin:10px 0; }
+.culinary-tour-copy>p { font-size:14px; line-height:1.8; }
+.culinary-tour-copy dl { margin:24px 0; border-top:1px solid #17373020; }
+.culinary-tour-copy dl>div { display:grid; grid-template-columns:100px 1fr; gap:15px; padding:12px 0; border-bottom:1px solid #17373020; font-size:12px; line-height:1.65; }
+.culinary-tour-copy dt { color:var(--ink-soft); }
+.culinary-tour-bottom { display:flex; justify-content:space-between; gap:20px; align-items:center; flex-wrap:wrap; }
+.culinary-tour-bottom>p { font-size:26px; font-family:var(--font-display),Georgia,serif; }
+.culinary-tour-bottom small { font-size:12px; }
+.culinary-pairing { padding:42px 30px; display:flex; flex-direction:column; align-items:start; justify-content:center; background:#e2e5d6; }
+.culinary-pairing>span { font-size:60px; color:#688d72; }
+.culinary-pairing h3 { font-size:38px; line-height:1.15; margin:24px 0; }
+.culinary-pairing p { font-size:13px; line-height:1.85; margin-bottom:16px; }
+.culinary-drinks { background:#153c37; }
+.culinary-credits { padding:40px max(24px,calc((100vw - 1344px)/2)); border-top:1px solid #ffffff20; font-size:11px; line-height:1.9; color:#bdcbc4; scroll-margin-top:150px; }
+.culinary-credits h2 { font-size:22px; color:#f3efe5; margin-bottom:12px; }
+.culinary-credits p { max-width:900px; margin-bottom:16px; }
+.culinary-credits li { margin-bottom:8px; }
+.culinary-credits a { text-decoration:underline; text-underline-offset:3px; }
+@media(max-width:1023px) { .culinary-hero { padding:42px 28px; gap:32px; } .culinary-hero h1 { font-size:54px; } .culinary-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .culinary-restaurant { gap:35px; grid-template-columns:.7fr 1.3fr; } .culinary-section { padding:64px 28px; } .culinary-section-nav { padding-inline:28px; gap:26px; } }
+@media(max-width:639px) { .taste-page { padding-top:80px; } .culinary-hero { display:flex; flex-direction:column; padding:30px 22px 34px; gap:30px; } .culinary-hero h1 { font-size:52px; margin:18px 0; } .culinary-hero-copy>p:not(.culinary-kicker) { font-size:14px; } .culinary-hero-actions { gap:15px; margin-top:24px; } .culinary-hero-feature { width:100%; } .culinary-hero-image { aspect-ratio:4/3; border-radius:80px 80px 3px 3px; } .culinary-hero-feature figcaption { font-size:8px; } .culinary-section-nav { top:72px; gap:22px; padding:12px 22px; } .culinary-section-nav a { min-height:40px; display:flex; align-items:center; } .culinary-section { padding:52px 22px; } .culinary-section h2 { font-size:42px; } .culinary-section-heading { display:block; margin-bottom:28px; } .culinary-section-heading>p { margin-top:20px; font-size:13px; } .culinary-grid { grid-template-columns:1fr; gap:30px; } .culinary-card-copy { padding-top:16px; } .culinary-card-title h3 { font-size:28px; } .culinary-restaurant { display:block; } .culinary-restaurant-story { position:static; margin-bottom:32px; } .culinary-tours { grid-template-columns:1fr; } .culinary-tour-copy { padding:24px; } .culinary-tour-copy h3 { font-size:28px; } .culinary-pairing { padding:28px; } .culinary-credits { padding:32px 22px 100px; } }
+@media(prefers-reduced-motion:reduce) { .culinary-card-media img { transition:none; } .culinary-card button:hover img { transform:none; } }
+.taste-page .culinary-text-link { display:inline-flex; align-items:center; gap:12px; }

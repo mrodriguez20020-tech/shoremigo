@@ -1,0 +1,1473 @@
+{
+  "identities": {
+    "specId": "sha256:e410a0e832c1bec50b38c30f0a0a01dd09f23d4c0185d649636efed7b698d79f",
+    "generatorId": "sha256:1faa38d6a8bcee99f8cdf4da1cbd9135003b3529c2450330223ba1d22b6b58ab",
+    "massingModelId": "sha256:fcdaaf8acd903bc70a3c6e76f2ace85c9a21b8ed2f1150e248abd6a62e58a1b8",
+    "cameraId": "sha256:d3065cd505224c9a4a25744e29b9f9c8bcf01707849a4c53ab0e281dd0c859d5"
+  },
+  "glbSha256": "sha256:44bb89ee06cf47fed19ce51420ce99c67063c59273c6ffb90b515d88b4be741f",
+  "mesh": {
+    "solids": 45,
+    "triangles": 15392,
+    "invalidIndices": 0,
+    "badNormals": 0,
+    "degenerateTriangles": 0,
+    "nonManifoldEdges": 0,
+    "nonPositiveVolumes": 0,
+    "eulerCharacteristicEach": 2,
+    "details": [
+      {
+        "name": "hull",
+        "triangles": 3100,
+        "volumeM3": 25434.416086439884,
+        "minTriangleAreaM2": 0.008048244510980601
+      },
+      {
+        "name": "terraceT1",
+        "triangles": 56,
+        "volumeM3": 5.999901532663898,
+        "minTriangleAreaM2": 0.025147932887030593
+      },
+      {
+        "name": "bulwarkT1P",
+        "triangles": 88,
+        "volumeM3": 1.6851118200160518,
+        "minTriangleAreaM2": 0.0037500047683352022
+      },
+      {
+        "name": "bulwarkT1S",
+        "triangles": 88,
+        "volumeM3": 1.6851118200160329,
+        "minTriangleAreaM2": 0.0037500047683352022
+      },
+      {
+        "name": "bulwarkT1Transom",
+        "triangles": 16,
+        "volumeM3": 2.7979653749286784,
+        "minTriangleAreaM2": 0.07558421360105258
+      },
+      {
+        "name": "deck4Enclosure",
+        "triangles": 744,
+        "volumeM3": 746.4178406047973,
+        "minTriangleAreaM2": 0.024999618530273438
+      },
+      {
+        "name": "deck5",
+        "triangles": 940,
+        "volumeM3": 6939.939478271849,
+        "minTriangleAreaM2": 0.17800406646711053
+      },
+      {
+        "name": "terraceT2",
+        "triangles": 56,
+        "volumeM3": 27.42434393131589,
+        "minTriangleAreaM2": 0.037695630474511355
+      },
+      {
+        "name": "deck6",
+        "triangles": 908,
+        "volumeM3": 6907.038375367104,
+        "minTriangleAreaM2": 0.23808894685602205
+      },
+      {
+        "name": "terraceT3",
+        "triangles": 80,
+        "volumeM3": 42.77597347935656,
+        "minTriangleAreaM2": 0.037608823482258566
+      },
+      {
+        "name": "deck7",
+        "triangles": 876,
+        "volumeM3": 6395.6217765299725,
+        "minTriangleAreaM2": 0.23760207938039393
+      },
+      {
+        "name": "terraceT4",
+        "triangles": 104,
+        "volumeM3": 58.056252985309435,
+        "minTriangleAreaM2": 0.037524361704206664
+      },
+      {
+        "name": "deck8",
+        "triangles": 788,
+        "volumeM3": 5345.782219686123,
+        "minTriangleAreaM2": 0.23750090599060059
+      },
+      {
+        "name": "terraceD8",
+        "triangles": 104,
+        "volumeM3": 55.31380208969131,
+        "minTriangleAreaM2": 0.03749990463256836
+      },
+      {
+        "name": "sunDeck9",
+        "triangles": 312,
+        "volumeM3": 377.55114497604944,
+        "minTriangleAreaM2": 0.2999992370605469
+      },
+      {
+        "name": "windscreen9P",
+        "triangles": 312,
+        "volumeM3": 5.47203774263653,
+        "minTriangleAreaM2": 0.017999851226704777
+      },
+      {
+        "name": "windscreen9S",
+        "triangles": 312,
+        "volumeM3": 5.47203774263653,
+        "minTriangleAreaM2": 0.017999851226704777
+      },
+      {
+        "name": "windscreen9Aft",
+        "triangles": 16,
+        "volumeM3": 1.1865878796543257,
+        "minTriangleAreaM2": 0.03600084686331684
+      },
+      {
+        "name": "windscreen9Fwd",
+        "triangles": 16,
+        "volumeM3": 1.1130531710283929,
+        "minTriangleAreaM2": 0.03599855804350227
+      },
+      {
+        "name": "glazing5P",
+        "triangles": 472,
+        "volumeM3": 5.219962835312496,
+        "minTriangleAreaM2": 0.022499799728393555
+      },
+      {
+        "name": "glazing5S",
+        "triangles": 472,
+        "volumeM3": 5.21996283531189,
+        "minTriangleAreaM2": 0.022499799728393555
+      },
+      {
+        "name": "glazing6P",
+        "triangles": 872,
+        "volumeM3": 9.720048666000366,
+        "minTriangleAreaM2": 0.022499799728393555
+      },
+      {
+        "name": "glazing6S",
+        "triangles": 872,
+        "volumeM3": 9.720048666000366,
+        "minTriangleAreaM2": 0.022499799728393555
+      },
+      {
+        "name": "glazing7P",
+        "triangles": 840,
+        "volumeM3": 9.36004900932312,
+        "minTriangleAreaM2": 0.022499799728393555
+      },
+      {
+        "name": "glazing7S",
+        "triangles": 840,
+        "volumeM3": 9.36004900932312,
+        "minTriangleAreaM2": 0.022499799728393555
+      },
+      {
+        "name": "glazing8P",
+        "triangles": 296,
+        "volumeM3": 3.2400169372558594,
+        "minTriangleAreaM2": 0.022499799728393555
+      },
+      {
+        "name": "glazing8S",
+        "triangles": 296,
+        "volumeM3": 3.2400169372558594,
+        "minTriangleAreaM2": 0.022499799728393555
+      },
+      {
+        "name": "glazingLoungeP",
+        "triangles": 120,
+        "volumeM3": 0.7061175098147411,
+        "minTriangleAreaM2": 0.007139933929465769
+      },
+      {
+        "name": "glazingLoungeS",
+        "triangles": 120,
+        "volumeM3": 0.7061175098148548,
+        "minTriangleAreaM2": 0.007139933929465769
+      },
+      {
+        "name": "glazingLoungeAft",
+        "triangles": 16,
+        "volumeM3": 3.305058574381898,
+        "minTriangleAreaM2": 0.08099927330022183
+      },
+      {
+        "name": "lifeboat0P",
+        "triangles": 16,
+        "volumeM3": 45.47200131988359,
+        "minTriangleAreaM2": 1.1600001239776248
+      },
+      {
+        "name": "lifeboat0S",
+        "triangles": 16,
+        "volumeM3": 45.47200131988344,
+        "minTriangleAreaM2": 1.1600001239776248
+      },
+      {
+        "name": "lifeboat1P",
+        "triangles": 16,
+        "volumeM3": 45.472001319883624,
+        "minTriangleAreaM2": 1.1600001239776248
+      },
+      {
+        "name": "lifeboat1S",
+        "triangles": 16,
+        "volumeM3": 45.47200131988344,
+        "minTriangleAreaM2": 1.1600001239776248
+      },
+      {
+        "name": "funnelCasingBase",
+        "triangles": 352,
+        "volumeM3": 1058.8504428863525,
+        "minTriangleAreaM2": 0.025000572204589844
+      },
+      {
+        "name": "funnel",
+        "triangles": 284,
+        "volumeM3": 920.4023475115746,
+        "minTriangleAreaM2": 0.08660287288272962
+      },
+      {
+        "name": "exhaust0",
+        "triangles": 16,
+        "volumeM3": 3.528003481865653,
+        "minTriangleAreaM2": 0.7200004863739196
+      },
+      {
+        "name": "exhaust1",
+        "triangles": 16,
+        "volumeM3": 3.5279922666521393,
+        "minTriangleAreaM2": 0.7199981975554692
+      },
+      {
+        "name": "exhaust2",
+        "triangles": 16,
+        "volumeM3": 3.5280034818655017,
+        "minTriangleAreaM2": 0.7200004863739196
+      },
+      {
+        "name": "exhaust3",
+        "triangles": 16,
+        "volumeM3": 3.528003481865653,
+        "minTriangleAreaM2": 0.7200004863739196
+      },
+      {
+        "name": "radomeMastHouse",
+        "triangles": 16,
+        "volumeM3": 751.9998168945312,
+        "minTriangleAreaM2": 11.749992370605469
+      },
+      {
+        "name": "radome0",
+        "triangles": 224,
+        "volumeM3": 26.93251562899877,
+        "minTriangleAreaM2": 0.10321598866618382
+      },
+      {
+        "name": "radome1",
+        "triangles": 224,
+        "volumeM3": 16.083364380168575,
+        "minTriangleAreaM2": 0.07319484608589223
+      },
+      {
+        "name": "mast",
+        "triangles": 16,
+        "volumeM3": 8.19203088378769,
+        "minTriangleAreaM2": 0.32000122547151477
+      },
+      {
+        "name": "mastYard",
+        "triangles": 16,
+        "volumeM3": 0.6000083923572674,
+        "minTriangleAreaM2": 0.060000839235726744
+      }
+    ]
+  },
+  "faces": {
+    "count": 15392,
+    "maxGLBDeviationM": 3.661964825596442e-06,
+    "sha256": "sha256:d60bdafc67a93c70a31c5398093abc3a590dea896a90afd43ba6df2c225fb1b7"
+  },
+  "capacity": {
+    "count": 104,
+    "guests": 208,
+    "perDeck": {
+      "4": 28,
+      "5": 16,
+      "6": 30,
+      "7": 30
+    },
+    "samplingM": 0.01,
+    "minimumMarginM": 0.009845085144043253,
+    "variants": [
+      {
+        "num": 7305,
+        "deck": 7,
+        "balconyDepth": 1.86,
+        "clearBalconyM2": 7.92,
+        "marginM": 0.009845085144043253,
+        "availableM": 9.289845085144043,
+        "atX": 116.0
+      },
+      {
+        "num": 7306,
+        "deck": 7,
+        "balconyDepth": 1.86,
+        "clearBalconyM2": 7.92,
+        "marginM": 0.009845085144043253,
+        "availableM": 9.289845085144043,
+        "atX": 116.0
+      }
+    ],
+    "cabin7214": {
+      "num": 7214,
+      "deck": 7,
+      "balconyDepth": 2.1,
+      "clearBalconyM2": 9.0,
+      "marginM": 0.2799998092651368,
+      "availableM": 9.799999809265136,
+      "atX": 97.6
+    },
+    "slots": [
+      {
+        "num": 4101,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9423785018920885,
+        "availableM": 10.262378501892089,
+        "atX": 23.0
+      },
+      {
+        "num": 4102,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9423785018920885,
+        "availableM": 10.262378501892089,
+        "atX": 23.0
+      },
+      {
+        "num": 4103,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 27.6
+      },
+      {
+        "num": 4104,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 27.6
+      },
+      {
+        "num": 4105,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 32.2
+      },
+      {
+        "num": 4106,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 32.2
+      },
+      {
+        "num": 4107,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 36.8
+      },
+      {
+        "num": 4108,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 36.8
+      },
+      {
+        "num": 4109,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 55.2
+      },
+      {
+        "num": 4110,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 55.2
+      },
+      {
+        "num": 4111,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 59.8
+      },
+      {
+        "num": 4112,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 59.8
+      },
+      {
+        "num": 4201,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 64.4
+      },
+      {
+        "num": 4202,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 64.4
+      },
+      {
+        "num": 4203,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 69.0
+      },
+      {
+        "num": 4204,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 69.0
+      },
+      {
+        "num": 4205,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 73.6
+      },
+      {
+        "num": 4206,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 73.6
+      },
+      {
+        "num": 4207,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 78.2
+      },
+      {
+        "num": 4208,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 78.2
+      },
+      {
+        "num": 4209,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 96.6
+      },
+      {
+        "num": 4210,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 96.6
+      },
+      {
+        "num": 4301,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 101.2
+      },
+      {
+        "num": 4302,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.9799999999999986,
+        "availableM": 10.299999999999999,
+        "atX": 101.2
+      },
+      {
+        "num": 4303,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.879593464621049,
+        "availableM": 10.19959346462105,
+        "atX": 110.4
+      },
+      {
+        "num": 4304,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.879593464621049,
+        "availableM": 10.19959346462105,
+        "atX": 110.4
+      },
+      {
+        "num": 4305,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.3707474799620396,
+        "availableM": 9.69074747996204,
+        "atX": 115.0
+      },
+      {
+        "num": 4306,
+        "deck": 4,
+        "balconyDepth": 0,
+        "clearBalconyM2": 0,
+        "marginM": 2.3707474799620396,
+        "availableM": 9.69074747996204,
+        "atX": 115.0
+      },
+      {
+        "num": 5201,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.08,
+        "availableM": 10.6,
+        "atX": 67.0
+      },
+      {
+        "num": 5202,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.08,
+        "availableM": 10.6,
+        "atX": 67.0
+      },
+      {
+        "num": 5203,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.08,
+        "availableM": 10.6,
+        "atX": 71.6
+      },
+      {
+        "num": 5204,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.08,
+        "availableM": 10.6,
+        "atX": 71.6
+      },
+      {
+        "num": 5205,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.08,
+        "availableM": 10.6,
+        "atX": 76.2
+      },
+      {
+        "num": 5206,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.08,
+        "availableM": 10.6,
+        "atX": 76.2
+      },
+      {
+        "num": 5207,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.08,
+        "availableM": 10.6,
+        "atX": 80.8
+      },
+      {
+        "num": 5208,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.08,
+        "availableM": 10.6,
+        "atX": 80.8
+      },
+      {
+        "num": 5209,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.08,
+        "availableM": 10.6,
+        "atX": 94.6
+      },
+      {
+        "num": 5210,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.08,
+        "availableM": 10.6,
+        "atX": 94.6
+      },
+      {
+        "num": 5211,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.08,
+        "availableM": 10.6,
+        "atX": 99.2
+      },
+      {
+        "num": 5212,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.08,
+        "availableM": 10.6,
+        "atX": 99.2
+      },
+      {
+        "num": 5301,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.0726521301269525,
+        "availableM": 10.592652130126952,
+        "atX": 108.4
+      },
+      {
+        "num": 5302,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 1.0726521301269525,
+        "availableM": 10.592652130126952,
+        "atX": 108.4
+      },
+      {
+        "num": 5303,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.796625213623047,
+        "availableM": 10.316625213623047,
+        "atX": 113.0
+      },
+      {
+        "num": 5304,
+        "deck": 5,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.796625213623047,
+        "availableM": 10.316625213623047,
+        "atX": 113.0
+      },
+      {
+        "num": 6101,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.44289405822753913,
+        "availableM": 9.962894058227539,
+        "atX": 18.0
+      },
+      {
+        "num": 6102,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.44289405822753913,
+        "availableM": 9.962894058227539,
+        "atX": 18.0
+      },
+      {
+        "num": 6103,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6355957794189457,
+        "availableM": 10.155595779418945,
+        "atX": 22.6
+      },
+      {
+        "num": 6104,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6355957794189457,
+        "availableM": 10.155595779418945,
+        "atX": 22.6
+      },
+      {
+        "num": 6105,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 27.2
+      },
+      {
+        "num": 6106,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 27.2
+      },
+      {
+        "num": 6107,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 31.8
+      },
+      {
+        "num": 6108,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 31.8
+      },
+      {
+        "num": 6109,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 36.4
+      },
+      {
+        "num": 6110,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 36.4
+      },
+      {
+        "num": 6111,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 54.8
+      },
+      {
+        "num": 6112,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 54.8
+      },
+      {
+        "num": 6113,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 59.4
+      },
+      {
+        "num": 6114,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 59.4
+      },
+      {
+        "num": 6201,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 64.0
+      },
+      {
+        "num": 6202,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 64.0
+      },
+      {
+        "num": 6203,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 68.6
+      },
+      {
+        "num": 6204,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 68.6
+      },
+      {
+        "num": 6205,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 73.2
+      },
+      {
+        "num": 6206,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 73.2
+      },
+      {
+        "num": 6207,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 77.8
+      },
+      {
+        "num": 6208,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 77.8
+      },
+      {
+        "num": 6209,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 96.2
+      },
+      {
+        "num": 6210,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 96.2
+      },
+      {
+        "num": 6301,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 100.8
+      },
+      {
+        "num": 6302,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6800003814697266,
+        "availableM": 10.200000381469726,
+        "atX": 100.8
+      },
+      {
+        "num": 6303,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6297474670410157,
+        "availableM": 10.149747467041015,
+        "atX": 110.0
+      },
+      {
+        "num": 6304,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.6297474670410157,
+        "availableM": 10.149747467041015,
+        "atX": 110.0
+      },
+      {
+        "num": 6305,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2962448883056652,
+        "availableM": 9.816244888305665,
+        "atX": 114.6
+      },
+      {
+        "num": 6306,
+        "deck": 6,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2962448883056652,
+        "availableM": 9.816244888305665,
+        "atX": 114.6
+      },
+      {
+        "num": 7101,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2649069595336915,
+        "availableM": 9.784906959533691,
+        "atX": 24.0
+      },
+      {
+        "num": 7102,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2649069595336915,
+        "availableM": 9.784906959533691,
+        "atX": 24.0
+      },
+      {
+        "num": 7103,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 28.6
+      },
+      {
+        "num": 7104,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 28.6
+      },
+      {
+        "num": 7105,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 33.2
+      },
+      {
+        "num": 7106,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 33.2
+      },
+      {
+        "num": 7107,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 37.8
+      },
+      {
+        "num": 7108,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 37.8
+      },
+      {
+        "num": 7109,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 56.2
+      },
+      {
+        "num": 7110,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 56.2
+      },
+      {
+        "num": 7201,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 60.8
+      },
+      {
+        "num": 7202,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 60.8
+      },
+      {
+        "num": 7203,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 65.4
+      },
+      {
+        "num": 7204,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 65.4
+      },
+      {
+        "num": 7205,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 70.0
+      },
+      {
+        "num": 7206,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 70.0
+      },
+      {
+        "num": 7207,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 74.6
+      },
+      {
+        "num": 7208,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 74.6
+      },
+      {
+        "num": 7209,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 79.2
+      },
+      {
+        "num": 7210,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 79.2
+      },
+      {
+        "num": 7211,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 93.0
+      },
+      {
+        "num": 7212,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 93.0
+      },
+      {
+        "num": 7213,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 97.6
+      },
+      {
+        "num": 7214,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 97.6
+      },
+      {
+        "num": 7301,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 102.2
+      },
+      {
+        "num": 7302,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.2799998092651368,
+        "availableM": 9.799999809265136,
+        "atX": 102.2
+      },
+      {
+        "num": 7303,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.15942199707031257,
+        "availableM": 9.679421997070312,
+        "atX": 111.4
+      },
+      {
+        "num": 7304,
+        "deck": 7,
+        "balconyDepth": 2.1,
+        "clearBalconyM2": 9.0,
+        "marginM": 0.15942199707031257,
+        "availableM": 9.679421997070312,
+        "atX": 111.4
+      },
+      {
+        "num": 7305,
+        "deck": 7,
+        "balconyDepth": 1.86,
+        "clearBalconyM2": 7.92,
+        "marginM": 0.009845085144043253,
+        "availableM": 9.289845085144043,
+        "atX": 116.0
+      },
+      {
+        "num": 7306,
+        "deck": 7,
+        "balconyDepth": 1.86,
+        "clearBalconyM2": 7.92,
+        "marginM": 0.009845085144043253,
+        "availableM": 9.289845085144043,
+        "atX": 116.0
+      }
+    ]
+  },
+  "glazing": [
+    {
+      "name": "glazing5P",
+      "vertices": 238,
+      "minGapM": 0.0049991607666015625,
+      "maxGapM": 0.06500053405761719
+    },
+    {
+      "name": "glazing5S",
+      "vertices": 238,
+      "minGapM": 0.0049991607666015625,
+      "maxGapM": 0.06500053405761719
+    },
+    {
+      "name": "glazing6P",
+      "vertices": 438,
+      "minGapM": 0.0049991607666015625,
+      "maxGapM": 0.06500053405761719
+    },
+    {
+      "name": "glazing6S",
+      "vertices": 438,
+      "minGapM": 0.0049991607666015625,
+      "maxGapM": 0.06500053405761719
+    },
+    {
+      "name": "glazing7P",
+      "vertices": 422,
+      "minGapM": 0.0049991607666015625,
+      "maxGapM": 0.06500053405761719
+    },
+    {
+      "name": "glazing7S",
+      "vertices": 422,
+      "minGapM": 0.0049991607666015625,
+      "maxGapM": 0.06500053405761719
+    },
+    {
+      "name": "glazing8P",
+      "vertices": 150,
+      "minGapM": 0.0049991607666015625,
+      "maxGapM": 0.06500053405761719
+    },
+    {
+      "name": "glazing8S",
+      "vertices": 150,
+      "minGapM": 0.0049991607666015625,
+      "maxGapM": 0.06500053405761719
+    },
+    {
+      "name": "glazingLoungeP",
+      "vertices": 62,
+      "minGapM": 0.005000114440917969,
+      "maxGapM": 0.06517512416394311
+    },
+    {
+      "name": "glazingLoungeS",
+      "vertices": 62,
+      "minGapM": 0.005000114440917969,
+      "maxGapM": 0.06517512416394311
+    },
+    {
+      "name": "glazingLoungeAft",
+      "vertices": 10,
+      "minGapM": 0.005000114440917969,
+      "maxGapM": 0.06499958038330078
+    }
+  ],
+  "cabin7214": {
+    "entryClearM": 0.8999999999999999,
+    "entryAndSwingObstacles": 0,
+    "wardrobeDepthM": 0.7,
+    "wardrobeFrontageM": 1.8,
+    "bathroomPocketM": 0.75,
+    "interiorFloorM2": 32.175000000000004,
+    "partitionsM2": 0.3320000000000003,
+    "netM2": 31.843000000000004,
+    "bathM2": 5.8,
+    "wardrobeM2": 1.2599999999999996,
+    "roomExcludingBathWardrobeM2": 24.783000000000005,
+    "balconyClearM2": 9.0,
+    "routes": [
+      {
+        "id": "entry-to-balcony",
+        "kind": "primary",
+        "verifiedTargetM": 0.8,
+        "bottleneckApproxM": 0.89
+      },
+      {
+        "id": "bathroom",
+        "kind": "secondary",
+        "verifiedTargetM": 0.6,
+        "bottleneckApproxM": 0.75
+      },
+      {
+        "id": "wc",
+        "kind": "secondary",
+        "verifiedTargetM": 0.6,
+        "bottleneckApproxM": 0.75
+      },
+      {
+        "id": "shower-entry",
+        "kind": "secondary",
+        "verifiedTargetM": 0.6,
+        "bottleneckApproxM": 0.75
+      },
+      {
+        "id": "vanity",
+        "kind": "secondary",
+        "verifiedTargetM": 0.6,
+        "bottleneckApproxM": 0.75
+      },
+      {
+        "id": "wardrobe",
+        "kind": "secondary",
+        "verifiedTargetM": 0.6,
+        "bottleneckApproxM": 0.89
+      },
+      {
+        "id": "bed-aft-side",
+        "kind": "secondary",
+        "verifiedTargetM": 0.6,
+        "bottleneckApproxM": 0.61
+      },
+      {
+        "id": "bed-fwd-side",
+        "kind": "secondary",
+        "verifiedTargetM": 0.6,
+        "bottleneckApproxM": 0.89
+      },
+      {
+        "id": "sofa",
+        "kind": "secondary",
+        "verifiedTargetM": 0.6,
+        "bottleneckApproxM": 0.89
+      },
+      {
+        "id": "desk",
+        "kind": "secondary",
+        "verifiedTargetM": 0.6,
+        "bottleneckApproxM": 0.89
+      },
+      {
+        "id": "armchair",
+        "kind": "secondary",
+        "verifiedTargetM": 0.6,
+        "bottleneckApproxM": 0.71
+      },
+      {
+        "id": "balcony-seats",
+        "kind": "secondary",
+        "verifiedTargetM": 0.6,
+        "bottleneckApproxM": 0.89
+      }
+    ],
+    "gridM": 0.01
+  },
+  "lounge": {
+    "x": [
+      9,
+      22.95
+    ],
+    "widthsM": [
+      20.401799034037072,
+      22.32250413894653
+    ],
+    "grossM2": 300.7585081495873,
+    "barM2": 66.70313319325447,
+    "stageM2": 12,
+    "netSeatingM2": 173.78706871288293,
+    "targetSeated": 96,
+    "displacedCabins": 0,
+    "certifiedOccupancy": false
+  },
+  "datums": {
+    "lengthOverallM": 158.0,
+    "mastBaselineZ": 37.5,
+    "DWLZ": 5.4,
+    "airDraftAboveDWL": 32.1,
+    "deckNumbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ]
+  },
+  "remainingFindings": [
+    {
+      "severity": "P3",
+      "file": "design/aurora-tide/generate.mjs:547",
+      "description": "Sheet 06 caption still labels 7305/7306 balcony 1.87 m; spec and actual envelopes correctly use 1.86 m."
+    }
+  ]
+}

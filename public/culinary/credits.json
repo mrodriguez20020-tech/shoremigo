@@ -1,0 +1,113 @@
+[
+  {
+    "id": "doubles",
+    "sourceId": "M-04-doubles",
+    "title": "File:FOOD Doubles 2.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:FOOD_Doubles_2.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3b/FOOD_Doubles_2.jpg",
+    "author": "Grueslayer @Wikipedia",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceWidth": 4320,
+    "sourceHeight": 3240,
+    "originalSha256": "295584306f449f24a1e23eaf09a740e31110561c86e9ce0655c6e3fa230715da",
+    "description": "Doubles. Food court in a mall in Frederick Street, Port of Spain, Trinidad.",
+    "retrieved": "2026-11-12",
+    "changes": "Resized and converted to WebP; responsive crop by CSS. No subject alteration.",
+    "status": "editorial dish-guide photograph; illustrative of a dish, not a tour or sample-menu serving",
+    "derivatives": [
+      {
+        "path": "/culinary/doubles-640.webp",
+        "width": 640,
+        "sha256": "4c7a40e5e58d04b440f1c05097fc4088d08d11d5642eaef58c939782352b2cf2",
+        "bytes": 40690
+      },
+      {
+        "path": "/culinary/doubles-1200.webp",
+        "width": 1200,
+        "sha256": "5cb575df299f9e8ed4e38120a6036cfe7f2af5537cefa3885bcf39919f7829b1",
+        "bytes": 110654
+      },
+      {
+        "path": "/culinary/doubles-2400.webp",
+        "width": 2400,
+        "sha256": "1a41c8ca04710c55ee3a66b865356e549f71ae805672af3742e875c3508619ef",
+        "bytes": 374872
+      }
+    ]
+  },
+  {
+    "id": "jerk",
+    "sourceId": "M-04-jerk",
+    "title": "File:Jerk Chicken Plate.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Jerk_Chicken_Plate.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/Jerk_Chicken_Plate.jpg",
+    "author": "naotakem",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "sourceWidth": 4272,
+    "sourceHeight": 2848,
+    "originalSha256": "d53063c2e77f3d98eafad168c60423ffaa7d0bc2f62a8b3c2ebbc9f5ed2d611b",
+    "description": "Food of the Caribbean",
+    "retrieved": "2026-11-12",
+    "changes": "Resized and converted to WebP; responsive crop by CSS. No subject alteration.",
+    "status": "editorial dish-guide photograph; illustrative of a dish, not a tour or sample-menu serving",
+    "derivatives": [
+      {
+        "path": "/culinary/jerk-640.webp",
+        "width": 640,
+        "sha256": "ee62b99693b419087efe4f730e0c3ab31fd913ba8d330038ae1c2cdfbed23675",
+        "bytes": 28832
+      },
+      {
+        "path": "/culinary/jerk-1200.webp",
+        "width": 1200,
+        "sha256": "5f47c59445e8c39a0454a13f60a443a4a7b6567721de577b131ba636369f8716",
+        "bytes": 60518
+      },
+      {
+        "path": "/culinary/jerk-2400.webp",
+        "width": 2400,
+        "sha256": "c60e3bf307f689e22a08ccc349f031b3c5c9e01e807b39e626eb4c33cb62a8bd",
+        "bytes": 147190
+      }
+    ]
+  },
+  {
+    "id": "cochinita",
+    "sourceId": "M-04-cochinita",
+    "title": "File:Cochinita Pibil Casera, México.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Cochinita_Pibil_Casera,_M%C3%A9xico.jpg",
+    "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Cochinita_Pibil_Casera%2C_M%C3%A9xico.jpg",
+    "author": "Petrvs III",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceWidth": 2448,
+    "sourceHeight": 1928,
+    "originalSha256": "02b719e0006d78822e66957abb45576ac91548d39905b533310c308d9ea072ca",
+    "description": "A sample of the \"cochinita pibil\" dish, this is homemade, cooked in a clay pot and wrapped in banana leaves, the meat is cooked until soften and the ingredients integrate their flavor into it. \nThe main ingredient is \"achiote\" ( seed paste of the same name), some dried chili peppers, lightly fried and ground, onion among other ingredients. \nIt is very popular to feast in informal celebrations, it is a dish with a lot of flavor, it is accompanied with chopped or julienned onions macerated in juice of lemon (optional a little vinegar) where julienne habanero chili is added. \n\nIt is commonly accompanied by the famous tortillas, be it normal corn (white) or criollo corn (blue) made by hand, of course the tortillas must be soft, it can be optionally accompanied like the \"pozole\", with corn toasts to which cream of milk, cheese, salt, and a bit of chili powder, the hard toasts that are erroneously styled in the \"tacos\" of some restaurants in the USA could also be served as an accompaniment with cream, cheese and chili powder, but it is not ideal.",
+    "retrieved": "2026-11-12",
+    "changes": "Resized and converted to WebP; responsive crop by CSS. No subject alteration.",
+    "status": "editorial dish-guide photograph; illustrative of a dish, not a tour or sample-menu serving",
+    "derivatives": [
+      {
+        "path": "/culinary/cochinita-640.webp",
+        "width": 640,
+        "sha256": "f5b801e5d2714bfe238b13e3750e732e1626f262e75475ca8790697dbf3cdc2a",
+        "bytes": 51490
+      },
+      {
+        "path": "/culinary/cochinita-1200.webp",
+        "width": 1200,
+        "sha256": "67159052bf0f4b11fe745d65400b96f39824765d01a3b435c5fc93a7ad92185c",
+        "bytes": 130722
+      },
+      {
+        "path": "/culinary/cochinita-2400.webp",
+        "width": 2400,
+        "sha256": "5b874b42f3dcaa4b3de838979c42b5a1f43e656b2704c16200f28ef0d379866f",
+        "bytes": 367804
+      }
+    ]
+  }
+]

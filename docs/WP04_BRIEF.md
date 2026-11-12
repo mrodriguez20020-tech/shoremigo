@@ -1,6 +1,6 @@
 # WP-04 · Taste & Indulge — next independent implementation package
 
-**Prepared, not implemented.** The owner requested this next package after WP-01 engineering remediation and WP-02 review. Proposed ownership: **Claude implements; Codex reviews**, subject to the owner's dispatch and Claude finishing/handing off active WP-02 corrections. One owner per shared component. Do not start competing work on WP-01 or the ship/cabin. Final vessel assets do not block an honest culinary gallery; they do block representing an invented onboard venue as approved architecture.
+**Owner dispatched implementation on November 12, 2026.** The owner requested this next package after WP-01 engineering remediation and WP-02 review. Ownership: **Codex implements; Claude independently reviews**, under the Accelerated Completion directive. One owner per shared component. Do not start competing work on WP-01 or the ship/cabin. Final vessel assets do not block an honest culinary gallery; they do block representing an invented onboard venue as approved architecture.
 
 ## Branch and entry conditions
 
@@ -25,15 +25,15 @@ For the first reviewed set, specify the exact subjects from existing content: do
 
 ## Ship facts and cross-package boundaries
 
-Owner's provisional Aurora Tide basis: **158 m, nine decks, 104 staterooms, ~208 guests**, Cabin **7214** on Deck 7. Claude owns WP-02; Codex reviews. PR #3 at `414b627` has outstanding geometry/cabin defects, and its GLB is design control, not production quality. Do not create a second vessel or relocate onboard venues independently.
+Owner's provisional Aurora Tide basis: **158 m, nine decks, 104 staterooms, ~208 guests**, Cabin **7214** on Deck 7. Claude owns WP-02; Codex reviews. Codex re-reviewed exact PR #3 head `2938befe284e94d7f43634be70fb8b2bd1867399`: all nine findings resolved; recommend design-control acceptance subject to owner appearance approval, with one nonblocking Sheet 06 caption correction. The GLB is design control, not production quality. Do not create a second vessel or relocate onboard venues independently.
 
-Interior Staterooms, conventional theatre and Kids' splash are removed from the planned migration. Tidekeeper Suite is future-only; boutique entertainment lounge allocation requires spatial validation. Existing `dining.ts` Deck 11 pool / Deck 6 promenade strings await the scoped Ships & Rooms migration to Deck 7 aft / Deck 5 respectively. WP-04 must flag/coordinate those references rather than silently changing protected domain content. Shore food guidance is independent of that unresolved vessel adapter.
+Interior Staterooms, conventional theatre and Kids' splash are removed from the planned migration. Tidekeeper Suite is future-only; the Deck 4 boutique lounge has independently checked design-control allocation; real-world engineering/occupancy is not certified. Existing `dining.ts` Deck 11 pool / Deck 6 promenade strings await the scoped Ships & Rooms migration to Deck 7 aft / Deck 5 respectively. WP-04 must flag/coordinate those references rather than silently changing protected domain content. Shore food guidance is independent of that unresolved vessel adapter.
 
 ## Acceptance and handoff
 
 - Focused tests for expansion lifecycle, keyboard/touch, back/focus restoration, reduced motion, missing/broken image and disclosure; menu tabs and food-booking link regressions. Validate 320×700, 390×844, 820×1180 and 1440×1000 with Migo/control clearance and no overflow.
 - Run unit tests, TypeScript, lint, a production build, browser regressions and isolated HTTP smoke checks. State exactly which external providers/database paths were configured, skipped or mocked. Do not infer live success from UI fixtures.
 - Supply real screenshots and a 20–40 s **actual browser** expansion/menu recording, asset source/rights/hash manifest and measured transfer/CLS/loading. Follow EVIDENCE_POLICY; no new binary evidence in Git source history.
-- Update package ownership/handoff/registry and open one draft PR to integration. Separate engineering acceptance from asset/visual approval. Ask Codex to review the actual head, assets, dialog lifecycle, shared MenuViewer diff and booking regression. Owner approves appearance. Unavailable images/design decisions remain named blockers; a working vector fallback is not photoreal completion.
+- Update package ownership/handoff/registry and open one draft PR to integration. Separate engineering acceptance from asset/visual approval. Ask Claude to independently review the actual head, assets, dialog lifecycle, shared MenuViewer diff and booking regression. Owner approves appearance. Unavailable images/design decisions remain named blockers; a working vector fallback is not photoreal completion.
 
 No WP-04 source implementation is included in the WP-01 remediation PR. This brief is the independent handoff, not a redesign of the product or authorization to merge.

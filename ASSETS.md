@@ -51,3 +51,15 @@ No new motion footage, third-party 3D model, stock ocean film, music or external
 ## WP-01 review remediation asset retirement
 
 The unused harbor stock image was removed from the current public bundle after a source-reference check. Its original Unsplash attribution/license above is retained, and its [immutable pre-remediation copy](https://raw.githubusercontent.com/mrodriguez20020-tech/shoremigo/c64ace134e228403c11ece9e152a8a30faa66350/public/images/ship.webp) remains accessible. Original Migo and approved vessel/environment reference assets are unchanged. Existing review recordings/screenshots are retained; new compact captures are published as review-only GitHub release assets under [the evidence policy](docs/EVIDENCE_POLICY.md), not added repeatedly to Git history. No paid storage is introduced.
+
+## WP-04 culinary guide photographs · 2026-11-12
+
+These are editorial photographs of dishes, not a partner venue, a tour, or a sample-menu serving. Source/master URLs, source hashes, delivery hashes and transformations are in [`public/culinary/credits.json`](public/culinary/credits.json). Original downloaded masters are retained in ignored review work; the publicly licensed source URLs remain the master references. WebP derivatives retain the image license, separate from code MIT.
+
+| ID / derivatives | Author | Source | License | Changes / subject verification |
+|---|---|---|---|---|
+| M-04-doubles · `doubles-{640,1200,2400}.webp` | Grueslayer @Wikipedia | [File:FOOD Doubles 2.jpg](https://commons.wikimedia.org/wiki/File:FOOD_Doubles_2.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) | Resize and WebP conversion; photograph visually checked against source description. |
+| M-04-jerk · `jerk-{640,1200,2400}.webp` | naotakem | [File:Jerk Chicken Plate.jpg](https://commons.wikimedia.org/wiki/File:Jerk_Chicken_Plate.jpg) | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) | Resize and WebP conversion; photograph visually checked against source description. |
+| M-04-cochinita · `cochinita-{640,1200,2400}.webp` | Petrvs III | [File:Cochinita Pibil Casera, México.jpg](https://commons.wikimedia.org/wiki/File:Cochinita_Pibil_Casera,_M%C3%A9xico.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) | Resize and WebP conversion; photograph visually checked against source description. |
+
+Credits and license links are visible below the guide and in the expanded view. No ingredient/allergen assurance is inferred from photographs. The remaining dishes, sample drinks and desserts use the original MIT vector DishArt and are labeled Original illustration; photographs of differently prepared dishes are deliberately not assigned to sample-menu items. Photographs are licensed, not team-created or generated.
