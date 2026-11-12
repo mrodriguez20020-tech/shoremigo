@@ -43,6 +43,7 @@ await page.getByRole("dialog", { name: "Welcome to ShoreMigo" }).waitFor();
 await page.locator('[data-greeting-phase="wave"]').waitFor();
 await screenshot(page, `welcome-desktop`);
 await page.getByRole("dialog").getByRole("button", { name: "Begin exploring", exact: true }).click();
+await page.locator(".welcome-world").waitFor({ state: "detached" });
 await page.locator('[data-migo-stage][data-mode="roam"][data-placement-ready="true"]').waitFor();
 const notNow = page.getByRole("button", { name: "Not now", exact: true });
 if (await notNow.isVisible()) {
@@ -92,6 +93,7 @@ for (const [name, width, height] of [["desktop", 1440, 1000], ["tablet", 820, 11
     await screenshot(p, `preferences-narrow`);
   }
   await p.getByRole("dialog").getByRole("button", { name: "Skip", exact: true }).click();
+  await p.locator(".welcome-world").waitFor({ state: "detached" });
   await p.locator('[data-migo-stage][data-mode="roam"][data-placement-ready="true"]').waitFor();
   const skip = p.getByRole("button", { name: "Not now", exact: true });
   if (await skip.isVisible()) {
