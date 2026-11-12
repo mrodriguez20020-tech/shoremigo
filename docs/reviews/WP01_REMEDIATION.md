@@ -46,3 +46,37 @@ Shared references now use Cabin 7214/nine decks/104 staterooms/~208 guests and C
 The final exact source SHA, repeat results and immutable artifact links are recorded in the following verification addendum after the fixed-build runs. Earlier 31-case runs occurred before N1–N4 remediation and are not evidence for the final revision. Native fixtures are procedural QA patterns; screenshots/recording use the actual public pending manifest. No production film decode, physical mobile, screen-reader or live-provider/database success is inferred.
 
 The intermediate native/placement source `ea170d0` passed 39/39 in three consecutive headed runs and one headless run (156 tests, no retries/skips/flakes; handoff errors 1.6–32.8 ms). A subsequent proactive-tip check found the already-open bubble obstruction, so those are retained as intermediate results rather than claimed as final bubble-remediation coverage. The final repeated suites include that case.
+
+## Final engineering verification · source 79173ba
+
+Exact tested application/tests source: **`79173ba06c73b0743cd19f960e326fcdfd2e5741`**. Subsequent changes affect capture readiness and documentation/evidence only, not application/tests. The capture tool at 9872f1e waits for the welcome overlay to detach before hero screenshots. The production build was fixed throughout the following runs. [Machine-readable results](WP01_VERIFICATION.json).
+
+| Check | Actual result |
+|---|---|
+| Full headed Chromium regression ×3, serial, no retries | **41/41 + 41/41 + 41/41 = 123 passed**; 0 skipped, unexpected or flaky |
+| Final-source focused headless existing-tip cases | **2/2 passed** (820/1440; open tip → resize/scroll) |
+| Native phase measurements in the three final runs | **2.099–41.2 ms**, within one 24 fps frame (41.667 ms); delayed-seek cases **2.099–36.6 ms** with the injected 120 ms setter delay |
+| Unit/service suite | **84 passed, 4 Postgres skipped** without PG_TEST_URL |
+| TypeScript | pass |
+| ESLint | **0 errors, 3 original sprite-img warnings**; alternate generated-dir negative probe ignored correctly |
+| Production build | pass; 23 generated pages |
+| Isolated real HTTP smoke | **17/17**; local file store, PayPal not configured, Gemini offline, operator protected; no live external-provider success claimed |
+| Missing native executables probe | **1 explicitly skipped** selected native case with PATH excluding FFmpeg/ffprobe; not counted as native playback verification |
+| Production media QC | expected **exit 2**, productionMediaReady=false, production film missing |
+| Evidence guard / whitespace / capture-script syntax | pass; historical binary snapshots preserved |
+
+The final three full runs were Linux system Chromium on virtual Xorg :99, with three CPU cores and no GPU. Headed/headless are modes in this OS, not separate physical platforms. Claude's Windows results belong to the earlier c64ace1 revision. The intermediate ea170d0 headless 39/39 result is retained separately; it is not reported as a full headless run of the final tip guard. Current source is ready for Claude's independent re-review, not merged or self-approved.
+
+Actual captures, frame/mask metadata, sizes, SHA-256 and immutable artifact URLs are recorded in [WP01_EVIDENCE.json](WP01_EVIDENCE.json) and the following evidence addendum. The recording uses the public pending manifest, not fixture injection. Performance is still-only viewport emulation, not real-film/physical-device verification.
+
+## Settled capture / immutable evidence
+
+[Review-only artifact release](https://github.com/mrodriguez20020-tech/shoremigo/releases/tag/wp01-review-79173ba06c73) · [27.68-second muted actual browser recording](https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/interim-browser-review.mp4) · [complete archive](https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/wp01-review-evidence.zip) · [hash manifest](https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/evidence-manifest.json). Capture tool **9872f1e1234cc6e77604d84996ffe9449113f2f6** waits for the welcome overlay to detach; application/tests remain **79173ba06c73b0743cd19f960e326fcdfd2e5741**. Early unpublished captures caught the exit fade and were regenerated before publication, rather than described as settled hero evidence.
+
+Key previews: [desktop golden layout](https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-hour-desktop.jpg), [390 px hero/launcher](https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/hero-launcher-mobile.jpg), [mobile golden editorial](https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/golden-editorial-mobile.jpg), [320 px preferences](https://github.com/mrodriguez20020-tech/shoremigo/releases/download/wp01-review-79173ba06c73/preferences-narrow.jpg). Gallery/masks cover all six required viewports. Final both-light/all-language film contact sheets still require actual production assets. The interim still is not a validated production camera/geometry composition.
+
+Final 2.5-second still-only samples: **59.6–60.0 RAF callbacks/s**, p95 intervals **16.7–16.8 ms**, 0 sample long tasks, no overflow or page errors, 0 film requests. Raw non-recent-input shift sums are nonzero: about 0.00015 desktop, 0.00048 tablet, **0.05014 mobile**, **0.04639 narrow**, 0.00003 short desktop and 0.00785 landscape phone. These are short localhost/virtual-display measurements, not full-session Core Web Vitals or production-video/physical-device benchmarks.
+
+Logical payload **4,801,326 bytes**, slightly above the preferred 4 MB to preserve six-viewport states, masks and one actual recording. ZIP **4,680,318 bytes**; direct files and archive are duplicated for review convenience on existing GitHub storage. No binary review evidence added to Git; historical snapshots remain byte-identical. [Full source/size/SHA-256 index](WP01_EVIDENCE.json).
+
+Claude independently advanced WP-02 to 4a3bd65056f4918bb395f9215f3f7ae0cd3ab29c while this package finished. The posted review is of 414b627; the subsequent reconciliation is **not independently verified or approved here**. Its follow-up review and reported two tapered-balcony decision remain next review gates, in addition to production-source resources and owner appearance approval.

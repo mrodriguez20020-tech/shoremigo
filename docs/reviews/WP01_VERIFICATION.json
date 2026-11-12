@@ -1,0 +1,132 @@
+{
+  "source": "79173ba06c73b0743cd19f960e326fcdfd2e5741",
+  "environment": "Managed Linux, system Chromium, virtual Xorg :99. Three full headed runs use one OS. Two focused headless tip cases also passed on the final source; the earlier 39-case headless suite applies to ea170d0 before the tip guard. Claude separately reviewed the previous c64ace1 on Windows; this revision still needs independent re-review.",
+  "note": "Complete suites, serial, no retries. Headed/headless are Linux execution modes, not separate operating systems.",
+  "runs": [
+    {
+      "name": "headed-1",
+      "started": "2026-11-12T05:38:38.523Z",
+      "exitCode": 0,
+      "stats": {
+        "startTime": "2026-11-12T05:38:39.814Z",
+        "duration": 178011.293,
+        "expected": 41,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "name": "headed-2",
+      "started": "2026-11-12T05:41:37.847Z",
+      "exitCode": 0,
+      "stats": {
+        "startTime": "2026-11-12T05:41:38.737Z",
+        "duration": 180862.377,
+        "expected": 41,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "name": "headed-3",
+      "started": "2026-11-12T05:44:39.637Z",
+      "exitCode": 0,
+      "stats": {
+        "startTime": "2026-11-12T05:44:40.529Z",
+        "duration": 180125.804,
+        "expected": 41,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ],
+  "phases": [
+    {
+      "run": "headed-1",
+      "test": "one native film pair plays silently and swaps matched phases on scene changes",
+      "type": "phase-error-ms",
+      "errorMs": 24.2
+    },
+    {
+      "run": "headed-1",
+      "test": "delayed native seeks are rechecked before the sunset dissolve",
+      "type": "delayed-seek-phase-error-ms",
+      "errorMs": 36.599999999999966
+    },
+    {
+      "run": "headed-2",
+      "test": "one native film pair plays silently and swaps matched phases on scene changes",
+      "type": "phase-error-ms",
+      "errorMs": 41.1999999999999
+    },
+    {
+      "run": "headed-2",
+      "test": "delayed native seeks are rechecked before the sunset dissolve",
+      "type": "delayed-seek-phase-error-ms",
+      "errorMs": 29.40000000000009
+    },
+    {
+      "run": "headed-3",
+      "test": "one native film pair plays silently and swaps matched phases on scene changes",
+      "type": "phase-error-ms",
+      "errorMs": 2.9000000000001247
+    },
+    {
+      "run": "headed-3",
+      "test": "delayed native seeks are rechecked before the sunset dissolve",
+      "type": "delayed-seek-phase-error-ms",
+      "errorMs": 2.098999999999851
+    }
+  ],
+  "unit": {
+    "passed": 84,
+    "skipped": 4,
+    "skipReason": "Postgres integration unavailable without PG_TEST_URL"
+  },
+  "typecheck": "passed",
+  "lint": {
+    "errors": 0,
+    "warnings": 3,
+    "reason": "Existing original sprite img elements"
+  },
+  "productionBuild": {
+    "passed": true,
+    "pages": 23
+  },
+  "protectedBoundaryDiff": [],
+  "visualAcceptance": "BLOCKED: no approved production model or matched wide/portrait film. Native test patterns are QA only.",
+  "smoke": {
+    "passed": 17,
+    "total": 17,
+    "store": "isolated SHOREMIGO_DATA_DIR",
+    "paypal": "not_configured",
+    "gemini": "offline",
+    "liveProviderCalls": "none"
+  },
+  "supplementalHeadless": {
+    "source": "79173ba06c73b0743cd19f960e326fcdfd2e5741",
+    "passed": 2,
+    "scope": "Existing proactive tip after scroll/resize"
+  },
+  "missingNativeToolsProbe": {
+    "explicitlySkipped": 1,
+    "playbackVerified": false
+  },
+  "mediaCheck": {
+    "exitCode": 2,
+    "productionMediaReady": false
+  },
+  "intermediateRuns": {
+    "source": "ea170d0ef48d7845768aa11419c277ffa80b4b2c",
+    "headed": [
+      39,
+      39,
+      39
+    ],
+    "headless": 39,
+    "note": "Before the final existing-tip guard. Not counted as final source coverage."
+  }
+}

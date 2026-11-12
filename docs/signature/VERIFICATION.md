@@ -1,3 +1,5 @@
+> **Remediation update:** source `79173ba` supersedes the engineering findings below. See [the current reconciliation and final verification addendum](../reviews/WP01_REMEDIATION.md). Existing local gallery/video links remain historical snapshots at `a05d005`/`c64ace1`, preserved unchanged. New captures use versioned external review assets. Final cinematic media is still blocked.
+
 # WP-01 verification · 2026-11-12 UTC
 
 **Engineering checks pass; final visual acceptance is BLOCKED and independent Claude review is PENDING.** These are results for the actual source/assets whose digests are in [verification.json](evidence/verification.json). The handoff identifies the implementation commit containing them.
@@ -41,3 +43,7 @@ All four samples reported zero horizontal overflow, zero >50 ms long tasks **dur
 Missing: canonical appearance-approved scene/model and genuinely moving matched wide/portrait daylight/sunset films, source/rights records and final real-asset visual/loop/performance approval. Full Migo articulation requires authored source from [MIGO_ASSET_PLAN.md](../MIGO_ASSET_PLAN.md). Exact delivery/resource requirements: [ASSET_PRODUCTION_SPEC.md](ASSET_PRODUCTION_SPEC.md).
 
 No new live PayPal, refund, Gemini or database success is claimed. Historical provider evidence stays in [the append-only verification log](../VERIFICATION.md). No integration/main merge, production deployment or change to verified submission/payment flows was performed. Independent review must inspect actual source and evidence; green technical checks do not approve the cinematic result.
+
+## Remediation evidence addendum
+
+[Current exact results and performance](../reviews/WP01_REMEDIATION.md#final-engineering-verification--source-79173ba); [versioned gallery/recording](https://github.com/mrodriguez20020-tech/shoremigo/releases/tag/wp01-review-79173ba06c73). Application/tests 79173ba; capture tool 9872f1e. Final movie 27.68 s, silent H.264 1280×888 at 25 recording fps. No real moving-water/sunset media approval.

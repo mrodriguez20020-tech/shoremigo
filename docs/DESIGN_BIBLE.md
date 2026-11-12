@@ -43,7 +43,7 @@ The current 750 ms player transition is an engineering capability, not evidence 
 |---|---|
 | Approved final opening storyboard, wide/portrait composition and physically matched film | WP-01 final visual acceptance; the production spec gives review targets, not newly approved frames |
 | Definitive dimensional exterior, unseen elevations, deck arrangement and source model | WP-02, all subsequent vessel views; do not extrapolate differently in separate packages |
-| Cabin 7214 floor plan, room dimensions/material references, circulation and camera controls | WP-03; current vector views do not supply these |
+| Corrected/approved Cabin 7214 floor plan, dimensions/material references, circulation and camera controls | WP-03; WP-02 supplies a provisional plan with confirmed entry/area defects, not an accepted spatial source |
 | Complete culinary gallery/expansion/menu interaction spec and verified image set | WP-04; retain existing fictional sample content meanwhile |
 | Reef entry and canopy-rise storyboards/camera tracks/environment sources | WP-05/06; do not invent a new visual identity |
 | Separated original Migo art/rig or approved authored motion/expression frames | WP-07; no generated replacement character |

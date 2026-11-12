@@ -1,6 +1,6 @@
 # WP-02 package reference — canonical Aurora Tide
 
-**Owner-assigned to Claude; Codex independently reviews.** Claude is assigned to review current WP-01 PR #2 and then own WP-02 definitive architecture. Codex has not started a competing vessel implementation. No full 3D model or approved matched cinematic footage currently exists outside the repository (owner-confirmed). Do not ask for the same missing asset links again or claim the local rejected Blender proof is canonical.
+**Owner-assigned to Claude; Codex independently reviews.** Claude reviewed WP-01 c64ace1 with conditions, reviews the remediation independently, and owns WP-02 definitive architecture. Codex has not started a competing vessel implementation. No full 3D model or approved matched cinematic footage currently exists outside the repository (owner-confirmed). Do not ask for the same missing asset links again or claim the local rejected Blender proof is canonical.
 
 ## Start point and boundaries
 

@@ -1,3 +1,5 @@
+> **Remediation update:** source `79173ba` supersedes the engineering findings below. See [the current reconciliation and final verification addendum](../reviews/WP01_REMEDIATION.md). Existing local gallery/video links remain historical snapshots at `a05d005`/`c64ace1`, preserved unchanged. New captures use versioned external review assets. Final cinematic media is still blocked.
+
 # Signature environment — review status
 
 **The requested cinematic moving-water result is not complete.** The missing deliverable is a joint-rendered Aurora Tide/ocean/wake environment with matching daylight and sunset footage. The current public manifest explicitly remains `awaiting-production-media`.
@@ -37,3 +39,7 @@ Run `npm test`, `npm run lint`, `npm run typecheck`, `npm run build`. Start the 
 Use `DISPLAY=:99 PLAYWRIGHT_HEADED=1 PLAYWRIGHT_CHROMIUM_PATH=/usr/bin/chromium PLAYWRIGHT_BROWSERS_PATH=/workspace/.playwright PLAYWRIGHT_BASE_URL=http://127.0.0.1:3002 node scripts/capture-signature-review.mjs` for the interim recording and screenshots, with a running Xorg display. Playwright's FFmpeg and system FFmpeg are required. This captures the actual public manifest, without injecting test films.
 
 Final check counts and remaining limitations are recorded in [VERIFICATION.md](VERIFICATION.md). The design branch remains unmerged and undeployed. Later visual phases wait for flagship approval.
+
+## Remediation evidence (79173ba)
+
+[Settled six-viewport gallery, masks and 27.68-second actual recording](https://github.com/mrodriguez20020-tech/shoremigo/releases/tag/wp01-review-79173ba06c73). Application/tests 79173ba; capture tool 9872f1e waits for welcome exit. [Exact final checks/limitations](../reviews/WP01_REMEDIATION.md). Historical gallery above stays unchanged; missing matched cinematic footage remains blocked.
