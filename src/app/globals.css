@@ -431,3 +431,44 @@ html[data-intro="playing"]:has(.welcome-world) .cinematic-backdrop { z-index: 99
   .golden-editorial { padding:40px 24px; }
   .golden-editorial > div { padding-right:0; }
 }
+
+/* ── Atmosphere system: one fixed, non-interactive layer between the scene backdrop (z-0) and the
+   content (main z-10). Tokens give each route a small contextual variation of the same cinematic
+   luxury mood: deep navy→teal depth, a warm champagne horizon glow and a soft focus vignette. ── */
+:root {
+  --atm-glow: rgba(232, 200, 149, 0.10);      /* champagne horizon light */
+  --atm-tint: rgba(18, 92, 110, 0.16);         /* sea-glass depth */
+  --atm-deep: rgba(4, 16, 26, 0.55);           /* vignette edge */
+  --atm-glow-pos: 78% 8%;
+  --atm-drift: 38s;
+}
+body::before {
+  content: ""; position: fixed; inset: -6%; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(60% 45% at var(--atm-glow-pos), var(--atm-glow), transparent 70%),
+    radial-gradient(70% 60% at 12% 105%, var(--atm-tint), transparent 70%),
+    radial-gradient(120% 95% at 50% 45%, transparent 58%, var(--atm-deep) 100%);
+  animation: atm-drift var(--atm-drift) ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes atm-drift { from { transform: translate3d(-1.2%, -0.8%, 0) scale(1); } to { transform: translate3d(1.2%, 0.8%, 0) scale(1.03); } }
+@media (prefers-reduced-motion: reduce) { body::before { animation: none; } }
+html[data-motion="reduced"] body::before { animation: none; }
+
+/* contextual variations */
+html[data-scene="sunset"] { --atm-glow: rgba(255, 178, 110, 0.16); --atm-tint: rgba(120, 50, 70, 0.14); --atm-glow-pos: 70% 18%; }
+html[data-scene="night"]  { --atm-glow: rgba(150, 170, 230, 0.07); --atm-deep: rgba(2, 8, 18, 0.65); }
+html[data-scene="shade"]  { --atm-tint: rgba(10, 70, 90, 0.20); }
+html[data-scene="neutral"] { --atm-glow: rgba(232, 200, 149, 0.06); --atm-tint: transparent; --atm-deep: rgba(4, 16, 26, 0.10); }
+/* homepage film: keep the concept still clean, vignette only */
+html:has(.cinematic-backdrop) { --atm-glow: rgba(232, 200, 149, 0.05); --atm-tint: transparent; --atm-deep: rgba(4, 16, 26, 0.38); }
+/* ships & rooms: dark maritime with a soft sunset support */
+html:has(.ship-explorer) { --atm-glow: rgba(240, 186, 120, 0.12); --atm-tint: rgba(8, 40, 60, 0.30); --atm-glow-pos: 82% 4%; }
+/* reef: immersed deep-ocean light from above */
+html:has([data-discovery="reef"]) { --atm-glow: rgba(190, 240, 245, 0.10); --atm-tint: rgba(4, 50, 80, 0.30); --atm-glow-pos: 50% -10%; --atm-deep: rgba(2, 14, 28, 0.60); }
+/* canopy: misted green with filtered sun */
+html:has([data-discovery="canopy"]) { --atm-glow: rgba(250, 236, 190, 0.12); --atm-tint: rgba(30, 80, 50, 0.24); --atm-glow-pos: 65% 0%; }
+/* taste & indulge: warmer, editorial hospitality */
+html:has(.taste-page) { --atm-glow: rgba(240, 170, 110, 0.13); --atm-tint: rgba(90, 40, 30, 0.16); --atm-glow-pos: 85% 12%; --atm-deep: rgba(14, 10, 8, 0.50); }
+/* phones: lighter vignette so edges stay readable */
+@media (max-width: 639px) { body::before { inset: 0; background-size: 100% 100%; } :root { --atm-deep: rgba(4, 16, 26, 0.35); } }
