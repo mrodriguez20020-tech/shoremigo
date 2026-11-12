@@ -40,7 +40,7 @@ export default async function TastePage() {
         </div>
         <CulinaryCollection items={[doubles, ...GUIDE_ITEMS.filter((d) => d.id === "jerk" || d.id === "cochinita")]}>
           <figure className="culinary-hero-feature">
-            <CulinaryTrigger item={doubles} className="culinary-hero-image"><CulinaryMedia item={doubles} priority /><span className="culinary-feature-open">Meet doubles <ArrowIcon /></span></CulinaryTrigger>
+            <CulinaryTrigger item={doubles} className="culinary-hero-image" label="Meet doubles"><CulinaryMedia item={doubles} priority /><span className="culinary-feature-open">Meet doubles <ArrowIcon /></span></CulinaryTrigger>
             <figcaption data-migo-avoid><span>01 / Trinidad &amp; Tobago</span><span>Photo: Grueslayer @Wikipedia · CC BY-SA 4.0 · <a href="#photo-credits">Credits</a></span></figcaption>
           </figure>
         </CulinaryCollection>

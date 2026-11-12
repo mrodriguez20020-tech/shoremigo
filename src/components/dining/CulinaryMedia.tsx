@@ -18,7 +18,8 @@ export function CulinaryMedia({ item, expanded = false, priority = false }: { it
           <img key={photo.id} src={remote} alt={`${item.name} — editorial dish photograph, not a sample-menu serving`} width={photo.sourceWidth} height={photo.sourceHeight} loading={priority ? "eager" : "lazy"} decoding="async" referrerPolicy="no-referrer" ref={ref} onError={onError} />
         ) : <Image key={photo.id} src={`/culinary/${photo.id}-${expanded ? 2400 : priority ? 1200 : 640}.webp`} alt={`${item.name} — dish guide photograph, not a sample-menu serving`} width={photo.sourceWidth} height={photo.sourceHeight} unoptimized priority={priority} loading={priority ? undefined : "lazy"} ref={ref} onError={onError} />
       ) : <DishArt tone={item.tone} kind={item.kind} />}
-      <span className="culinary-media-label">{photo && !failed ? "Dish guide · photograph" : photo ? "Photo unavailable · illustration" : "Original illustration"}</span>
+      {/* With a photograph the alt text already says this; hide the badge from assistive tech so it does not pollute button names. */}
+      <span className="culinary-media-label" aria-hidden={photo && !failed ? true : undefined}>{photo && !failed ? "Dish guide · photograph" : photo ? "Photo unavailable · illustration" : "Original illustration"}</span>
     </div>
   );
 }

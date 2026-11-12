@@ -10,7 +10,7 @@ async function returning(page: Page) {
 }
 test("same dish photo expands; native modal traps focus and restores opener/scroll", async ({ page }) => {
   await returning(page);
-  const opener = page.getByRole("button", { name: "Explore Doubles", exact: true }).first();
+  const opener = page.getByRole("button", { name: "Meet doubles", exact: true });
   await opener.focus(); await page.keyboard.press("Enter");
   const dialog = page.getByRole("dialog", { name: "Doubles", exact: true });
   await expect(dialog).toBeVisible();
@@ -24,7 +24,7 @@ test("same dish photo expands; native modal traps focus and restores opener/scro
 });
 test("previous/next and keyboard navigation announce the actual subject", async ({ page }) => {
   await returning(page);
-  await page.getByRole("button", { name: "Explore Doubles", exact: true }).first().click();
+  await page.getByRole("button", { name: "Meet doubles", exact: true }).click();
   let dialog = page.getByRole("dialog");
   await dialog.getByRole("button", { name: "Next dish" }).click();
   await expect(dialog.getByRole("heading", { name: "Cochinita pibil", exact: true })).toBeVisible();
@@ -70,14 +70,14 @@ test("sample menu illustrations stay distinct from guide photos and can expand",
 test("photo failure retains a named usable illustration and disclosure", async ({ page }) => {
   await page.route("**/culinary/doubles-*.webp", (route) => route.abort());
   await returning(page);
-  await page.getByRole("button", { name: "Explore Doubles", exact: true }).first().click();
+  await page.getByRole("button", { name: "Meet doubles", exact: true }).click();
   await expect(page.getByRole("dialog").locator('[data-media-kind="illustration"]')).toBeVisible();
   await expect(page.getByRole("dialog")).toContainText("Photo unavailable");
 });
 test("Ask Migo closes modal and opens the contextual concierge", async ({ page }) => {
   await page.route("**/api/concierge", (route) => route.fulfill({ json: { text: "This is a fictional sample menu. Browse the catalog for bookable food tours.", cards: [], mood: "speaking", toolsUsed: ["get_dining_guide"], engine: "offline" } }));
   await returning(page);
-  await page.getByRole("button", { name: "Explore Doubles", exact: true }).first().click();
+  await page.getByRole("button", { name: "Meet doubles", exact: true }).click();
   const request = page.waitForRequest((r) => r.url().endsWith("/api/concierge") && r.method() === "POST");
   await page.getByRole("button", { name: "Ask Migo about this dish" }).click();
   expect((await request).postDataJSON().history.at(-1).text).toContain("Doubles");
@@ -109,7 +109,7 @@ test("shared MenuViewer remains usable in Ships & Rooms", async ({ page }) => {
 for (const [width,height] of [[320,700],[390,844],[820,1180],[1440,1000]]) test(`layout, dialog and visible focus at ${width}×${height}`, async ({ page }) => {
   await page.setViewportSize({ width,height }); await returning(page);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
-  await page.getByRole("button", { name: "Explore Doubles", exact: true }).first().click();
+  await page.getByRole("button", { name: "Meet doubles", exact: true }).click();
   const dialog = page.getByRole("dialog"); await expect(dialog).toBeVisible();
   expect(await dialog.evaluate((el) => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
   await page.getByRole("button", { name: "Close dish details" }).click();
@@ -117,7 +117,7 @@ for (const [width,height] of [[320,700],[390,844],[820,1180],[1440,1000]]) test(
 });
 test("reduced motion opens without transform animations and cleans up on navigation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" }); await returning(page);
-  await page.getByRole("button", { name: "Explore Doubles", exact: true }).first().click();
+  await page.getByRole("button", { name: "Meet doubles", exact: true }).click();
   expect(await page.getByRole("dialog").evaluate((el) => el.getAnimations({ subtree:true }).length)).toBe(0);
   await page.goto("/excursions");
   expect(await page.evaluate(() => document.body.style.overflow)).not.toBe("hidden");

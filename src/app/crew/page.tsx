@@ -75,7 +75,7 @@ export default function CrewPage() {
                   <input className="field" value={handle} onChange={(e) => setHandle(e.target.value)} maxLength={30} />
                 </label>
                 <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                  <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap rounded-2xl bg-black/20 px-4 py-3 text-sm">{link}</code>
+                  <code tabIndex={0} aria-label="Your crew invite link" className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap rounded-2xl bg-black/20 px-4 py-3 text-sm focus-visible:outline focus-visible:outline-2">{link}</code>
                   <button
                     className="btn btn-primary !py-2 text-sm"
                     onClick={async () => {
