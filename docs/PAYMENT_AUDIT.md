@@ -32,7 +32,7 @@ LastBoard: added exact-minute boundary tests for all 12 excursions (return cut-o
 
 ## Open items (not fixed here, by decision or dependency)
 
-- **Live sandbox end-to-end** (create → approve → capture → rescue refund/top-up): **skipped by owner decision on 2026-11-12**, not verified in this pass. A hold (SM-V5HXD, $178.00) was created on an isolated local store; no PayPal order was created and the store was discarded. Last live sandbox evidence predates these fixes (competition recording, checkout only). Unit tests use a test double and are not evidence of sandbox behavior.
+- **Live sandbox end-to-end**: first skipped on 2026-11-12; **then run on 2026-11-13 (UTC) on `1e76eb1`**: booking SM-XFYPS, $178.00 capture verified (COMPLETED), 90-min delay, operator approval, traveler consent, rebook to Afternoon Reef & Sandbar, $20.00 refund COMPLETED, PayPal re-verify PARTIALLY_REFUNDED with matching amount. The top-up capture path was not exercised live.
 - **Webhook live check** requires registering a sandbox webhook to `/api/paypal/webhook` on a deployed preview and setting `PAYPAL_WEBHOOK_ID`. Not done (no deploy without approval).
 - Operator access is one shared passcode with a per-instance throttle. Real multi-operator accounts/roles are a product feature, not in scope.
 - `paidCents` is reduced when PayPal accepts a refund, including `PENDING`; the refund record keeps the exact status and the UI never says "completed". Operator re-verify checks captures, not refund status.
